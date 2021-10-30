@@ -9,7 +9,7 @@ router.get("/user", async function(req, res, next){
     await conn.beginTransaction()
     try {
         let [result, _] = await conn.query(`SELECT * FROM members ORDER BY member_d ASC;`)
-        res.status(200).json(result)
+        res.status(201).json(result)
         await conn.commit()
     } catch (err) {
         await conn.rollback()
