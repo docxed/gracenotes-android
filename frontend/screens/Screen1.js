@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 
-const Test2 = ({ navigation }) => {
+const Screen1 = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.content}>Welcome to Screen 1 !!</Text>
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Test2;
+export default Screen1;

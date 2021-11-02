@@ -1,16 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 
-const Test2 = ({ navigation }) => {
+const Note = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.content}>Welcome to Screen 1 !!</Text>
-      <Button
-        title="Go to Screen 2"
-        onPress={() => {
-          navigation.navigate("S2", { prev: "Screen01", id: 25 });
-        }}
-      />
+      <Text style={styles.content}>Welcome to Note Page !!</Text>
     </View>
   );
 };
@@ -27,4 +21,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Test2;
+export default Note;
