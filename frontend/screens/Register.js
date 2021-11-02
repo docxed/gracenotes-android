@@ -5,8 +5,6 @@ import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 
-
-
 export default function Register({navigation}){
     var [first, setFirst] = useState("");
     var [last, setLast] = useState("");
@@ -31,10 +29,6 @@ export default function Register({navigation}){
       setShow(Platform.OS === 'ios');
       setDate(currentDate);
       setRealDate(full)
-
-
-
-      
     }
 
 
@@ -61,8 +55,6 @@ export default function Register({navigation}){
       + ' ' + hours + ':' + min + ':' + sec
     );
   }, []);
-  
-
 
 
 
