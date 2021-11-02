@@ -8,7 +8,7 @@ router.get("/user", async function(req, res, next){
     const conn = await pool.getConnection()
     await conn.beginTransaction()
     try {
-        let [result, _] = await conn.query(`SELECT * FROM members ORDER BY member_d ASC;`)
+        let [result, _] = await conn.query(`SELECT * FROM members ORDER BY member_id ASC;`)
         res.status(200).json(result)
         await conn.commit()
     } catch (err) {

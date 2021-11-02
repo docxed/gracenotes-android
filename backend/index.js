@@ -14,9 +14,11 @@ app.use(express.urlencoded({ extended: true })) // For parsing application/x-www
 // routers
 const pool = require("./config")
 const userRouter = require("./routes/user")
+const registerRouter = require("./routes/register")
 
 // use routers
 app.use(userRouter.router)
+app.use(registerRouter.router)
 
 app.listen(5001, () => {
     console.log(`database running at http://localhost:5001`)
