@@ -56,16 +56,6 @@ export default function Register({navigation}){
     );
   }, []);
 
-
-
-
-
-
-
-
-
-
-
     useEffect(() => {
         (async () => {
           if (Platform.OS !== 'web') {
