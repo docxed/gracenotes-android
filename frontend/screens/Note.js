@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 
-const Note = ({ navigation }) => {
+const Note_Screen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.content}>Welcome to Note Page !!</Text>
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Note;
+export default Note_Screen;
