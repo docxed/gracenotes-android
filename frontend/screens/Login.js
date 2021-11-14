@@ -1,23 +1,26 @@
 import * as React from 'react';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import {
   NativeBaseProvider,
   Box,
   Text,
-  Image,
   Heading,
   VStack,
   FormControl,
   Input,
+  Icon,
+  IconButton,
   Link,
   Button,
   HStack,
   Center,
 } from 'native-base';
+import { Image } from 'react-native';
 
-const img = require('../assets/logo.png');
+// const img = require('../assets/logo.png');
 
-function Login_Screen({navigation}) {
+function Login_Screen({ navigation }) {
+
   return (
     <NativeBaseProvider>
       <Box safeArea flex={1} p="3" py="10" w="90%" mx="auto">
@@ -27,8 +30,9 @@ function Login_Screen({navigation}) {
               resizeMode={"contain"}
               borderRadius={30}
               source={{
-                uri: img,
+                uri: "https://wallpaperaccess.com/full/317501.jpg",
               }}
+              alt="Alternate Text"
           />
         </Center>
         <Heading padding={3} textAlign="center" size="lg" fontWeight="600" color="indigo.400">
@@ -37,30 +41,46 @@ function Login_Screen({navigation}) {
         <Heading textAlign="center" mt="1" color="gray.500" fontWeight="500" size="md">
             ลงชื่อเข้าใช้
         </Heading>
-        <VStack space={4} mt="5">
+        <VStack space={4} mt="5" borderRadius={5} padding={15} shadow={4}>
           <FormControl>
             <FormControl.Label
               _text={{
                 color: 'coolGray.800',
-                fontSize: 'm',
+                fontSize: 15,
                 fontWeight: 600,
               }}>
               รหัสนักเรียน
             </FormControl.Label>
-            <Input />
+            <Input InputLeftElement={
+              <Icon
+                as={<MaterialIcons name="person" />}
+                size={5}
+                ml="2"
+                color="muted.400"
+              />
+            }/>
           </FormControl>
           <FormControl>
             <FormControl.Label
               _text={{
                 color: 'coolGray.800',
-                fontSize: 'm',
+                fontSize: 15,
                 fontWeight: 600,
               }}>
               รหัสผ่าน
             </FormControl.Label>
-            <Input type="password" />
+            <Input 
+              InputLeftElement={
+                <Icon
+                as={<AntDesign  name="lock" />}
+                size={5}
+                ml="2"
+                color="muted.400"
+              />
+              }
+            />
           </FormControl>
-          <Button mt="2" color="primary.300" _text={{ color: 'white' }} onPress={() => { navigation.navigate("Home"); }}>
+          <Button mt="2" color="primary.300" _text={{ color: 'white' }} onPress={() => { navigation.navigate("Home_page"); }}>
             ลงชื่อเข้าใช้
           </Button>
           <HStack mt="6" justifyContent="center">
@@ -68,7 +88,7 @@ function Login_Screen({navigation}) {
               _text={{
                 color: 'indigo.500',
                 fontWeight: 'medium',
-                fontSize: 'sm',
+                fontSize: 15,
               }} onPress={() => { navigation.navigate("Register"); }}>
               ลงทะเบียนเข้าใช้งาน
             </Link>
@@ -78,4 +98,5 @@ function Login_Screen({navigation}) {
     </NativeBaseProvider>
   );
 }
+
 export default Login_Screen;

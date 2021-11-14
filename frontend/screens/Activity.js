@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 
-const Info_Screen = ({ navigation }) => {
+function Activity_Screen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.content}>Welcome to Info Page !!</Text>
+      <Text style={styles.content}>Welcome to Activity Page !!</Text>
     </View>
   );
 };
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Info_Screen;
+export default Activity_Screen;

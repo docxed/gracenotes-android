@@ -1,7 +1,6 @@
-import React from "react";
+import * as React from "react"
 import MyNavigator from "./Navigation/Navigator";
 
-
-export default function App() {
+export default () => {
   return <MyNavigator/>;
 }
