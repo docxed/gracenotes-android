@@ -1,137 +1,102 @@
-import React from 'react'
+import * as React from 'react';
+import { MaterialIcons, AntDesign } from '@expo/vector-icons';
+import {
+  NativeBaseProvider,
+  Box,
+  Text,
+  Heading,
+  VStack,
+  FormControl,
+  Input,
+  Icon,
+  IconButton,
+  Link,
+  Button,
+  HStack,
+  Center,
+} from 'native-base';
+import { Image } from 'react-native';
 
-import {ImageBackground,StyleSheet, View, Text, Image, TouchableOpacity, TextInput, ScrollView} from 'react-native'
-function Login({navigation}){
-    return(
-        
-        <View>
-          <ScrollView>
-            <View style = {styles.container}>
-                <Text style = {styles.text2}>Login</Text>
-            </View>
+// const img = require('../assets/logo.png');
 
-            <View style = {styles.container3 }>
-            <Image source={require("../assets/glasses.jpg")}
-            style = {styles.background }>
+function Login_Screen({ navigation }) {
 
-            </Image>
-            </View>
-
-            <View style = {styles.container2 }>
-                <View style = {{margin:3}}>
-                <Text style={styles.text}>User ID :</Text>
-                <TextInput style={styles.input} keyboardType="number-pad" placeholder="เลขประจำตัวนักเรียน"></TextInput>
-                </View>
-
-                <View style = {{margin:3}}>
-                <Text style={styles.text}>Password :</Text>
-                <TextInput style={styles.input} placeholder="รหัสผ่าน" secureTextEntry={true}></TextInput>
-                </View>
-
-            </View>
-
-            <View>
-            <TouchableOpacity style={styles.loginButton} onPress={ () => { navigation.navigate("First_page"); } }><Text>LOGIN</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.register} onPress={ () => { navigation.navigate("Register"); } }><Text> Register</Text></TouchableOpacity>
-            </View>
-            </ScrollView>
-            
-            
-
-            
-
-        </View>
-        
-
-    )
+  return (
+    <NativeBaseProvider>
+      <Box safeArea flex={1} p="3" py="10" w="90%" mx="auto">
+        <Center>
+          <Image
+              size={100}
+              resizeMode={"contain"}
+              borderRadius={30}
+              source={{
+                uri: "https://wallpaperaccess.com/full/317501.jpg",
+              }}
+              alt="Alternate Text"
+          />
+        </Center>
+        <Heading padding={3} textAlign="center" size="lg" fontWeight="600" color="indigo.400">
+            GraceNotes
+        </Heading>
+        <Heading textAlign="center" mt="1" color="gray.500" fontWeight="500" size="md">
+            ลงชื่อเข้าใช้
+        </Heading>
+        <VStack space={4} mt="5" borderRadius={5} padding={15} shadow={4}>
+          <FormControl>
+            <FormControl.Label
+              _text={{
+                color: 'coolGray.800',
+                fontSize: 15,
+                fontWeight: 600,
+              }}>
+              รหัสนักเรียน
+            </FormControl.Label>
+            <Input InputLeftElement={
+              <Icon
+                as={<MaterialIcons name="person" />}
+                size={5}
+                ml="2"
+                color="muted.400"
+              />
+            }/>
+          </FormControl>
+          <FormControl>
+            <FormControl.Label
+              _text={{
+                color: 'coolGray.800',
+                fontSize: 15,
+                fontWeight: 600,
+              }}>
+              รหัสผ่าน
+            </FormControl.Label>
+            <Input 
+              InputLeftElement={
+                <Icon
+                as={<AntDesign  name="lock" />}
+                size={5}
+                ml="2"
+                color="muted.400"
+              />
+              }
+            />
+          </FormControl>
+          <Button mt="2" color="primary.300" _text={{ color: 'white' }} onPress={() => { navigation.navigate("Home_page"); }}>
+            ลงชื่อเข้าใช้
+          </Button>
+          <HStack mt="6" justifyContent="center">
+            <Link
+              _text={{
+                color: 'indigo.500',
+                fontWeight: 'medium',
+                fontSize: 15,
+              }} onPress={() => { navigation.navigate("Register"); }}>
+              ลงทะเบียนเข้าใช้งาน
+            </Link>
+          </HStack>
+        </VStack>
+      </Box>
+    </NativeBaseProvider>
+  );
 }
 
-const styles = StyleSheet.create({
-    container: {
-      backgroundColor: '#EBB715',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 25
-      
-    },
-    container2: {
-
-        width:"70%",
-        padding: 25,
-        margin: "15%",
-        marginTop: "5%",
-        borderColor: "#000000",
-        borderWidth: 2,
-        borderRadius: 10
-        
-      },
-
-      container3: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 5
-        
-      },
-    text:{
-        fontSize: 20,
-        alignItems:'center',
-        color: '#000000'
-        
-    },
-
-    text2:{
-        fontSize: 40,
-        alignItems:'center',
-        color: '#000000'
-        
-    },
-    loginButton:{
-        width: "50%",
-        height: 50,
-        backgroundColor: "#EBB715",
-        alignItems: 'center',
-      justifyContent: 'center',
-      marginLeft: "25%",
-      fontSize: 20,
-      borderRadius:10
-
-    },
-
-    register:{
-        width: "50%",
-        height: 50,
-        backgroundColor: "#C3C3C0",
-        alignItems: 'center',
-      justifyContent: 'center',
-      marginLeft: "25%",
-      marginTop: "10%",
-      fontSize: 20,
-      borderRadius:10,
-      marginBottom:10
-
-    },
-    input: {
-        height:35,
-        borderWidth:1,
-        borderRadius: 5
-
-    },
-    background:{
-      height:150,
-      width: 150,
-      alignItems: 'center',
-      justifyContent: 'center',
-
-
-
-      
-        
-    },
-
-
-
-
-  })
-
-
-export default Login;
+export default Login_Screen;

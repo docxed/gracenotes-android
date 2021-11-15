@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 
-const Activity = ({ navigation }) => {
+function Activity_Screen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.content}>Welcome to Activity Page !!</Text>
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Activity;
+export default Activity_Screen;
