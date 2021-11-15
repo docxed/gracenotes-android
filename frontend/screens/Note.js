@@ -4,7 +4,6 @@ import {
   Box,
   Heading,
   Image,
-  Text,
   TextArea,
   Center,
   CheckIcon,

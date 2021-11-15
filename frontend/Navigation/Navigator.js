@@ -11,15 +11,28 @@ import Register_Screen from "../screens/Register.js";
 import Home_Screen from "../screens/Home.js";
 import Note_Screen from "../screens/Note.js";
 import Info_Screen from "../screens/Activity.js";
+import Home_Screen_Comment from '../screens/Home_Comment.js';
 
 
 const Login_page = createNativeStackNavigator();
+const Home_page = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
+function inhome() {
+    return(
+        <Home_page.Navigator initialRouteName="Home_first">
+            <Home_page.Screen name="Home_first" component={Home_Screen}
+            options={{headerShown: false}}/>
+            <Home_page.Screen name="Home_Second" component={Home_Screen_Comment}
+            options={{headerShown: false}}/>
+        </Home_page.Navigator>
+    );
+}
 
 function inside() {
     return (
         <Tab.Navigator initialRouteName="Home">
-            <Tab.Screen name="Home" component={Home_Screen} 
+            <Tab.Screen name="Home" component={inhome} 
             options={
                 {
                     title: "หน้าแรก",
