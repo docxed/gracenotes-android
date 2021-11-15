@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import {
   Box,
   Heading,
@@ -19,7 +19,7 @@ import {
   Button,
 } from "native-base";
 
-const Card = ({ navigation }) => {
+const Card = () => {
   return (
     <Box marginTop={50} p="5" py="15" w="100%" mx="auto">
         <Heading padding={3} Size= {18} ml="-3" color="indigo.600">กวาดดาดฟ้า มหานคร</Heading>
@@ -91,7 +91,6 @@ function Home_Screen_Comment() {
             </Center>
         </ScrollView>
     </NativeBaseProvider>
-    
   );
 }
 

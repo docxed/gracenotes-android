@@ -13,6 +13,7 @@ import Note_Screen from "../screens/Note.js";
 import Info_Screen from "../screens/Activity.js";
 import Home_Screen_Comment from '../screens/Home_Comment.js';
 import Activity_Screen from '../screens/Activity.js';
+import Activity_Detail_Screen from '../screens/Activity_Details.js';
 
 
 const Login_page = createNativeStackNavigator();
@@ -35,6 +36,8 @@ function inActivity() {
     return(
         <Activity_page.Navigator initialRouteName="Activity_first">
             <Activity_page.Screen name="Activity_first" component={Activity_Screen}
+            options={{headerShown: false}}/>
+            <Activity_page.Screen name="Activity_Second" component={Activity_Detail_Screen}
             options={{headerShown: false}}/>
         </Activity_page.Navigator>
     );

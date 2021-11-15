@@ -19,7 +19,6 @@ import {
 
 const Card = (props) => {
     return (
-        
         <TouchableOpacity
             style={styles.button}
             onPress={() => { props.navigation.navigate("Home_Second")}}

@@ -27,7 +27,7 @@ const Add_Note = () => {
   return (
     <Box>
       <ScrollView _contentContainerStyle={{px: "10px", mb: "4", minW: "72"}} >
-        <VStack space={3} mt="3" borderRadius={6} padding={5} shadow={4}>
+        <VStack space={3} mt="3" padding={5}>
           <FormControl>
             <FormControl.Label
               _text={{
@@ -87,7 +87,7 @@ const Add_Note = () => {
             <FormControl.Label>
               <Select
                 selectedValue={service}
-                minWidth="330"
+                width="2xs"
                 accessibilityLabel="Choose Service"
                 placeholder="หน่วยงานที่ทำความดี"
                 _selectedItem={{

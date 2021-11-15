@@ -14,7 +14,7 @@ const Post_Activity = (props) => {
     return(
         <TouchableOpacity
           style={styles.button}
-          onPress={() => { props.navigation.navigate("") }}
+          onPress={() => { props.navigation.navigate("Activity_Second")}}
           >
             <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" backgroundColor= "gray.50">
                 <Box>
@@ -33,7 +33,7 @@ const Post_Activity = (props) => {
                     px="5"
                     py="1.5"
                 >
-                    ยังไม่ครบ
+                    0/5
                 </Center>
                 </Box>
                 <Stack p="4" space={3}>
@@ -55,8 +55,11 @@ const Post_Activity = (props) => {
                     >
                         นางสาว มณี </Text>
                     </Stack>
+                    <Text color="coolGray.600" fontSize= {12}>
+                        รับผู้เข้าร่วมกิจกรรม 5 คน
+                    </Text>
                     <Text textAlign="right" color="coolGray.600" fontSize={11}>
-                        เริ่ม วันที่15/08/2564 เวลา 15:35
+                        เริ่มวันที่ 15/08/2564 เวลา 15:35
                     </Text>
                 </Stack>
             </Box>
