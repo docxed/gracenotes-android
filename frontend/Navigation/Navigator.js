@@ -12,10 +12,12 @@ import Home_Screen from "../screens/Home.js";
 import Note_Screen from "../screens/Note.js";
 import Info_Screen from "../screens/Activity.js";
 import Home_Screen_Comment from '../screens/Home_Comment.js';
+import Activity_Screen from '../screens/Activity.js';
 
 
 const Login_page = createNativeStackNavigator();
 const Home_page = createNativeStackNavigator();
+const Activity_page = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function inhome() {
@@ -26,6 +28,15 @@ function inhome() {
             <Home_page.Screen name="Home_Second" component={Home_Screen_Comment}
             options={{headerShown: false}}/>
         </Home_page.Navigator>
+    );
+}
+
+function inActivity() {
+    return(
+        <Activity_page.Navigator initialRouteName="Activity_first">
+            <Activity_page.Screen name="Activity_first" component={Activity_Screen}
+            options={{headerShown: false}}/>
+        </Activity_page.Navigator>
     );
 }
 
@@ -53,7 +64,7 @@ function inside() {
                       }
                 }
             }/>
-            <Tab.Screen name="Activity" component={Info_Screen} options={
+            <Tab.Screen name="Activity" component={inActivity} options={
                 {
                     title: "กิจกรรม",
                     headerShown:false,

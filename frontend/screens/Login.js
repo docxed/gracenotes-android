@@ -41,7 +41,7 @@ function Login_Screen({ navigation }) {
         <Heading textAlign="center" mt="1" color="gray.500" fontWeight="500" size="md">
             ลงชื่อเข้าใช้
         </Heading>
-        <VStack space={4} mt="5" borderRadius={5} padding={15} shadow={4}>
+        <VStack space={4} mt="5" padding={15}>
           <FormControl>
             <FormControl.Label
               _text={{

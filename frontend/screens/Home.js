@@ -1,126 +1,30 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import {
-  Box,
   Heading,
-  AspectRatio,
-  Image,
-  Text,
-  Center,
-  HStack,
-  Stack,
+  ScrollView,
   NativeBaseProvider,
+  VStack,
 } from "native-base";
+import Card from "../components/Homelist";
 
-const Card = () => {
-  return (
-      <Box
-        maxW="80"
-        rounded="lg"
-        overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1"
-        _dark={{
-          borderColor: "coolGray.600",
-          backgroundColor: "gray.700",
-        }}
-        _web={{
-          shadow: 2,
-          borderWidth: 0,
-        }}
-        _light={{
-          backgroundColor: "gray.50",
-        }}
-      >
-        <Box>
-          <AspectRatio w="100%" ratio={16 / 9}>
-            <Image
-              source={{
-                uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg",
-              }}
-              alt="image"
-            />
-          </AspectRatio>
-          <Center
-            bg="success.500"
-            position="absolute"
-            bottom="5"
-            px="5"
-            py="1.5"
-          >
-            ตรวจแล้ว
-          </Center>
-        </Box>
-        <Stack p="4" space={3}>
-          <Stack space={2}>
-            <Heading size="md" ml="-1">
-              กวาดดาดฟ้า มหานคร
-            </Heading>
-            <Text
-              fontSize= {14}
-              _light={{
-                color: "violet.500",
-              }}
-              _dark={{
-                color: "violet.400",
-              }}
-              fontWeight="500"
-              ml="-0.5"
-              mt="-1"
-            >
-              นาย สมชาย มากมี
-            </Text>
-          </Stack>
-          <Text fontWeight="400">
-            Bengaluru (also called Bangalore) is the center of India's high-tech
-            industry. The city is also known for its parks and nightlife.
-          </Text>
-          <HStack alignItems="center" space={4} justifyContent="space-between">
-            <HStack alignItems="center">
-              <Text
-                color="coolGray.600"
-                _dark={{
-                  color: "warmGray.200",
-                }}
-                fontWeight="400"
-              >
-                6 mins ago
-              </Text>
-            </HStack>
-          </HStack>
-        </Stack>
-      </Box>
-  );
-}
-
-function Home_Screen({ navigation }) {
+const Home_Screen = ({ navigation }) => {
   return (
     <NativeBaseProvider>
       <Heading marginTop={45} textAlign="center" size="lg" fontWeight="600" color="indigo.500">ความดีล่าสุด</Heading>
-      <Center flex={2} px="3">
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => { navigation.navigate("Home_Second") }}
-          >
-          <Card />
-        </TouchableOpacity>
-      </Center>
-      
+      <ScrollView 
+        _contentContainerStyle={{
+            px: "10px",
+            mb: "4",
+            minW: "72",
+        }}>
+        <VStack flex={2} px="3">
+            <Card navigation={navigation}/>
+            <Card navigation={navigation}/>
+        </VStack>
+      </ScrollView>
     </NativeBaseProvider>
-    
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    paddingHorizontal: 10
-  },
-  button: {
-    alignItems: "center",
-  },
-});
-
 
 export default Home_Screen;

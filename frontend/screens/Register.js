@@ -22,14 +22,8 @@ function Register_Screen({ navigation }) {
                 <Heading padding={2} textAlign="center" size="md" fontWeight="600" color="rose.400">
                     ลงทะเบียนเข้าใช้งาน
                 </Heading>
-                <ScrollView
-                    _contentContainerStyle={{
-                        px: "10px",
-                        mb: "4",
-                        minW: "72",
-                    }}
-                >
-                    <VStack space={3} mt="3" borderRadius={6} padding={5} shadow={4}>
+                <ScrollView>
+                    <VStack space={3} mt="3" padding={5}>
                         <FormControl>
                             <FormControl.Label
                             _text={{
