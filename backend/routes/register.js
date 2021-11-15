@@ -5,7 +5,6 @@ const pool = require("../config");
 router = express.Router();
 
 router.post("/register", async function (req, res, next) {
-  console.log(req.body);
   const user = req.body.user;
   const fname = req.body.fname;
   const lname = req.body.lname;
@@ -13,6 +12,7 @@ router.post("/register", async function (req, res, next) {
   const no = req.body.no;
   const dob = req.body.dob;
   const address = req.body.address;
+  const img = req.body.img;
   const pass = req.body.pass;
 
   const conn = await pool.getConnection();
@@ -25,13 +25,13 @@ router.post("/register", async function (req, res, next) {
     if (check_user.length > 0) {
       await conn.rollback();
       return res
-        .status(409)
+        .status(200)
         .json({ status: false, message: "รหัสนักเรียนนี้ถูกใช้แล้ว" });
     } else {
       let result = await conn.query(
-        `INSERT INTO members (member_user, member_password, member_fname, member_lname, member_class, member_no, member_dob, member_address)
+        `INSERT INTO members (member_user, member_password, member_fname, member_lname, member_class, member_no, member_address, member_img)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-        [user, pass, fname, lname, classes, no, dob, address]
+        [user, pass, fname, lname, classes, no, address, img]
       );
     }
     res.status(200).json({ status: true, message: "สมัครสมาชิกสำเร็จ" });

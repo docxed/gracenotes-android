@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   Box,
   Heading,
@@ -8,6 +10,7 @@ import {
   Center,
   HStack,
   Stack,
+  Button,
   NativeBaseProvider,
 } from "native-base";
 
@@ -40,13 +43,7 @@ const Card = () => {
             alt="image"
           />
         </AspectRatio>
-        <Center
-          bg="success.500"
-          position="absolute"
-          bottom="0"
-          px="3"
-          py="1.5"
-        >
+        <Center bg="success.500" position="absolute" bottom="0" px="3" py="1.5">
           ตรวจแล้ว
         </Center>
       </Box>
@@ -56,7 +53,7 @@ const Card = () => {
             กวาดดาดฟ้า มหานคร
           </Heading>
           <Text
-            fontSize= {14}
+            fontSize={14}
             _light={{
               color: "violet.500",
             }}
@@ -90,19 +87,60 @@ const Card = () => {
       </Stack>
     </Box>
   );
-}
+};
 
-function Home_Screen() {
+function Home_Screen({ navigation }) {
+  const [info, setInfo] = useState({});
+  async function _retrieveData() {
+    try {
+      const value = await AsyncStorage.getItem("info"); // Get member's info from LocalStorage
+      if (value == null) {
+        // LocalStorage doesn't has Data
+        // Unauthorized
+        navigation.navigate("Login");
+        return;
+      }
+      setInfo(JSON.parse(value));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useFocusEffect(
+    React.useCallback(() => {
+      //  When the screen is focused (coming back to it). What do you do?
+      _retrieveData(); // Call Check Authorized
+      return () => {
+        // When the screen is unfocused (leaving). What do you do?
+      };
+    }, [])
+  );
+
   return (
     <NativeBaseProvider>
-      <Heading marginTop={45} textAlign="center" size="lg" fontWeight="600" color="indigo.500">ความดีล่าสุด</Heading>
+      <Heading
+        marginTop={45}
+        textAlign="center"
+        size="lg"
+        fontWeight="600"
+        color="indigo.500"
+      >
+        ความดีล่าสุด
+      </Heading>
+      <Button
+        mx={3}
+        mt={5}
+        onPress={ async () => {
+          await AsyncStorage.clear();
+          navigation.navigate("Login");
+        }}
+      >
+        Log out
+      </Button>
       <Center flex={2} px="3">
-        <Card/>
+        <Card />
       </Center>
     </NativeBaseProvider>
-    
   );
 }
-
 
 export default Home_Screen;
