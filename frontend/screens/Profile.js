@@ -29,7 +29,6 @@ function Profile_Screen({ navigation }) {
                             uri: "https://wallpaperaccess.com/full/317501.jpg",
                             }}
                         />
-                        <Button alignSelf="center" size="sm" my="15">เลือกรูปภาพ</Button>
                     </VStack>
                     <VStack space={2} mt="3" padding={5}>
                         <FormControl>
