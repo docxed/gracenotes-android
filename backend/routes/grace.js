@@ -41,8 +41,8 @@ router.get("/grace/:id", async function (req, res, next) {
 });
 
 router.post("/grace", async function (req, res, next) {
-    const time = NULL // req.body.time;
-    const date = NULL // req.body.date;
+    const time = null // req.body.time;
+    const date = null // req.body.date;
     const detail = req.body.detail;
     const agency = req.body.agency;
     const img = req.body.img;
@@ -51,10 +51,10 @@ router.post("/grace", async function (req, res, next) {
     await conn.beginTransaction();
     try {
       let [result, _] = await conn.query(
-        `INSERT INTO grace (grace_time, grace_date, grace_detail, grace_agency, member_id) VALUES (?, ?, ?, ?, ?, ?);`
+        `INSERT INTO grace (grace_time, grace_date, grace_detail, grace_agency, grace_img, member_id) VALUES (?, ?, ?, ?, ?, ?);`
         , [time, date, detail, agency, img, sid]
       );
-      res.status(200).json(result[0]);
+      res.status(200).send("บันทึกสำเร็จแล้ว");
       await conn.commit();
     } catch (err) {
       await conn.rollback();

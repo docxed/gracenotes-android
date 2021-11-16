@@ -27,6 +27,7 @@ import { firebaseConfig } from "../database/firebaseDB";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import { Alert } from "react-native";
 
 function Note_Screen({ navigation }) {
   if (!firebase.apps.length) {
@@ -37,8 +38,6 @@ function Note_Screen({ navigation }) {
   const [date, setDate] = useState("");
   const [detail, setDetail] = useState("");
   const [agency, setAgency] = useState("");
-  const [img, setImg] = useState("");
-  const [sid, setSid] = useState("");
   const [image, setImage] = useState("");
   const [uploading, setUploading] = useState(false);
 
@@ -291,16 +290,15 @@ function Note_Screen({ navigation }) {
                           };
 
                           Axios.post(`http://10.0.2.2:5001/grace`, formData)
-                          .then((response) => {
-                            const data = response.data;
-                            Alert.alert(data);
-                            // navigation.navigate()
-                          })
-                          .catch((error) => {
-                            console.log(error);
-                          });
+                            .then((response) => {
+                              const data = response.data;
+                              Alert.alert(data);
+                              // navigation.navigate()
+                            })
+                            .catch((error) => {
+                              console.log(error);
+                            });
 
-            
                           return url;
                         });
                       }
