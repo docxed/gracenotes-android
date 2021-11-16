@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Axios from "axios";
+import { SERVER_IP, PORT } from "../database/serverIP";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import {
   Box,
@@ -11,78 +15,198 @@ import {
   ScrollView,
   Stack,
   NativeBaseProvider,
+  InfoIcon,
 } from "native-base";
 
-export const Grace_list_status = () => {
-    return (
-        <Flex direction="row" borderRadius="3xl" backgroundColor= "gray.50">
-            <TouchableOpacity style={styles.button}>
-                <Text color="warning.500">ทั้งหมด</Text>
-                <Text color="warning.500">4</Text>
-            </TouchableOpacity>
-            <Divider orientation="vertical" mx="3" />
-            <TouchableOpacity style={styles.button}>
-                <Text color="success.500">รับรอง</Text>
-                <Text color="success.500">4</Text>
-            </TouchableOpacity>
-            <Divider orientation="vertical" mx="3" />
-            <TouchableOpacity style={styles.button}>
-                <Text color="error.500">ไม่รับรอง</Text>
-                <Text color="error.500">0</Text>
-            </TouchableOpacity>
-        </Flex>
-    );
-}
-
 export const Grace_list = (props) => {
-    return (
-        <TouchableOpacity style={styles.button} onPress={() => { props.navigation.navigate("Grace_Details")}}>
-            <Box width={350} rounded="lg" overflow="hidden" borderColor="coolGray.500" borderWidth="1" backgroundColor= "gray.300">
-                <Stack p="4" space={3}>
-                    <Stack space={2}>
-                        <Heading color="indigo.500" size="md" ml="-1">
-                            กวาดดาดฟ้า 
-                        </Heading>
-                    </Stack>
-                    <Text color="coolGray.700" fontSize= {12}>
-                            ที่ตึกมหานคร ทำความดีเป็นเวลา 50 นาที
-                    </Text>
-                    <Text textAlign="left" color="success.500" fontSize={11}>
-                            รับรองแล้ว
-                    </Text>
-                    <Text textAlign="right" color="coolGray.600" fontSize={11}>
-                            วันที่ 15/08/2564 เวลา 15:35
-                    </Text>
-                </Stack>
-            </Box>
-        </TouchableOpacity>
-    );
-}
-
-function Grace_list_Screen({ navigation }) {
   return (
-    <NativeBaseProvider>
-      <Heading marginTop={45} textAlign="center" size="lg" fontWeight="600" color="indigo.500">บันทึกความดีของ นาย วรเมธ</Heading>
-      <Spacer my="2"/>
-      <Center padding="3"><Grace_list_status/></Center>
-      <ScrollView 
-        _contentContainerStyle={{
-            px: "10px",
-            mb: "4",
-            minW: "72",
-        }}>
-            <Spacer my="2"/>
-            <Center flex={2} px="3">
-                <Grace_list navigation={navigation}/>
-                <Grace_list navigation={navigation}/>
-                <Grace_list navigation={navigation}/>
-                <Grace_list navigation={navigation}/>
-            </Center>
-        </ScrollView>
-      
-    </NativeBaseProvider>
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => {
+        // Parse parameter id of grace to Grace_Details page
+        props.navigation.navigate("Grace_Details", {
+          keys: props.item.grace_id,
+        });
+      }}
+    >
+      <Box
+        width={350}
+        rounded="lg"
+        overflow="hidden"
+        borderColor="coolGray.500"
+        borderWidth="1"
+        backgroundColor="gray.300"
+      >
+        <Stack p="4" space={3}>
+          <Stack space={2}>
+            <Heading color="indigo.500" size="md" ml="-1">
+              {props.item.grace_detail}
+            </Heading>
+          </Stack>
+          <Text color="coolGray.700" fontSize={12}>
+            ที่ {props.item.grace_agency} ทำความดีเป็นเวลา {props.item.grace_time}{" "}
+            ชั่วโมง
+          </Text>
+          <Text textAlign="left" color="success.500" fontSize={11}>
+            รับรองแล้ว
+          </Text>
+          <Text textAlign="right" color="coolGray.600" fontSize={11}>
+            {/* substr For cutting string of date to simple display */}
+            วันที่ {props.item.grace_date.substr(0, 10)}
+          </Text>
+        </Stack>
+      </Box>
+    </TouchableOpacity>
   );
 };
+
+function Grace_list_Screen({ navigation }) {
+  const [info, setInfo] = useState({}); // LocalStorage Data
+  const [me, setMe] = useState({}); // My Member Data query From info(LocalStorage)
+  const [rawGraceList, setRawGraceList] = useState([]); // Raw List For Compare, Whenever you want
+  const [graceList, setGraceList] = useState([]); // List to render
+  const [allAmount, setAllAmount] = useState(0); // Amount of ความดี ทั้งหมด
+  const [checkAmount, setCheckAmount] = useState(0); // Amount of ความดี ผ่าน
+  const [unCheckAmount, setUnCheckAmount] = useState(0); // Amount of ความดี ไม่ผ่าน
+
+  async function showGrace() {
+    // My Grace List
+    await Axios.get(`http://${SERVER_IP}:${PORT}/grace`)
+      .then((response) => {
+        let data = response.data;
+        data = data.filter((array) => array.member_id == info.s_id); // Select My Grace
+        data.reverse(); // Order by Desc
+        setRawGraceList(data); // RAW LIST FOR COMPARE WHEN FILTER SOMETHING
+        setGraceList(data); // Default Render When open this page
+
+        // Get Length of Grace Check
+        setAllAmount(data.length);
+        setCheckAmount(
+          data.filter((array) => array.grace_check == "ผ่าน").length
+        );
+        setUnCheckAmount(
+          data.filter((array) => array.grace_check == "ไม่ผ่าน").length
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function showMe() {
+    // My Member
+    await Axios.get(`http://${SERVER_IP}:${PORT}/user/${info.s_id}`)
+      .then((response) => {
+        let data = response.data;
+        setMe(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function _retrieveData() {
+    try {
+      const value = await AsyncStorage.getItem("info"); // Get member's info from LocalStorage
+      if (value == null) {
+        // LocalStorage doesn't has Data
+        // Unauthorized
+        navigation.navigate("Login");
+        return;
+      }
+      setInfo(JSON.parse(value));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      //  When the screen is focused (coming back to it). What do you do?
+      _retrieveData(); // Call Check Authorized
+      return () => {
+        // When the screen is unfocused (leaving). What do you do?
+      };
+    }, [])
+  );
+
+  useEffect(() => {
+    // useState is Asynchronous!!!, Thus you need to Hook for getValue on created info(LocalStorage)
+    showMe();
+    showGrace();
+  }, [info]);
+
+  return (
+    <NativeBaseProvider>
+      <Heading
+        marginTop={45}
+        textAlign="center"
+        size="lg"
+        fontWeight="600"
+        color="indigo.500"
+      >
+        บันทึกความดีของ {me.member_fname} {me.member_lname}
+      </Heading>
+      <Spacer my="2" />
+      <Center padding="3">
+        <Flex direction="row" borderRadius="3xl" backgroundColor="gray.50">
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              let data = rawGraceList;
+              setGraceList(data);
+            }}
+          >
+            <Text color="warning.500">ทั้งหมด</Text>
+            <Text color="warning.500">{allAmount}</Text>
+          </TouchableOpacity>
+          <Divider orientation="vertical" mx="3" />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              let data = rawGraceList.filter(
+                (array) => array.grace_check == "ผ่าน"
+              );
+              setGraceList(data);
+            }}
+          >
+            <Text color="success.500">รับรอง</Text>
+            <Text color="success.500">{checkAmount}</Text>
+          </TouchableOpacity>
+          <Divider orientation="vertical" mx="3" />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              let data = rawGraceList.filter(
+                (array) => array.grace_check == "ไม่ผ่าน"
+              );
+              setGraceList(data);
+            }}
+          >
+            <Text color="error.500">ไม่รับรอง</Text>
+            <Text color="error.500">{unCheckAmount}</Text>
+          </TouchableOpacity>
+        </Flex>
+      </Center>
+      <ScrollView
+        _contentContainerStyle={{
+          px: "10px",
+          mb: "4",
+          minW: "72",
+        }}
+      >
+        <Spacer my="2" />
+        <Center flex={2} px="3">
+          {graceList.map((item, index) => {
+            return (
+              <Grace_list key={index} navigation={navigation} item={item} />
+            );
+          })}
+        </Center>
+      </ScrollView>
+    </NativeBaseProvider>
+  );
+}
 
 const styles = StyleSheet.create({
   button: {

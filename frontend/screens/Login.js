@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SERVER_IP, PORT } from "../database/serverIP";
 import { useFocusEffect } from "@react-navigation/native";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import {
@@ -141,7 +142,7 @@ function Login_Screen({ navigation }) {
                 user: user,
                 pass: pass,
               };
-              Axios.post(`http://10.0.2.2:5001/login`, formData)
+              Axios.post(`http://${SERVER_IP}:${PORT}/login`, formData)
                 .then((response) => {
                   const data = response.data;
                   if (data.status) {

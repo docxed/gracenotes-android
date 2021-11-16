@@ -22,6 +22,7 @@ import {
 } from "native-base";
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
+import { SERVER_IP, PORT } from "../database/serverIP";
 import * as firebase from "firebase";
 import { firebaseConfig } from "../database/firebaseDB";
 import * as ImagePicker from "expo-image-picker";
@@ -322,7 +323,7 @@ function Note_Screen({ navigation }) {
                             sid: info.s_id,
                           };
 
-                          Axios.post(`http://10.0.2.2:5001/grace`, formData)
+                          Axios.post(`http://${SERVER_IP}:${PORT}/grace`, formData)
                             .then((response) => {
                               const data = response.data;
                               Alert.alert(data);

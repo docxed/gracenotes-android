@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import Axios from "axios";
+import { SERVER_IP, PORT } from "../database/serverIP";
 import * as firebase from "firebase";
 import { firebaseConfig } from "../database/firebaseDB";
 import * as ImagePicker from "expo-image-picker";
@@ -393,7 +394,7 @@ function Register_Screen({ navigation }) {
                           pass: pass,
                           img: url,
                         };
-                        Axios.post(`http://10.0.2.2:5001/register`, formData)
+                        Axios.post(`http://${SERVER_IP}:${PORT}/register`, formData)
                           .then((response) => {
                             const data = response.data;
                             if (data.status) {
