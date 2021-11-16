@@ -28,6 +28,8 @@ import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { Alert } from "react-native";
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 
 function Note_Screen({ navigation }) {
   if (!firebase.apps.length) {
@@ -35,11 +37,14 @@ function Note_Screen({ navigation }) {
   }
   const [info, setInfo] = useState({});
   const [time, setTime] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date());
   const [detail, setDetail] = useState("");
   const [agency, setAgency] = useState("");
   const [image, setImage] = useState("");
   const [uploading, setUploading] = useState(false);
+
+  var [mode, setMode] = useState('date');
+  var [show, setShow] = useState(false);
 
   async function _retrieveData() {
     try {
@@ -90,6 +95,28 @@ function Note_Screen({ navigation }) {
       setImage(result.uri);
     }
   };
+
+
+
+  var month = date.getMonth()+1
+    var full = date.getDate() + "/" + month + "/" + date.getFullYear()
+    console.log(date)
+    
+
+    var onChange = (event, selectedDate) => {
+      var currentDate = selectedDate || date;
+      setShow(Platform.OS === 'ios');
+      setDate(currentDate);
+      
+    }
+    const showMode = (currentMode) => {
+      setShow(true);
+      setMode(currentMode);
+    };
+  
+    const showDatepicker = () => {
+      showMode('date');
+    };
 
   return (
     <NativeBaseProvider>
@@ -143,7 +170,21 @@ function Note_Screen({ navigation }) {
                   }}
                 >
                   วันที่ทำความดี
+                  <FormControl>
+            {show && (   
+        <DateTimePicker
+        style={{margin: 50}}
+          value={date}
+          mode={mode}
+          is24Hour={true}
+          display="default"
+          placeholder="DD/MM/YYYY"
+          onChange={onChange}
+        />)}</FormControl>
                 </FormControl.Label>
+                <Button w={{ base: "30%" }}
+                  alignSelf="center"
+                  colorScheme="secondary" onPress={showDatepicker} >เลือกวันที่</Button>
                 <Input
                   placeholder="วว/ดด/ปปปป"
                   InputRightElement={
@@ -156,8 +197,7 @@ function Note_Screen({ navigation }) {
                       }}
                     />
                   }
-                  value={date}
-                  onChangeText={(text) => setDate(text)}
+                  value={full}
                 />
               </FormControl>
               <FormControl>
@@ -244,7 +284,7 @@ function Note_Screen({ navigation }) {
                   w={{ base: "30%" }}
                   alignSelf="center"
                   colorScheme="secondary"
-                  onPress={async () => {
+                  onPress={/*async () => {
                     // Bypass Network request failed when fetching || code from github :/
                     const blob = await new Promise((resolve, reject) => {
                       const xhr = new XMLHttpRequest();
@@ -303,7 +343,20 @@ function Note_Screen({ navigation }) {
                         });
                       }
                     );
-                  }}
+                    }*/
+
+                    () => {
+                      const formData = {
+                        time: time,
+                        date: date,
+                        detail: detail,
+                        agency: agency,
+                        sid: info.s_id,
+                      };
+                      console.log(formData)
+                    }
+                  
+                  }
                 >
                   บันทึก
                 </Button>
