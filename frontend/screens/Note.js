@@ -28,8 +28,7 @@ import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { Alert } from "react-native";
-import DateTimePicker from '@react-native-community/datetimepicker';
-
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 function Note_Screen({ navigation }) {
   if (!firebase.apps.length) {
@@ -43,7 +42,7 @@ function Note_Screen({ navigation }) {
   const [image, setImage] = useState("");
   const [uploading, setUploading] = useState(false);
 
-  var [mode, setMode] = useState('date');
+  var [mode, setMode] = useState("date");
   var [show, setShow] = useState(false);
 
   async function _retrieveData() {
@@ -96,27 +95,19 @@ function Note_Screen({ navigation }) {
     }
   };
 
+  var onChange = (event, selectedDate) => {
+    var currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+  };
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
 
-
-  var month = date.getMonth()+1
-    var full = date.getDate() + "/" + month + "/" + date.getFullYear()
-    console.log(date)
-    
-
-    var onChange = (event, selectedDate) => {
-      var currentDate = selectedDate || date;
-      setShow(Platform.OS === 'ios');
-      setDate(currentDate);
-      
-    }
-    const showMode = (currentMode) => {
-      setShow(true);
-      setMode(currentMode);
-    };
-  
-    const showDatepicker = () => {
-      showMode('date');
-    };
+  const showDatepicker = () => {
+    showMode("date");
+  };
 
   return (
     <NativeBaseProvider>
@@ -143,10 +134,10 @@ function Note_Screen({ navigation }) {
                     fontWeight: 500,
                   }}
                 >
-                  จำนวนเวลาที่ทำความดี
+                  จำนวนเวลาที่ทำความดี ชั่วโมง:นาที
                 </FormControl.Label>
                 <Input
-                  placeholder="--:--"
+                  placeholder="00:00"
                   InputRightElement={
                     <IconButton
                       icon={<Icon as={Ionicons} name="time-outline" />}
@@ -171,21 +162,22 @@ function Note_Screen({ navigation }) {
                 >
                   วันที่ทำความดี
                   <FormControl>
-            {show && (   
-        <DateTimePicker
-        style={{margin: 50}}
-          value={date}
-          mode={mode}
-          is24Hour={true}
-          display="default"
-          placeholder="DD/MM/YYYY"
-          onChange={onChange}
-        />)}</FormControl>
+                    {show && (
+                      <DateTimePicker
+                        style={{ margin: 50 }}
+                        value={date}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        placeholder="DD/MM/YYYY"
+                        onChange={onChange}
+                      />
+                    )}
+                  </FormControl>
                 </FormControl.Label>
-                <Button w={{ base: "30%" }}
-                  alignSelf="center"
-                  colorScheme="secondary" onPress={showDatepicker} >เลือกวันที่</Button>
                 <Input
+                value={ date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear() }
+                  editable={false}
                   placeholder="วว/ดด/ปปปป"
                   InputRightElement={
                     <IconButton
@@ -195,9 +187,9 @@ function Note_Screen({ navigation }) {
                         color: "gray.400",
                         size: "sm",
                       }}
+                      onPress={showDatepicker}
                     />
                   }
-                  value={full}
                 />
               </FormControl>
               <FormControl>
@@ -284,7 +276,8 @@ function Note_Screen({ navigation }) {
                   w={{ base: "30%" }}
                   alignSelf="center"
                   colorScheme="secondary"
-                  onPress={/*async () => {
+                  onPress={
+                    async () => {
                     // Bypass Network request failed when fetching || code from github :/
                     const blob = await new Promise((resolve, reject) => {
                       const xhr = new XMLHttpRequest();
@@ -343,19 +336,9 @@ function Note_Screen({ navigation }) {
                         });
                       }
                     );
-                    }*/
-
-                    () => {
-                      const formData = {
-                        time: time,
-                        date: date,
-                        detail: detail,
-                        agency: agency,
-                        sid: info.s_id,
-                      };
-                      console.log(formData)
                     }
-                  
+
+
                   }
                 >
                   บันทึก
