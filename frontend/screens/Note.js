@@ -1,4 +1,4 @@
-import React from "react";
+
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import {
   Box,
@@ -20,14 +20,23 @@ import {
   Input,
   Button,
 } from "native-base";
+import React,{useState, useEffect} from "react";
+import Axios from "axios";
+import * as firebase from "firebase";
+import { firebaseConfig } from "../database/firebaseDB";
+import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Add_Note = () => {
+
 
   let [service, setService] = React.useState("")
 
   return (
     <Box>
       <ScrollView _contentContainerStyle={{px: "10px", mb: "4", minW: "72"}} >
+
         <VStack space={3} mt="3" borderRadius={6} padding={5} shadow={4}>
           <FormControl>
             <FormControl.Label
@@ -136,6 +145,34 @@ const Add_Note = () => {
 }
 
 function Note_Screen({ navigation }) {
+
+  const [info, setInfo] = useState({});
+  async function _retrieveData() {
+    try {
+      const value = await AsyncStorage.getItem("info"); // Get member's info from LocalStorage
+      if (value == null) {
+        // LocalStorage doesn't has Data
+        // Unauthorized
+        navigation.navigate("Login");
+        return;
+      }
+      setInfo(JSON.parse(value));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useFocusEffect(
+    React.useCallback(() => {
+      //  When the screen is focused (coming back to it). What do you do?
+      _retrieveData(); // Call Check Authorized
+      return () => {
+        // When the screen is unfocused (leaving). What do you do?
+      };
+    }, [])
+  );
+
+
+
   return (
     <NativeBaseProvider>
       <Heading marginTop={45} textAlign="center" size="lg" fontWeight="600" color="indigo.500">เพิ่มบันทึกความดี</Heading>
