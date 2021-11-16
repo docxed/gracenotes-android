@@ -15,6 +15,10 @@ import {
 } from "native-base";
 
 const Card = () => {
+
+
+
+  
   return (
     <Box
       maxW="80"
