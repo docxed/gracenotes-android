@@ -6,51 +6,49 @@ import {
   Heading,
   VStack,
   FormControl,
+  Avatar,
   Input,
   ScrollView,
   IconButton, 
   Icon,
   Button,
-  HStack,
+  Divider,
 } from 'native-base';
 
-function Register_Screen({ navigation }) {
+function Profile_Screen({ navigation }) {
     return (
         <NativeBaseProvider>
-            <Box flex={1} py="10" w="90%" mx="auto">
-                <Ionicons name="arrow-back" size={24} color="orange" onPress={() => { navigation.navigate("Login"); }}/>
-                <Heading padding={2} textAlign="center" size="md" fontWeight="600" color="rose.400">
-                    ลงทะเบียนเข้าใช้งาน
-                </Heading>
+            <Box flex={1} py="8" w="90%" mx="auto">
                 <ScrollView>
-                    <VStack space={3} mt="3" padding={5}>
+                    <Heading alignSelf="center" fontSize="xl" p="4" pb="3">โปรไฟล์</Heading>
+                    <VStack>
+                        <Avatar
+                            alignSelf="center"
+                            size="110"
+                            source={{
+                            uri: "https://wallpaperaccess.com/full/317501.jpg",
+                            }}
+                        />
+                        <Button alignSelf="center" size="sm" my="15">เลือกรูปภาพ</Button>
+                    </VStack>
+                    <VStack space={2} mt="3" padding={5}>
                         <FormControl>
                             <FormControl.Label>
-                            ชื่อจริง
+                                รหัสนักเรียน
                             </FormControl.Label>
-                            <Input placeholder="ชื่อ"/>
+                            <Input placeholder="62070164" variant="filled"/>
                         </FormControl>
                         <FormControl>
-                            <FormControl.Label
-                            _text={{
-                                color: 'coolGray.800',
-                                fontSize: 15,
-                                fontWeight: 500,
-                            }}>
-                            นามสกุล
-                            </FormControl.Label>
-                            <Input placeholder="นามสกุล"/>
+                                <FormControl.Label>
+                                    ชื่อ
+                                </FormControl.Label>
+                                <Input placeholder="วรเมธ"/>
                         </FormControl>
                         <FormControl>
-                            <FormControl.Label
-                            _text={{
-                                color: 'coolGray.800',
-                                fontSize: 15,
-                                fontWeight: 500,
-                            }}>
-                            รหัสนักเรียน
-                            </FormControl.Label>
-                            <Input placeholder="รหัสนักเรียน"/>
+                                <FormControl.Label>
+                                    นามสกุล
+                                </FormControl.Label>
+                                <Input placeholder="สาริกาเกตุ"/> 
                         </FormControl>
                         <FormControl>
                             <FormControl.Label
@@ -61,7 +59,7 @@ function Register_Screen({ navigation }) {
                             }}>
                             ชั้นเรียน
                             </FormControl.Label>
-                            <Input placeholder="ชั้นเรียน"  
+                            <Input placeholder="6/1"  
                                 w={{
                                     base: "35%",
                                 }}
@@ -76,7 +74,7 @@ function Register_Screen({ navigation }) {
                             }}>
                             เลขที่
                             </FormControl.Label>
-                            <Input placeholder="เลขที่"
+                            <Input placeholder="20"  
                                 w={{
                                     base: "35%",
                                 }}
@@ -91,7 +89,7 @@ function Register_Screen({ navigation }) {
                             }}>
                             วัน/เดือน/ปีเกิด
                             </FormControl.Label>
-                            <Input placeholder="วว/ดด/ปปปป"
+                            <Input placeholder="20/07/2543"
                                     w={{
                                         base: "55%",
                                         md: "25%",
@@ -109,23 +107,30 @@ function Register_Screen({ navigation }) {
                             />
                         </FormControl>
                         <FormControl>
-                            <FormControl.Label
-                                _text={{
-                                    color: 'coolGray.800',
-                                    fontSize: 15,
-                                    fontWeight: 500,
-                                }}>
+                            <FormControl.Label>
                                 ที่อยู่
                             </FormControl.Label>
-                            <Input marginBottom={2} placeholder="ที่อยู่1"/>
-                            <Input placeholder="ที่อยู่2 (ไม่บังคับ)"/>
+                            <Input marginBottom={2} placeholder="บนโลกเนี่ยแหละ"/>
                         </FormControl>
-                        <Button colorScheme="indigo" _text={{ color: 'white' }} onPress={() => { navigation.navigate("Home_page"); }}>ลงทะเบียนเข้าใช้งาน</Button>
+                        <FormControl>
+                            <FormControl.Label>
+                                รหัสผ่านใหม่
+                            </FormControl.Label>
+                            <Input marginBottom={2} placeholder="รหัสผ่านใหม่"/>
+                        </FormControl>
+                        <FormControl>
+                            <FormControl.Label>
+                                ยืนยันรหัสผ่านใหม่
+                            </FormControl.Label>
+                            <Input marginBottom={2} placeholder="ยืนยันรหัสผ่านใหม่"/>
+                        </FormControl>
                     </VStack>
+                    <Divider my="5" />
+                    <Button w={{base: "40%"}} size="lg" alignSelf="center" colorScheme="info" onPress={() => { navigation.navigate(""); }}>อัปเดต</Button>
                 </ScrollView>
             </Box>
         </NativeBaseProvider>
     );
 }
 
-export default Register_Screen;
+export default Profile_Screen;

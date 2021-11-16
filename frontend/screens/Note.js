@@ -21,11 +21,9 @@ import {
 
 const Add_Note = () => {
 
-  let [service, setService] = React.useState("")
-
   return (
-    <Box>
-      <ScrollView _contentContainerStyle={{px: "10px", mb: "4", minW: "72"}} >
+    <Box flex={1} py="8" w="90%" mx="auto">
+      <ScrollView>
         <VStack space={3} mt="3" padding={5}>
           <FormControl>
             <FormControl.Label
@@ -83,26 +81,6 @@ const Add_Note = () => {
             <TextArea placeholder="เพิ่มรายละเอียดการทำความดี"/>
           </FormControl>
           <FormControl>
-              <Select
-                selectedValue={service}
-                minWidth="200"
-                accessibilityLabel="Choose Service"
-                placeholder="หน่วยงานที่ทำความดี"
-                _selectedItem={{
-                  bg: "teal.600",
-                  endIcon: <CheckIcon size="5" />,
-                }}
-                mt={1}
-                onValueChange={(itemValue) => setService(itemValue)}
-                >
-                <Select.Item label="UX Research" value="ux" />
-                <Select.Item label="Web Development" value="web" />
-                <Select.Item label="Cross Platform Development" value="cross" />
-                <Select.Item label="UI Designing" value="ui" />
-                <Select.Item label="Backend Development" value="backend" />
-              </Select>
-          </FormControl>
-          <FormControl>
             <FormControl.Label>
               <Image
                 source={{
@@ -125,7 +103,7 @@ const Add_Note = () => {
             <Button w={{base: "40%"}} size="md">เลือกรูปภาพ</Button>
           </FormControl>
         </VStack>
-        <Divider my="2" />
+        <Divider my="5" />
         <VStack padding={15}><Button w={{base: "40%"}} size="lg" alignSelf="center" colorScheme="secondary">บันทึก</Button></VStack>
       </ScrollView>
     </Box>
@@ -135,7 +113,7 @@ const Add_Note = () => {
 function Note_Screen({ navigation }) {
   return (
     <NativeBaseProvider>
-      <Heading marginTop={45} textAlign="center" size="lg" fontWeight="600" color="indigo.500">เพิ่มบันทึกความดี</Heading>
+      <Heading mt={45} textAlign="center" size="lg" fontWeight="600" color="indigo.500">เพิ่มบันทึกความดี</Heading>
       <Center flex={1} px="3"><Add_Note/></Center>
     </NativeBaseProvider>
     

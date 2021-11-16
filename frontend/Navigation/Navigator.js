@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons, MaterialIcons, Entypo } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons, Entypo} from '@expo/vector-icons';
 
 import Login_Screen from '../screens/Login.js';
 import Register_Screen from "../screens/Register.js";
@@ -14,15 +14,18 @@ import Info_Screen from "../screens/Activity.js";
 import Home_Screen_Comment from '../screens/Home_Comment.js';
 import Activity_Screen from '../screens/Activity.js';
 import Activity_Detail_Screen from '../screens/Activity_Details.js';
+import Menu_Screen from '../screens/Menu.js';
+import Profile_Screen from '../screens/Profile.js';
 
 
 const Login_page = createNativeStackNavigator();
 const Home_page = createNativeStackNavigator();
 const Activity_page = createNativeStackNavigator();
+const Menu_page = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function inhome() {
-    return(
+    return (
         <Home_page.Navigator initialRouteName="Home_first">
             <Home_page.Screen name="Home_first" component={Home_Screen}
             options={{headerShown: false}}/>
@@ -33,7 +36,7 @@ function inhome() {
 }
 
 function inActivity() {
-    return(
+    return (
         <Activity_page.Navigator initialRouteName="Activity_first">
             <Activity_page.Screen name="Activity_first" component={Activity_Screen}
             options={{headerShown: false}}/>
@@ -41,6 +44,17 @@ function inActivity() {
             options={{headerShown: false}}/>
         </Activity_page.Navigator>
     );
+}
+
+function inMenu() {
+    return (
+        <Menu_page.Navigator initialRouteName="Menu_st">
+            <Menu_page.Screen name="Menu_st" component={Menu_Screen}
+            options={{headerShown: false}}/>
+            <Menu_page.Screen name="editProfile" component={Profile_Screen}
+            options={{headerShown: false}}/>
+        </Menu_page.Navigator>
+    )
 }
 
 function inside() {
@@ -74,6 +88,16 @@ function inside() {
                     tabBarActiveTintColor: "indianred",
                     tabBarIcon: ({color, focused}) => {
                         return <Entypo focused={focused} color={color} name="flag" size={30}/>;
+                      }
+                }
+            }/>
+            <Tab.Screen name="Menu" component={inMenu} options={
+                {
+                    title: "เมนู",
+                    headerShown:false,
+                    tabBarActiveTintColor: "cadetblue",
+                    tabBarIcon: ({color, focused}) => {
+                        return <Entypo  focused={focused} color={color} name="menu" size={30}/>;
                       }
                 }
             }/>
