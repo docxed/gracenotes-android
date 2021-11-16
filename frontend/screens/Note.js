@@ -7,8 +7,7 @@ import {
   TextArea,
   Center,
   CheckIcon,
-  HStack,
-  Stack,
+  Divider,
   IconButton,
   Icon,
   Select,
@@ -84,10 +83,9 @@ const Add_Note = () => {
             <TextArea placeholder="เพิ่มรายละเอียดการทำความดี"/>
           </FormControl>
           <FormControl>
-            <FormControl.Label>
               <Select
                 selectedValue={service}
-                width="2xs"
+                minWidth="200"
                 accessibilityLabel="Choose Service"
                 placeholder="หน่วยงานที่ทำความดี"
                 _selectedItem={{
@@ -103,7 +101,6 @@ const Add_Note = () => {
                 <Select.Item label="UI Designing" value="ui" />
                 <Select.Item label="Backend Development" value="backend" />
               </Select>
-            </FormControl.Label>
           </FormControl>
           <FormControl>
             <FormControl.Label>
@@ -125,10 +122,11 @@ const Add_Note = () => {
               }}>
               รูปถ่ายความดีแนวนอน(.jpeg ขนาดน้อยกว่า 2 MB)
             </FormControl.Label>
-            <Button w={{base: "24%"}} size="sm">เลือกรูปภาพ</Button>
+            <Button w={{base: "40%"}} size="md">เลือกรูปภาพ</Button>
           </FormControl>
         </VStack>
-        <VStack padding={15}><Button w={{base: "30%"}} alignSelf="center" colorScheme="secondary">บันทึก</Button></VStack>
+        <Divider my="2" />
+        <VStack padding={15}><Button w={{base: "40%"}} size="lg" alignSelf="center" colorScheme="secondary">บันทึก</Button></VStack>
       </ScrollView>
     </Box>
   )

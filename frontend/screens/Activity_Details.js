@@ -52,7 +52,7 @@ const Detail_Activity = () => {
             </Stack>
             <Divider my="2" />
             <Stack space={2}>
-                <Text mx="auto" fontSize={20} color="tertiary.500">จำนวนคนที่เข้ารวม 0</Text>
+                <Text mx="auto" fontSize={20} color="tertiary.500">จำนวนคนที่เข้ารวม 1</Text>
                 <Divider my="1" />
                 <Text mx="auto" fontSize={14} color="info.700">วรเมธ สาริกาเกตุ</Text>
             </Stack>

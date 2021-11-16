@@ -23,7 +23,7 @@ const Card = () => {
   return (
     <Box marginTop={50} p="5" py="15" w="100%" mx="auto">
         <Heading padding={3} Size= {18} ml="-3" color="indigo.600">กวาดดาดฟ้า มหานคร</Heading>
-        <Text textAlign="right" padding={1} fontSize= {11} color="coolGray.600">วันที่ 30/07/2021  เวลา 14:35</Text>
+        <Text textAlign="right" padding={1} fontSize= {11} color="coolGray.600">วันที่ 30/07/2564  เวลา 14:35</Text>
         <AspectRatio w="100%" ratio={16 / 9}>
             <Image
                 source={{
