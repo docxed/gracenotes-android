@@ -17,6 +17,9 @@ import Menu_Screen from '../screens/Menu.js';
 import Profile_Screen from '../screens/Profile.js';
 import Help_Screen from '../screens/Help.js';
 import Help_Detail_Screen from '../screens/Help_Details.js';
+import Grace_list_Screen from '../screens/MyNotes.js';
+import Grace_Detail_Screen from '../screens/Grace_Detail.js';
+import Help_Post_Screen from '../screens/Post_Help.js';
 
 
 const Login_page = createNativeStackNavigator();
@@ -24,6 +27,7 @@ const Home_page = createNativeStackNavigator();
 const Help_page = createNativeStackNavigator();
 const Activity_page = createNativeStackNavigator();
 const Menu_page = createNativeStackNavigator();
+const Grace_page = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function inhome() {
@@ -66,8 +70,23 @@ function inMenu() {
             options={{headerShown: false}}/>
             <Menu_page.Screen name="editProfile" component={Profile_Screen}
             options={{headerShown: false}}/>
+            <Menu_page.Screen name="MyGrace" component={inGrace}
+            options={{headerShown: false}}/>
+            <Menu_page.Screen name="PostHelp" component={Help_Post_Screen}
+            options={{headerShown: false}}/>
         </Menu_page.Navigator>
-    )
+    );
+}
+
+function inGrace() {
+    return (
+        <Grace_page.Navigator initialRouteName="Grace_lists">
+            <Grace_page.Screen name="Grace_lists" component={Grace_list_Screen}
+            options={{headerShown: false}}/>
+            <Grace_page.Screen name="Grace_Details" component={Grace_Detail_Screen}
+            options={{headerShown: false}}/>
+        </Grace_page.Navigator>
+    );
 }
 
 function inside() {

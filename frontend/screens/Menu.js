@@ -30,11 +30,19 @@ function Menu_Screen({ navigation }) {
                     <Button my="15" onPress={() => { navigation.navigate("editProfile"); }}>แก้ไข้โปรไฟล์ส่วนตัว</Button>
                     <Divider my="2" />
                     <VStack space={2}>
-                        <TouchableOpacity style={styles.button}>
+                        <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("MyGrace")}}>
                             <Box>
                                 <HStack space={3}>
                                     <Icon color="success.400" as={MaterialCommunityIcons} name="note-multiple"/>
                                     <Text color="success.400" fontSize={20}>บันทึกความดีของฉัน</Text>
+                                </HStack>
+                            </Box>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("PostHelp")}}>
+                            <Box>
+                                <HStack space={3}>
+                                    <Icon color="warning.400" as={MaterialIcons} name="post-add"/>
+                                    <Text color="warning.400" fontSize={20}>โพสต์ขอความช่วยเหลือ</Text>
                                 </HStack>
                             </Box>
                         </TouchableOpacity>

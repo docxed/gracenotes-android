@@ -1,5 +1,5 @@
 import React from "react";
-import { AntDesign } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import {
     Box,
     Badge,
@@ -9,9 +9,7 @@ import {
     Divider,
     Text,
     Center,
-    HStack,
-    VStack,
-    Input,
+    Icon,
     Stack,
     ScrollView,
     NativeBaseProvider,
@@ -56,7 +54,15 @@ const Detail_Activity = () => {
                 <Divider my="1" />
                 <Text mx="auto" fontSize={14} color="info.700">วรเมธ สาริกาเกตุ</Text>
             </Stack>
-            
+            <Divider my="35"/>
+            <Button w={{base: "50%"}} 
+                            size="lg" 
+                            alignSelf="center" 
+                            colorScheme="danger"
+                            leftIcon={<Icon as={MaterialIcons} name="logout" size="sm" />}
+                            onPress={() => { navigation.navigate("Login"); }}
+                        >ยกเลิกการเข้าร่วม
+            </Button>
         </Box>
   );
 }

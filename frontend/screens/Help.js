@@ -11,16 +11,16 @@ import {
 } from "native-base";
 
 export const Help_list = (props) => {
-  return(
+    return(
         <TouchableOpacity
             style={styles.button}
             onPress={() => { props.navigation.navigate("Help_Second")}}
             >
-          <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" backgroundColor= "gray.50">
+          <Box width={350} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" backgroundColor= "dark.600">
               <Stack p="4" space={3}>
                   <Stack space={2}>
                   <Heading size="md" ml="-1">
-                      ขอความช่วยเหลือ : กวาดดาดฟ้า 
+                      ขอความช่วยเหลือ : กวาดดาดฟ้า
                   </Heading>
                   <Text
                       fontSize= {14}
@@ -45,7 +45,7 @@ export const Help_list = (props) => {
               </Stack>
           </Box>
         </TouchableOpacity>
-  )
+    )
 }
 
 function Help_Screen({ navigation }) {
@@ -59,6 +59,7 @@ function Help_Screen({ navigation }) {
             minW: "72",
         }}>
             <Center flex={2} px="3">
+                <Help_list navigation={navigation}/>
                 <Help_list navigation={navigation}/>
             </Center>
         </ScrollView>

@@ -18,7 +18,7 @@ export const Post_Activity = (props) => {
         style={styles.button}
         onPress={() => { props.navigation.navigate("Activity_Second")}}
         >
-          <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" backgroundColor= "gray.50">
+          <Box width={350} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" backgroundColor= "gray.50">
               <Box>
               <AspectRatio w="100%" ratio={16 / 9}>
                   <Image

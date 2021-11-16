@@ -24,7 +24,7 @@ export const Card = (props) => {
           onPress={() => { props.navigation.navigate("Home_Second")}}
           >
           <Box
-              maxW="80"
+              width={350}
               rounded="lg"
               overflow="hidden"
               borderColor="coolGray.200"

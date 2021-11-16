@@ -17,20 +17,18 @@ import {
 const Detail_Help = () => {
     return (
         <Box marginTop={50} p="5" py="15" w="100%" mx="auto">
-            <Heading padding={3} Size= {18} ml="-3" color="indigo.600">ขอความช่วยเหลือ : กวาดดาดฟ้า </Heading>
-            <Text textAlign="right" padding={1} fontSize= {11} color="coolGray.600">วันที่ 15/08/2564 เวลา 15:35</Text>
-            <Stack p="4" space={5}>
+            <Heading padding={3} Size= {18} ml="-3" color="indigo.600">ขอความช่วยเหลือ</Heading>
+            <Stack p="4" space={5} borderRadius="6" borderWidth="0.25">
                 <Stack space={2}>
-                    <Text fontSize= {20} color="violet.500"
-                        ml="-3"
-                        mt="-1"
-                    >
+                    <Heading Size= {18} color="tertiary.600" ml="-2">กวาดดาดฟ้า</Heading>
+                    <Text fontSize= {18} color="violet.500" ml="-2" mt="-1">
                         นางสาว มณี
                     </Text>
                 </Stack>
-                <Text fontSize= {15} ml="-3">
+                <Text fontSize= {15} ml="-2">
                     หาคนช่วยแม่บ้านที่ตึกมหานครทำความชั้นดาดฟ้า เพราะตอนนี้ไม่ไหวแน้ววว
                 </Text>
+                <Text textAlign="right" padding={1} fontSize= {11} color="coolGray.600">ประกาศเมื่อวันที่ 15/08/2564 เวลา 15:35</Text>
                 <Stack justifyContent="center" space={5}>
                     <Badge colorScheme="success" alignSelf="center" variant={"outline"}>
                         สถาณะ : เปิด
@@ -51,7 +49,8 @@ const Detail_Help = () => {
                             colorScheme="danger"
                             leftIcon={<Icon as={MaterialIcons } name="logout" size="sm" />}
                             onPress={() => { navigation.navigate("Login"); }}
-                        >ยกเลิกการเข้าร่วม</Button>
+                        >ยกเลิกการเข้าร่วม
+            </Button>
         </Box>
   );
 }
