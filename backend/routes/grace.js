@@ -41,8 +41,8 @@ router.get("/grace/:id", async function (req, res, next) {
 });
 
 router.post("/grace", async function (req, res, next) {
-    const time = req.body.time;
-    const date = req.body.date;
+    const time = NULL // req.body.time;
+    const date = NULL // req.body.date;
     const detail = req.body.detail;
     const agency = req.body.agency;
     const img = req.body.img;
