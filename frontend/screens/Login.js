@@ -149,7 +149,7 @@ function Login_Screen({ navigation }) {
                     let info = {
                       // Create obj prepare to save in LocalStorage
                       s_id: data.ses_id, // id of member '1, 2, 3, 4'
-                      s_user: data.see_user, // student's code of member '06437'
+                      s_user: data.ses_user, // student's code of member '06437'
                       s_level: data.ses_level, // role of member 'student or teacher'
                     };
                     let myJSON = JSON.stringify(info); // parsing JSON
