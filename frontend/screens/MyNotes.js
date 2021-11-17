@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Axios from "axios";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,9 +16,32 @@ import {
   Stack,
   NativeBaseProvider,
   InfoIcon,
+  Spinner,
 } from "native-base";
 
 export const Grace_list = (props) => {
+  function renderCheck() {
+    let statusCheck = props.item.grace_check;
+    if (statusCheck == "ผ่าน") {
+      return (
+        <Text textAlign="left" color="success.500" fontSize={11}>
+          รับรองแล้ว
+        </Text>
+      );
+    } else if (statusCheck == "ไม่ผ่าน") {
+      return (
+        <Text textAlign="left" color="warning.500" fontSize={11}>
+          ไม่รับรอง
+        </Text>
+      );
+    } else {
+      return (
+        <Text textAlign="left" fontSize={11}>
+          รอการรับรอง
+        </Text>
+      );
+    }
+  }
   return (
     <TouchableOpacity
       style={styles.button}
@@ -44,12 +67,10 @@ export const Grace_list = (props) => {
             </Heading>
           </Stack>
           <Text color="coolGray.700" fontSize={12}>
-            ที่ {props.item.grace_agency} ทำความดีเป็นเวลา {props.item.grace_time}{" "}
-            ชั่วโมง
+            ที่ {props.item.grace_agency} ทำความดีเป็นเวลา{" "}
+            {props.item.grace_time} ชั่วโมง
           </Text>
-          <Text textAlign="left" color="success.500" fontSize={11}>
-            รับรองแล้ว
-          </Text>
+          {renderCheck()}
           <Text textAlign="right" color="coolGray.600" fontSize={11}>
             {/* substr For cutting string of date to simple display */}
             วันที่ {props.item.grace_date.substr(0, 10)}
@@ -68,6 +89,7 @@ function Grace_list_Screen({ navigation }) {
   const [allAmount, setAllAmount] = useState(0); // Amount of ความดี ทั้งหมด
   const [checkAmount, setCheckAmount] = useState(0); // Amount of ความดี ผ่าน
   const [unCheckAmount, setUnCheckAmount] = useState(0); // Amount of ความดี ไม่ผ่าน
+  const [loading, setLoading] = useState(true);
 
   async function showGrace() {
     // My Grace List
@@ -87,6 +109,7 @@ function Grace_list_Screen({ navigation }) {
         setUnCheckAmount(
           data.filter((array) => array.grace_check == "ไม่ผ่าน").length
         );
+        setLoading(false); // Status of Data
       })
       .catch((error) => {
         console.log(error);
@@ -129,12 +152,15 @@ function Grace_list_Screen({ navigation }) {
       };
     }, [])
   );
-
-  useEffect(() => {
-    // useState is Asynchronous!!!, Thus you need to Hook for getValue on created info(LocalStorage)
+  const innerFunction = useCallback(() => {
     showMe();
     showGrace();
   }, [info]);
+
+  useEffect(() => {
+    // useState is Asynchronous!!!, Thus you need to Hook for getValue on created info(LocalStorage)
+    innerFunction();
+  }, [innerFunction]);
 
   return (
     <NativeBaseProvider>
@@ -197,11 +223,17 @@ function Grace_list_Screen({ navigation }) {
       >
         <Spacer my="2" />
         <Center flex={2} px="3">
-          {graceList.map((item, index) => {
-            return (
-              <Grace_list key={index} navigation={navigation} item={item} />
-            );
-          })}
+          {loading == false ? (
+            <Box>
+              {graceList.map((item, index) => {
+                return (
+                  <Grace_list key={index} navigation={navigation} item={item} />
+                );
+              })}
+            </Box>
+          ) : (
+            <Spinner size="lg" />
+          )}
         </Center>
       </ScrollView>
     </NativeBaseProvider>

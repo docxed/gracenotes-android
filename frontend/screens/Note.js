@@ -177,7 +177,13 @@ function Note_Screen({ navigation }) {
                   </FormControl>
                 </FormControl.Label>
                 <Input
-                value={ date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear() }
+                  value={
+                    date.getFullYear() +
+                    "-" +
+                    (date.getMonth() + 1) +
+                    "-" +
+                    date.getDate()
+                  }
                   editable={false}
                   placeholder="วว/ดด/ปปปป"
                   InputRightElement={
@@ -277,8 +283,7 @@ function Note_Screen({ navigation }) {
                   w={{ base: "30%" }}
                   alignSelf="center"
                   colorScheme="secondary"
-                  onPress={
-                    async () => {
+                  onPress={async () => {
                     // Bypass Network request failed when fetching || code from github :/
                     const blob = await new Promise((resolve, reject) => {
                       const xhr = new XMLHttpRequest();
@@ -323,11 +328,14 @@ function Note_Screen({ navigation }) {
                             sid: info.s_id,
                           };
 
-                          Axios.post(`http://${SERVER_IP}:${PORT}/grace`, formData)
+                          Axios.post(
+                            `http://${SERVER_IP}:${PORT}/grace`,
+                            formData
+                          )
                             .then((response) => {
                               const data = response.data;
                               Alert.alert(data);
-                              // navigation.navigate()
+                              navigation.navigate("Grace_lists");
                             })
                             .catch((error) => {
                               console.log(error);
@@ -337,10 +345,7 @@ function Note_Screen({ navigation }) {
                         });
                       }
                     );
-                    }
-
-
-                  }
+                  }}
                 >
                   บันทึก
                 </Button>

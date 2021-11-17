@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Axios from "axios";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -17,7 +17,9 @@ import {
   NativeBaseProvider,
   Button,
   Image,
+  Spinner,
 } from "native-base";
+import { Alert } from "react-native";
 
 function Grace_Detail_Screen({ navigation, route }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
@@ -85,11 +87,15 @@ function Grace_Detail_Screen({ navigation, route }) {
     }, [])
   );
 
-  useEffect(() => {
-    // useState is Asynchronous!!!, Thus you need to Hook for getValue on created info(LocalStorage)
+  const innerFunction = useCallback(() => {
     showMe();
     showThisGrace();
   }, [info]);
+
+  useEffect(() => {
+    // useState is Asynchronous!!!, Thus you need to Hook for getValue on created info(LocalStorage)
+    innerFunction();
+  }, [innerFunction]);
 
   function renderStatusCheck() {
     if (thisGrace.grace_check == "ผ่าน") {
@@ -104,12 +110,47 @@ function Grace_Detail_Screen({ navigation, route }) {
           ไม่รับรอง
         </Badge>
       );
-    } else{
-        return (
-            <Badge colorScheme="light" alignSelf="flex-end" variant={"outline"}>
-              รอการรับรอง
-            </Badge>
-          ); 
+    } else {
+      return (
+        <Badge colorScheme="light" alignSelf="flex-end" variant={"outline"}>
+          รอการรับรอง
+        </Badge>
+      );
+    }
+  }
+
+  function renDerdelButton() {
+    if (thisGrace.member_id == info.s_id) {
+      return (
+        <Button.Group
+          colorScheme="danger"
+          mx={{
+            base: "auto",
+            md: 0,
+          }}
+          size="md"
+          mb={10}
+        >
+          <Button
+            onPress={() => {
+              // Delete This Grace
+              Axios.delete(
+                `http://${SERVER_IP}:${PORT}/grace/${route.params.keys}`
+              )
+                .then((response) => {
+                  let data = response.data;
+                  Alert.alert(data);
+                  navigation.navigate("Grace_lists");
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }}
+          >
+            ลบบันทึก
+          </Button>
+        </Button.Group>
+      );
     }
   }
 
@@ -124,13 +165,17 @@ function Grace_Detail_Screen({ navigation, route }) {
                   บันทึกความดี
                 </Heading>
                 <Box style={{ alignItems: "center" }} my={5}>
-                  <Image
-                    source={{
-                      uri: "https://cms.swensens1112.com/image/product/47/5947.jpg",
-                    }}
-                    alt="Alternate Text"
-                    size="2xl"
-                  />
+                  {thisGrace.grace_img != undefined ? (
+                    <Image
+                      source={{
+                        uri: thisGrace.grace_img,
+                      }}
+                      alt="Alternate Text"
+                      size="2xl"
+                    />
+                  ) : (
+                    <Spinner size="lg" />
+                  )}
                 </Box>
                 {renderStatusCheck()}
                 <Text textAlign="right" fontSize={11} color="coolGray.600">
@@ -158,6 +203,7 @@ function Grace_Detail_Screen({ navigation, route }) {
               </Text>
             </Stack>
           </Box>
+          {renDerdelButton()}
         </Center>
       </ScrollView>
     </NativeBaseProvider>
