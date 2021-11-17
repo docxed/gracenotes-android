@@ -68,7 +68,7 @@ const Card = () => {
             นาย สมชาย มากมี
           </Text>
         </Stack>
-        <Text isTruncated fontWeight="400">
+        <Text fontWeight="400">
           Bengaluru (also called Bangalore) is the center of India's high-tech
           industry. The city is also known for its parks and nightlife.
         </Text>
@@ -127,16 +127,6 @@ function Home_Screen({ navigation }) {
       >
         ความดีล่าสุด
       </Heading>
-      <Button
-        mx={3}
-        mt={5}
-        onPress={ async () => {
-          await AsyncStorage.clear();
-          navigation.navigate("Login");
-        }}
-      >
-        Log out
-      </Button>
       <Center flex={2} px="3">
         <Card />
       </Center>

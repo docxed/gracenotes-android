@@ -29,9 +29,9 @@ router.post("/register", async function (req, res, next) {
         .json({ status: false, message: "รหัสนักเรียนนี้ถูกใช้แล้ว" });
     } else {
       let result = await conn.query(
-        `INSERT INTO members (member_user, member_password, member_fname, member_lname, member_class, member_no, member_address, member_img)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-        [user, pass, fname, lname, classes, no, address, img]
+        `INSERT INTO members (member_user, member_password, member_fname, member_lname, member_class, member_no, member_dob, member_address, member_img)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+        [user, pass, fname, lname, classes, no, dob, address, img]
       );
     }
     res.status(200).json({ status: true, message: "สมัครสมาชิกสำเร็จ" });
