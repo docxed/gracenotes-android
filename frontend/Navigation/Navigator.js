@@ -11,8 +11,6 @@ import Register_Screen from "../screens/Register.js";
 import Home_Screen from "../screens/Home.js";
 import Note_Screen from "../screens/Note.js";
 import Home_Screen_Comment from '../screens/Home_Comment.js';
-import Activity_Screen from '../screens/Activity.js';
-import Activity_Detail_Screen from '../screens/Activity_Details.js';
 import Menu_Screen from '../screens/Menu.js';
 import Profile_Screen from '../screens/Profile.js';
 import Help_Screen from '../screens/Help.js';
@@ -51,17 +49,6 @@ function inHelp() {
             <Help_page.Screen name="Help_Second" component={Help_Detail_Screen}
             options={{headerShown: false}}/>
         </Help_page.Navigator>
-    );
-}
-
-function inActivity() {
-    return (
-        <Activity_page.Navigator initialRouteName="Activity_first">
-            <Activity_page.Screen name="Activity_first" component={Activity_Screen}
-            options={{headerShown: false}}/>
-            <Activity_page.Screen name="Activity_Second" component={Activity_Detail_Screen}
-            options={{headerShown: false}}/>
-        </Activity_page.Navigator>
     );
 }
 
@@ -137,18 +124,7 @@ function inside() {
                         return <FontAwesome5  focused={focused} color={color} name="hands-helping" size={30}/>;
                       }
                 }
-            }/>
-            <Tab.Screen name="Activity" component={inActivity} options={
-                {
-                    title: "กิจกรรม",
-                    headerShown:false,
-                    tabBarActiveTintColor: "indianred",
-                    tabBarIcon: ({color, focused}) => {
-                        return <Entypo focused={focused} color={color} name="flag" size={30}/>;
-                      }
-                }
-            }/>
-            
+            }/>          
             <Tab.Screen name="Menu" component={inMenu} options={
                 {
                     title: "เมนู",
