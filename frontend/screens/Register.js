@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import Axios from "axios";
+import { SERVER_IP, PORT } from "../database/serverIP";
 import * as firebase from "firebase";
 import { firebaseConfig } from "../database/firebaseDB";
 import * as ImagePicker from "expo-image-picker";
@@ -24,6 +25,7 @@ import {
   Text,
 } from "native-base";
 import { Alert } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 function Register_Screen({ navigation }) {
   // Check firebase exist
@@ -36,7 +38,7 @@ function Register_Screen({ navigation }) {
   const [user, setUser] = useState("");
   const [room, setRoom] = useState("");
   const [no, setNo] = useState("");
-  const [born, setBorn] = useState("");
+  const [born, setBorn] = useState(new Date());
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [pass, setPass] = useState("");
@@ -44,6 +46,9 @@ function Register_Screen({ navigation }) {
   const [uploading, setUploading] = useState(false);
   const [image, setImage] = useState("");
   const [info, setInfo] = useState({});
+
+  var [mode, setMode] = useState("date");
+  var [show, setShow] = useState(false);
 
   async function _retrieveData() {
     try {
@@ -93,6 +98,20 @@ function Register_Screen({ navigation }) {
     if (!result.cancelled) {
       setImage(result.uri);
     }
+  };
+
+  var onChange = (event, selectedDate) => {
+    var currentDate = selectedDate || born;
+    setShow(Platform.OS === "ios");
+    setBorn(currentDate);
+  };
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
   };
 
   return (
@@ -217,13 +236,32 @@ function Register_Screen({ navigation }) {
                   fontWeight: 500,
                 }}
               >
-                วัน/เดือน/ปีเกิด (NULL)
+                วัน/เดือน/ปีเกิด
+                <FormControl>
+                    {show && (
+                      <DateTimePicker
+                        style={{ margin: 50 }}
+                        value={born}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        placeholder="DD/MM/YYYY"
+                        onChange={onChange}
+                      />
+                    )}
+                  </FormControl>
               </FormControl.Label>
               <HStack space={3}>
                 <Input
                   placeholder="วว/ดด/ปปปป"
-                  value={born}
-                  onChangeText={(text) => setBorn(text)}
+                  value={
+                    born.getFullYear() +
+                    "-" +
+                    (born.getMonth() + 1) +
+                    "-" +
+                    born.getDate()
+                  }
+                  editable={false}
                   w={{
                     base: "55%",
                     md: "25%",
@@ -236,6 +274,7 @@ function Register_Screen({ navigation }) {
                         color: "gray.400",
                         size: "sm",
                       }}
+                      onPress={showDatepicker}
                     />
                   }
                 />
@@ -393,7 +432,7 @@ function Register_Screen({ navigation }) {
                           pass: pass,
                           img: url,
                         };
-                        Axios.post(`http://10.0.2.2:5001/register`, formData)
+                        Axios.post(`http://${SERVER_IP}:${PORT}/register`, formData)
                           .then((response) => {
                             const data = response.data;
                             if (data.status) {
