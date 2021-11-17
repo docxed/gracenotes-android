@@ -40,6 +40,7 @@ router.get("/user/:id", async function (req, res, next) {
 });
 
 router.put("/user/:id", async function (req, res, next) {
+
   const uid = req.params.id;
   const user = req.body.user;
   const fname = req.body.fname;
@@ -50,12 +51,14 @@ router.put("/user/:id", async function (req, res, next) {
   const address = req.body.address;
   const pass = req.body.pass;
   const level = req.body.level;
+  console.log(uid)
+  console.log(req.body)
 
   const conn = await pool.getConnection();
   await conn.beginTransaction();
   try {
     let [result, _] = await conn.query(
-      `UPDATE members SET member_user=?, member_fname=?, member_lname=?, member_class=?, member_no=?, member_dob=?, member_address=?, member_level=? WHERE member_id=?;`,
+      `UPDATE members SET member_user=?, member_fname=?, member_lname=?, member_class=?, member_no=?, member_dob=?, member_address=?, member_password=?, member_level=? WHERE member_id=?;`,
       [user, fname, lname, classes, no, dob, address, pass, level, uid]
     );
     res.status(200).send("อัปเดตข้อมูลแล้ว");

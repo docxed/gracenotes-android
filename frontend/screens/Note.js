@@ -22,6 +22,7 @@ import {
 } from "native-base";
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
+import { SERVER_IP, PORT } from "../database/serverIP";
 import * as firebase from "firebase";
 import { firebaseConfig } from "../database/firebaseDB";
 import * as ImagePicker from "expo-image-picker";
@@ -176,7 +177,13 @@ function Note_Screen({ navigation }) {
                   </FormControl>
                 </FormControl.Label>
                 <Input
-                value={ date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear() }
+                  value={
+                    date.getFullYear() +
+                    "-" +
+                    (date.getMonth() + 1) +
+                    "-" +
+                    date.getDate()
+                  }
                   editable={false}
                   placeholder="วว/ดด/ปปปป"
                   InputRightElement={
@@ -276,8 +283,7 @@ function Note_Screen({ navigation }) {
                   w={{ base: "30%" }}
                   alignSelf="center"
                   colorScheme="secondary"
-                  onPress={
-                    async () => {
+                  onPress={async () => {
                     // Bypass Network request failed when fetching || code from github :/
                     const blob = await new Promise((resolve, reject) => {
                       const xhr = new XMLHttpRequest();
@@ -322,11 +328,14 @@ function Note_Screen({ navigation }) {
                             sid: info.s_id,
                           };
 
-                          Axios.post(`http://10.0.2.2:5001/grace`, formData)
+                          Axios.post(
+                            `http://${SERVER_IP}:${PORT}/grace`,
+                            formData
+                          )
                             .then((response) => {
                               const data = response.data;
                               Alert.alert(data);
-                              // navigation.navigate()
+                              navigation.navigate("Grace_lists");
                             })
                             .catch((error) => {
                               console.log(error);
@@ -336,10 +345,7 @@ function Note_Screen({ navigation }) {
                         });
                       }
                     );
-                    }
-
-
-                  }
+                  }}
                 >
                   บันทึก
                 </Button>

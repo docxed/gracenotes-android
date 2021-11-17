@@ -127,16 +127,6 @@ function Home_Screen({ navigation }) {
       >
         ความดีล่าสุด
       </Heading>
-      <Button
-        mx={3}
-        mt={5}
-        onPress={ async () => {
-          await AsyncStorage.clear();
-          navigation.navigate("Login");
-        }}
-      >
-        Log out
-      </Button>
       <Center flex={2} px="3">
         <Card />
       </Center>
