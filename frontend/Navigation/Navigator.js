@@ -18,12 +18,14 @@ import Help_Detail_Screen from '../screens/Help_Details.js';
 import Grace_list_Screen from '../screens/MyNotes.js';
 import Grace_Detail_Screen from '../screens/Grace_Detail.js';
 import Help_Post_Screen from '../screens/Post_Help.js';
+import History_Screen from '../screens/History.js';
 
 
 const Login_page = createNativeStackNavigator();
 const Home_page = createNativeStackNavigator();
 const Help_page = createNativeStackNavigator();
 const Menu_page = createNativeStackNavigator();
+const History_page = createNativeStackNavigator();
 const Grace_page = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -49,6 +51,17 @@ function inHelp() {
     );
 }
 
+function inHistory() {
+    return (
+        <History_page.Navigator>
+            <History_page.Screen name="History_list" component={History_Screen}
+            options={{headerShown: false}}/>
+            <History_page.Screen name="History_Detail" component={Help_Detail_Screen}
+            options={{headerShown: false}}/>
+        </History_page.Navigator>
+    );
+}
+
 function inMenu() {
     return (
         <Menu_page.Navigator initialRouteName="Menu_st">
@@ -57,6 +70,8 @@ function inMenu() {
             <Menu_page.Screen name="editProfile" component={Profile_Screen}
             options={{headerShown: false}}/>
             <Menu_page.Screen name="MyGrace" component={inGrace}
+            options={{headerShown: false}}/>
+            <Menu_page.Screen name="MyHistory" component={inHistory}
             options={{headerShown: false}}/>
             <Menu_page.Screen name="PostHelp" component={Help_Post_Screen}
             options={{headerShown: false}}/>
@@ -108,7 +123,7 @@ function inside() {
                         return <FontAwesome5  focused={focused} color={color} name="hands-helping" size={30}/>;
                       }
                 }
-            }/>
+            }/>          
             <Tab.Screen name="Menu" component={inMenu} options={
                 {
                     title: "เมนู",
