@@ -68,7 +68,7 @@ const Card = () => {
             นาย สมชาย มากมี
           </Text>
         </Stack>
-        <Text fontWeight="400">
+        <Text isTruncated fontWeight="400">
           Bengaluru (also called Bangalore) is the center of India's high-tech
           industry. The city is also known for its parks and nightlife.
         </Text>

@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
-import { Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   Box,
   Divider,
@@ -9,6 +9,7 @@ import {
   HStack,
   VStack,
   Icon,
+  ScrollView,
   Text,
   Button,
   Center,
@@ -22,12 +23,12 @@ function Menu_Screen({ navigation }) {
                 <Box alignItems="center" w="90%" mx="auto">
                     <Heading fontSize="xl" p="4" pb="3" color="indigo.500">โปรไฟล์</Heading>
                     <Avatar
-                        size="150"
+                        size="120"
                         source={{
                         uri: "https://wallpaperaccess.com/full/317501.jpg",
                         }}
                     />
-                    <Button my="15" onPress={() => { navigation.navigate("editProfile"); }}>แก้ไข้โปรไฟล์ส่วนตัว</Button>
+                    <Button my="15" size="sm" onPress={() => { navigation.navigate("editProfile"); }}>แก้ไข้โปรไฟล์ส่วนตัว</Button>
                     <Divider my="2" />
                     <VStack space={2}>
                         <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("MyGrace")}}>
@@ -35,6 +36,14 @@ function Menu_Screen({ navigation }) {
                                 <HStack space={3}>
                                     <Icon color="success.400" as={MaterialCommunityIcons} name="note-multiple"/>
                                     <Text color="success.400" fontSize={20}>บันทึกความดีของฉัน</Text>
+                                </HStack>
+                            </Box>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("MyHistory")}}>
+                            <Box>
+                                <HStack space={3}>
+                                    <Icon color="teal.400" as={MaterialIcons} name="history"/>
+                                    <Text color="teal.400" fontSize={20}>ประวัติความช่วยเหลือ</Text>
                                 </HStack>
                             </Box>
                         </TouchableOpacity>
@@ -55,7 +64,7 @@ function Menu_Screen({ navigation }) {
                             </Box>
                         </TouchableOpacity>
                     </VStack>
-                    <Divider my="35"/>
+                    <Divider my="2"/>
                     <Button w={{base: "40%"}} 
                             size="lg" 
                             alignSelf="center" 
