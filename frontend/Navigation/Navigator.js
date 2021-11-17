@@ -24,7 +24,6 @@ import History_Screen from '../screens/History.js';
 const Login_page = createNativeStackNavigator();
 const Home_page = createNativeStackNavigator();
 const Help_page = createNativeStackNavigator();
-const Activity_page = createNativeStackNavigator();
 const Menu_page = createNativeStackNavigator();
 const History_page = createNativeStackNavigator();
 const Grace_page = createNativeStackNavigator();
