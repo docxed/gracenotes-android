@@ -11,8 +11,6 @@ import Register_Screen from "../screens/Register.js";
 import Home_Screen from "../screens/Home.js";
 import Note_Screen from "../screens/Note.js";
 import Home_Screen_Comment from '../screens/Home_Comment.js';
-import Activity_Screen from '../screens/Activity.js';
-import Activity_Detail_Screen from '../screens/Activity_Details.js';
 import Menu_Screen from '../screens/Menu.js';
 import Profile_Screen from '../screens/Profile.js';
 import Help_Screen from '../screens/Help.js';
@@ -25,7 +23,6 @@ import Help_Post_Screen from '../screens/Post_Help.js';
 const Login_page = createNativeStackNavigator();
 const Home_page = createNativeStackNavigator();
 const Help_page = createNativeStackNavigator();
-const Activity_page = createNativeStackNavigator();
 const Menu_page = createNativeStackNavigator();
 const Grace_page = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -49,17 +46,6 @@ function inHelp() {
             <Help_page.Screen name="Help_Second" component={Help_Detail_Screen}
             options={{headerShown: false}}/>
         </Help_page.Navigator>
-    );
-}
-
-function inActivity() {
-    return (
-        <Activity_page.Navigator initialRouteName="Activity_first">
-            <Activity_page.Screen name="Activity_first" component={Activity_Screen}
-            options={{headerShown: false}}/>
-            <Activity_page.Screen name="Activity_Second" component={Activity_Detail_Screen}
-            options={{headerShown: false}}/>
-        </Activity_page.Navigator>
     );
 }
 
@@ -123,17 +109,6 @@ function inside() {
                       }
                 }
             }/>
-            <Tab.Screen name="Activity" component={inActivity} options={
-                {
-                    title: "กิจกรรม",
-                    headerShown:false,
-                    tabBarActiveTintColor: "indianred",
-                    tabBarIcon: ({color, focused}) => {
-                        return <Entypo focused={focused} color={color} name="flag" size={30}/>;
-                      }
-                }
-            }/>
-            
             <Tab.Screen name="Menu" component={inMenu} options={
                 {
                     title: "เมนู",
