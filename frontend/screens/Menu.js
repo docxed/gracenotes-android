@@ -21,6 +21,7 @@ import {
   Button,
   Center,
   NativeBaseProvider,
+  Spacer,
   Spinner,
 } from "native-base";
 
@@ -83,7 +84,7 @@ function Menu_Screen({ navigation }) {
           </Heading>
           {me.member_img != undefined ? (
             <Avatar
-              size="150"
+              size="120"
               source={{
                 uri: me.member_img,
               }}
@@ -130,11 +131,11 @@ function Menu_Screen({ navigation }) {
               <Box>
                 <HStack space={3}>
                   <Icon
-                    color="emerald.400"
+                    color="teal.400"
                     as={MaterialIcons}
                     name="history"
                   />
-                  <Text color="emerald.400" fontSize={20}>
+                  <Text color="teal.400" fontSize={20}>
                     ประวัติความช่วยเหลือ
                   </Text>
                 </HStack>
@@ -159,7 +160,12 @@ function Menu_Screen({ navigation }) {
                 </HStack>
               </Box>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity 
+              style={styles.button}
+              onPress={() => {
+                navigation.navigate("Admin");
+              }}
+              >
               <Box>
                 <HStack space={3}>
                   <Icon
@@ -174,7 +180,7 @@ function Menu_Screen({ navigation }) {
               </Box>
             </TouchableOpacity>
           </VStack>
-          <Divider my="35" />
+          <Divider my="2"/>
           <Button
             w={{ base: "40%" }}
             size="lg"
