@@ -18,13 +18,26 @@ import Help_Detail_Screen from '../screens/Help_Details.js';
 import Grace_list_Screen from '../screens/MyNotes.js';
 import Grace_Detail_Screen from '../screens/Grace_Detail.js';
 import Help_Post_Screen from '../screens/Post_Help.js';
-
+import History_Screen from '../screens/History.js';
+import Admin_menu_Screen from '../screens/Admin_Menu.js';
+import Admin_check_Screen from '../screens/Admin_Check.js';
+import Admin_post_Screen from '../screens/Admin_Manage1.js';
+import Admin_user_Screen from '../screens/Admin_Manage2.js';
+import Admin_help_Screen from '../screens/Admin_Manage3.js';
+import Admin_Check_Detail_Screen from '../screens/Admin_Check_Detail.js';
+import Admin_Post_notes from '../screens/Admin_post.js';
+import Admin_edit_Post from '../screens/Admin_edit_post.js';
+import Admin_option_user from '../screens/Admin_option_user.js';
+import Admin_edit_help from '../screens/Admin_edit_help.js';
 
 const Login_page = createNativeStackNavigator();
 const Home_page = createNativeStackNavigator();
 const Help_page = createNativeStackNavigator();
 const Menu_page = createNativeStackNavigator();
+const History_page = createNativeStackNavigator();
 const Grace_page = createNativeStackNavigator();
+const Admin_page = createNativeStackNavigator();
+const Admin_CheckandPost = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function inhome() {
@@ -49,6 +62,17 @@ function inHelp() {
     );
 }
 
+function inHistory() {
+    return (
+        <History_page.Navigator>
+            <History_page.Screen name="History_list" component={History_Screen}
+            options={{headerShown: false}}/>
+            <History_page.Screen name="History_Detail" component={Help_Detail_Screen}
+            options={{headerShown: false}}/>
+        </History_page.Navigator>
+    );
+}
+
 function inMenu() {
     return (
         <Menu_page.Navigator initialRouteName="Menu_st">
@@ -58,7 +82,11 @@ function inMenu() {
             options={{headerShown: false}}/>
             <Menu_page.Screen name="MyGrace" component={inGrace}
             options={{headerShown: false}}/>
+            <Menu_page.Screen name="MyHistory" component={inHistory}
+            options={{headerShown: false}}/>
             <Menu_page.Screen name="PostHelp" component={Help_Post_Screen}
+            options={{headerShown: false}}/>
+            <Menu_page.Screen name="Admin" component={inAdmin}
             options={{headerShown: false}}/>
         </Menu_page.Navigator>
     );
@@ -72,6 +100,33 @@ function inGrace() {
             <Grace_page.Screen name="Grace_Details" component={Grace_Detail_Screen}
             options={{headerShown: false}}/>
         </Grace_page.Navigator>
+    );
+}
+
+function inAdmin() {
+    return (
+        <Admin_page.Navigator initialRouteName="Admin_menu">
+            <Admin_page.Screen name="Admin_menu" component={Admin_menu_Screen} options={{headerShown: false}}/>
+            <Admin_page.Screen name="Admin_check_notes" component={inAdminCheck} options={{headerShown: false}}/>
+            <Admin_page.Screen name="Admin_manage_post" component={Admin_post_Screen} options={{headerShown: false}}/>
+            <Admin_page.Screen name="Admin_manage_user" component={Admin_user_Screen} options={{headerShown: false}}/>
+            <Admin_page.Screen name="Admin_manage_help" component={Admin_help_Screen} options={{headerShown: false}}/>
+            <Admin_page.Screen name="Admin_Show_user" component={Admin_option_user} options={{headerShown: false}}/>
+            <Admin_page.Screen name="Admin_edit_p" component={Admin_edit_Post} options={{headerShown: false}}/>
+            <Admin_page.Screen name="Admin_view_p" component={Home_Screen_Comment} options={{headerShown: false}}/>
+            <Admin_page.Screen name="Admin_edit_h" component={Admin_edit_help} options={{headerShown: false}}/>
+        </Admin_page.Navigator>
+    );  
+}
+
+function inAdminCheck( ){
+    return (
+        <Admin_CheckandPost.Navigator initialRouteName="Check_list">
+            <Admin_CheckandPost.Screen name="Check_list" component={Admin_check_Screen} options={{headerShown: false}}/>
+            <Admin_CheckandPost.Screen name="Check_Detail" component={Admin_Check_Detail_Screen} options={{headerShown: false}}/>
+            <Admin_CheckandPost.Screen name="Check_Post" component={Admin_Post_notes} options={{headerShown: false}}/>
+            <Admin_CheckandPost.Screen name="Post_On" component={inhome} options={{headerShown: false}}/>
+        </Admin_CheckandPost.Navigator>
     );
 }
 
@@ -108,7 +163,7 @@ function inside() {
                         return <FontAwesome5  focused={focused} color={color} name="hands-helping" size={30}/>;
                       }
                 }
-            }/>
+            }/>          
             <Tab.Screen name="Menu" component={inMenu} options={
                 {
                     title: "เมนู",
