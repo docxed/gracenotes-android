@@ -124,7 +124,7 @@ function Menu_Screen({ navigation }) {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                navigation.navigate("MyGrace");
+                navigation.navigate("MyHistory");
               }}
             >
               <Box>
