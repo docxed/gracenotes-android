@@ -101,8 +101,7 @@ router.get("/sub", async function (req, res, next) {
 });
 
 router.post("/sub/:id", async function (req, res, next) {
-    console.log(req.body)
-    const uid = req.body.uid;
+    const uid = req.params.id;
     const sid = req.body.sid;
     
     const conn = await pool.getConnection();

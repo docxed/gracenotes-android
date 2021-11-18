@@ -197,7 +197,6 @@ function Help_Detail_Screen({ navigation, route }) {
                       colorScheme="indigo"
                       onPress={() => {
                         const formData = {
-                          uid: route.params.keys,
                           sid: info.s_id,
                         };
                         Axios.post(
