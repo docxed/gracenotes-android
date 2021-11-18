@@ -124,6 +124,25 @@ function Menu_Screen({ navigation }) {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
+                navigation.navigate("MyGrace");
+              }}
+            >
+              <Box>
+                <HStack space={3}>
+                  <Icon
+                    color="emerald.400"
+                    as={MaterialIcons}
+                    name="history"
+                  />
+                  <Text color="emerald.400" fontSize={20}>
+                    ประวัติความช่วยเหลือ
+                  </Text>
+                </HStack>
+              </Box>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
                 navigation.navigate("PostHelp");
               }}
             >
