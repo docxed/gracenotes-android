@@ -103,6 +103,29 @@ router.delete("/aid/:id", async function (req, res, next) {
   }
 });
 
+router.delete("/aidadmin/:id", async function (req, res, next) {
+  const uid = req.params.id;
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+     await conn.query(
+      `DELETE FROM aid WHERE aid_id=?;`,
+      [uid]
+    );
+     await conn.query(
+      `DELETE FROM aid_sub WHERE aid_id=?;`,
+      [uid]
+    );
+    res.status(200).send("ลบข้อมูลแล้ว");
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    return res.status(400).json(err);
+  } finally {
+    conn.release();
+  }
+});
+
 router.get("/sub", async function (req, res, next) {
     const conn = await pool.getConnection();
     await conn.beginTransaction();

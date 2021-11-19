@@ -55,6 +55,7 @@ function Profile_Screen({ navigation }) {
         setUser(data.member_user);
         setRoom(data.member_class);
         setNo(data.member_no);
+        setBorn(new Date(data.member_dob))
         setAddress(data.member_address);
         setoldPass(data.member_pass);
       })

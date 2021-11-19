@@ -335,7 +335,7 @@ function Note_Screen({ navigation }) {
                             .then((response) => {
                               const data = response.data;
                               Alert.alert(data);
-                              navigation.navigate("Grace_lists");
+                              // navigation.navigate(); HERE TO ADD NAVIGATE
                             })
                             .catch((error) => {
                               console.log(error);

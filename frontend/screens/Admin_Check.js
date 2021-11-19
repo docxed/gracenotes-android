@@ -29,7 +29,7 @@ function Admin_check_Screen({ navigation }) {
   const [graceList, setGraceList] = useState([]);
 
   async function showGrace() {
-    await Axios.get(`http://${SERVER_IP}:${PORT}/grace`)
+    await Axios.get(`http://${SERVER_IP}:${PORT}/graceadmin`)
       .then((response) => {
         let data = response.data;
         data.reverse();
@@ -98,40 +98,55 @@ function Admin_check_Screen({ navigation }) {
                   หมายเลขบันทึก
                 </Text>
                 <Divider my="1" />
-                <Text fontSize={16}>9</Text>
-                <Text fontSize={16}>8</Text>
-                <Text fontSize={16}>7</Text>
+                {graceList.map((item, index) => {
+                  return (
+                    <Box key={index}>
+                      <Text fontSize={16}>{item.grace_id}</Text>
+                    </Box>
+                  );
+                })}
               </VStack>
               <VStack alignItems="center" space={5}>
                 <Text bold fontSize={17}>
                   ผู้บันทึก
                 </Text>
                 <Divider my="1" />
-                <Text fontSize={16}>เอเรียม โมนาช</Text>
-                <Text fontSize={16}>โรนัส เกเรียน</Text>
-                <Text fontSize={16}>อานิน นาเดีย</Text>
+                {graceList.map((item, index) => {
+                  return (
+                    <Box key={index}>
+                      <Text fontSize={16}>
+                        {item.member_fname} {item.member_lname}
+                      </Text>
+                    </Box>
+                  );
+                })}
               </VStack>
               <VStack alignItems="center" space={5}>
                 <Text bold fontSize={17}>
                   สถานะตรวจ
                 </Text>
                 <Divider my="1" />
-                <Button
-                  w={{ base: "60%" }}
-                  size="6"
-                  colorScheme="warning"
-                  onPress={() => {
-                    props.navigation.navigate("Check_Detail");
-                  }}
-                >
-                  รอการตรวจ
-                </Button>
-                <Button w={{ base: "60%" }} size="6" colorScheme="success">
-                  ตรวจแล้ว
-                </Button>
-                <Button w={{ base: "60%" }} size="6" colorScheme="success">
-                  ตรวจแล้ว
-                </Button>
+                {graceList.map((item, index) => {
+                  return item.grace_check == "รอการอนุมัติ" ? (
+                    <Button
+                      key={index}
+                      w={{ base: "60%" }}
+                      size="6"
+                      colorScheme="warning"
+                      onPress={() => {
+                        navigation.navigate("Check_Detail", {keys: item.grace_id});
+                      }}
+                    >
+                      รอการตรวจ
+                    </Button>
+                  ) : (
+                    <Button key={index} w={{ base: "60%" }} size="6" colorScheme="success" onPress={() => {
+                      navigation.navigate("Check_Detail", {keys: item.grace_id});
+                    }}>
+                      ตรวจแล้ว
+                    </Button>
+                  );
+                })}
               </VStack>
             </HStack>
           </Box>

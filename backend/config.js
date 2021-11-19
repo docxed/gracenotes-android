@@ -4,7 +4,7 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '1234',
-    database: 'gracenote',
+    database: 'gracenote_android',
     waitForConnections: true,
     connectionLimit: 100,
     queueLimit: 0
