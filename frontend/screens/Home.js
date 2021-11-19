@@ -19,7 +19,6 @@ import {
 } from "native-base";
 
 const Card = (props) => {
-
   return (
     <Box
       maxW="80"
@@ -54,14 +53,12 @@ const Card = (props) => {
         </Center>
       </Box>
       <Stack p="4" space={3}>
-        <Stack space={2}>
-        </Stack>
+        <Stack space={2}></Stack>
         <Text isTruncated fontWeight="400">
           {props.item.social_detail}
         </Text>
         <HStack alignItems="center" space={4} justifyContent="space-between">
-          <HStack alignItems="center">
-          </HStack>
+          <HStack alignItems="center"></HStack>
         </HStack>
       </Stack>
     </Box>
@@ -76,7 +73,7 @@ function Home_Screen({ navigation }) {
     await Axios.get(`http://${SERVER_IP}:${PORT}/social`)
       .then((response) => {
         let data = response.data;
-        data.reverse()
+        data.reverse();
         setSocialList(data);
       })
       .catch((error) => {
@@ -105,6 +102,7 @@ function Home_Screen({ navigation }) {
       _retrieveData(); // Call Check Authorized
       return () => {
         // When the screen is unfocused (leaving). What do you do?
+        setSocialList([])
       };
     }, [])
   );
@@ -137,7 +135,9 @@ function Home_Screen({ navigation }) {
                 <Box key={index} my={3}>
                   <Pressable
                     onPress={() => {
-                      navigation.navigate("Home_Second", {keys: item.social_id});
+                      navigation.navigate("Home_Second", {
+                        keys: item.social_id,
+                      });
                     }}
                   >
                     <Card item={item} />

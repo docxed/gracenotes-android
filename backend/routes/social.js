@@ -40,6 +40,85 @@ router.get("/social/:id", async function (req, res, next) {
   }
 });
 
+router.get("/socialadmin/:id", async function (req, res, next) {
+  const uid = req.params.id;
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+    let [result, _] = await conn.query(
+      `SELECT * FROM social WHERE social_id=?;`,
+      [uid]
+    );
+    res.status(200).json(result[0]);
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    return res.status(400).json(err);
+  } finally {
+    conn.release();
+  }
+});
+
+router.post("/social", async function (req, res, next) {
+  const detail = req.body.detail;
+  const img = req.body.img;
+  const sid = req.body.sid;
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+    let [result, _] = await conn.query(
+      `INSERT INTO social (social_detail, social_img, member_id) VALUES (?, ?, ?);`,
+      [detail, img, sid]
+    );
+    res.status(200).send("เผยแพร่สำเร็จแล้ว");
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    return res.status(400).json(err);
+  } finally {
+    conn.release();
+  }
+});
+
+router.put("/socialadmin/:id", async function (req, res, next) {
+  const uid = req.params.id;
+  const detail = req.body.detail;
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+    let [result, _] = await conn.query(
+      `UPDATE social SET social_detail=? WHERE social_id=?;`,
+      [detail, uid]
+    );
+    res.status(200).send("อัปเดตโพสต์แล้ว");
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    return res.status(400).json(err);
+  } finally {
+    conn.release();
+  }
+});
+
+router.delete("/socialadmin/:id", async function (req, res, next) {
+  const uid = req.params.id;
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+    let [result, _] = await conn.query(
+      `DELETE FROM social WHERE social_id=?;`,
+      [uid]
+    );
+    res.status(200).send("ลบโพสต์แล้ว");
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    return res.status(400).json(err);
+  } finally {
+    conn.release();
+  }
+});
+
 router.post("/comment/:id", async function (req, res, next) {
   const uid = req.params.id;
   const detail = req.body.detail;

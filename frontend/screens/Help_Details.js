@@ -162,7 +162,7 @@ function Help_Detail_Screen({ navigation, route }) {
                 fontSize={11}
                 color="coolGray.600"
               >
-                ประกาศเมื่อวันที่{" "}
+                เริ่มวันที่{" "}
                 {datetime.getFullYear() +
                   "-" +
                   (datetime.getMonth() + 1) +
@@ -200,7 +200,7 @@ function Help_Detail_Screen({ navigation, route }) {
                       alignSelf="center"
                       variant={"outline"}
                     >
-                      สถาณะ : ปิด
+                      สถานะ : ปิด
                     </Badge>
                   </Pressable>
                 ) : (
@@ -230,7 +230,7 @@ function Help_Detail_Screen({ navigation, route }) {
                       alignSelf="center"
                       variant={"outline"}
                     >
-                      สถาณะ : เปิด
+                      สถานะ : เปิด
                     </Badge>
                   </Pressable>
                 )}
