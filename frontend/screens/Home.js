@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import Axios from "axios";
+import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import {
@@ -12,10 +14,12 @@ import {
   Stack,
   Button,
   NativeBaseProvider,
+  Pressable,
+  ScrollView,
 } from "native-base";
 
-const Card = () => {
-  
+const Card = (props) => {
+
   return (
     <Box
       maxW="80"
@@ -35,11 +39,12 @@ const Card = () => {
         backgroundColor: "gray.50",
       }}
     >
+      <Pressable />
       <Box>
         <AspectRatio w="100%" ratio={16 / 9}>
           <Image
             source={{
-              uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg",
+              uri: props.item.social_img,
             }}
             alt="image"
           />
@@ -50,39 +55,12 @@ const Card = () => {
       </Box>
       <Stack p="4" space={3}>
         <Stack space={2}>
-          <Heading size="md" ml="-1">
-            กวาดดาดฟ้า มหานคร
-          </Heading>
-          <Text
-            fontSize={14}
-            _light={{
-              color: "violet.500",
-            }}
-            _dark={{
-              color: "violet.400",
-            }}
-            fontWeight="500"
-            ml="-0.5"
-            mt="-1"
-          >
-            นาย สมชาย มากมี
-          </Text>
         </Stack>
         <Text isTruncated fontWeight="400">
-          Bengaluru (also called Bangalore) is the center of India's high-tech
-          industry. The city is also known for its parks and nightlife.
+          {props.item.social_detail}
         </Text>
         <HStack alignItems="center" space={4} justifyContent="space-between">
           <HStack alignItems="center">
-            <Text
-              color="coolGray.600"
-              _dark={{
-                color: "warmGray.200",
-              }}
-              fontWeight="400"
-            >
-              6 mins ago
-            </Text>
           </HStack>
         </HStack>
       </Stack>
@@ -91,7 +69,21 @@ const Card = () => {
 };
 
 function Home_Screen({ navigation }) {
-  const [info, setInfo] = useState({});
+  const [info, setInfo] = useState({}); // LocalStorage Data
+  const [socialList, setSocialList] = useState([]);
+
+  async function showSocial() {
+    await Axios.get(`http://${SERVER_IP}:${PORT}/social`)
+      .then((response) => {
+        let data = response.data;
+        data.reverse()
+        setSocialList(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   async function _retrieveData() {
     try {
       const value = await AsyncStorage.getItem("info"); // Get member's info from LocalStorage
@@ -106,6 +98,7 @@ function Home_Screen({ navigation }) {
       console.log(error);
     }
   }
+
   useFocusEffect(
     React.useCallback(() => {
       //  When the screen is focused (coming back to it). What do you do?
@@ -116,20 +109,47 @@ function Home_Screen({ navigation }) {
     }, [])
   );
 
+  const innerFunction = useCallback(() => {
+    showSocial();
+  }, [info]);
+
+  useEffect(() => {
+    // useState is Asynchronous!!!, Thus you need to Hook for getValue on created info(LocalStorage)
+    innerFunction();
+  }, [innerFunction]);
+
   return (
     <NativeBaseProvider>
-      <Heading
-        marginTop={45}
-        textAlign="center"
-        size="lg"
-        fontWeight="600"
-        color="indigo.500"
-      >
-        ความดีล่าสุด
-      </Heading>
-      <Center flex={2} px="3">
-        <Card />
-      </Center>
+      <ScrollView>
+        <Heading
+          marginTop={45}
+          textAlign="center"
+          size="lg"
+          fontWeight="600"
+          color="indigo.500"
+        >
+          ความดีล่าสุด
+        </Heading>
+        {socialList.length != 0 ? (
+          <Center flex={2} px="3">
+            {socialList.map((item, index) => {
+              return (
+                <Box key={index} my={3}>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate("Home_Second", {keys: item.social_id});
+                    }}
+                  >
+                    <Card item={item} />
+                  </Pressable>
+                </Box>
+              );
+            })}
+          </Center>
+        ) : (
+          <Text></Text>
+        )}
+      </ScrollView>
     </NativeBaseProvider>
   );
 }
