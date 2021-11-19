@@ -130,11 +130,7 @@ function Menu_Screen({ navigation }) {
             >
               <Box>
                 <HStack space={3}>
-                  <Icon
-                    color="teal.400"
-                    as={MaterialIcons}
-                    name="history"
-                  />
+                  <Icon color="teal.400" as={MaterialIcons} name="history" />
                   <Text color="teal.400" fontSize={20}>
                     ประวัติความช่วยเหลือ
                   </Text>
@@ -160,27 +156,31 @@ function Menu_Screen({ navigation }) {
                 </HStack>
               </Box>
             </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.button}
-              onPress={() => {
-                navigation.navigate("Admin");
-              }}
+            {info.s_level == "teacher" && info.s_id != undefined ? (
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  navigation.navigate("Admin");
+                }}
               >
-              <Box>
-                <HStack space={3}>
-                  <Icon
-                    color="rose.500"
-                    as={MaterialIcons}
-                    name="admin-panel-settings"
-                  />
-                  <Text color="rose.500" fontSize={20}>
-                    Admin Panel
-                  </Text>
-                </HStack>
-              </Box>
-            </TouchableOpacity>
+                <Box>
+                  <HStack space={3}>
+                    <Icon
+                      color="rose.500"
+                      as={MaterialIcons}
+                      name="admin-panel-settings"
+                    />
+                    <Text color="rose.500" fontSize={20}>
+                      Admin Panel
+                    </Text>
+                  </HStack>
+                </Box>
+              </TouchableOpacity>
+            ) : (
+              <Text></Text>
+            )}
           </VStack>
-          <Divider my="2"/>
+          <Divider my="2" />
           <Button
             w={{ base: "40%" }}
             size="lg"

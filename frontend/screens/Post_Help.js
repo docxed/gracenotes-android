@@ -201,7 +201,7 @@ function Help_Post_Screen({ navigation }) {
                     .then((response) => {
                       const data = response.data;
                       Alert.alert(data);
-                      // navigation.navigate("PostHelp");
+                      // navigation.navigate(""); HERE TO ADD NAVIGATE
                     })
                     .catch((error) => {
                       console.log(error);

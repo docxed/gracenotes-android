@@ -17,7 +17,9 @@ import {
   NativeBaseProvider,
   Button,
   Spinner,
+  Pressable,
 } from "native-base";
+import { Alert } from "react-native";
 
 export const RenderUser = (props) => {
   let uList = props.userList.filter((array) => array.member_id == props.memId);
@@ -172,21 +174,65 @@ function Help_Detail_Screen({ navigation, route }) {
                 {thisAid.aid_state == undefined ? (
                   <Text></Text>
                 ) : thisAid.aid_state == "ปิด" ? (
-                  <Badge
-                    colorScheme="warning"
-                    alignSelf="center"
-                    variant={"outline"}
+                  <Pressable
+                    onPress={() => {
+                      if (thisAid.member_id == info.s_id) {
+                        let formData = {
+                          state: "เปิด",
+                        };
+                        Axios.put(
+                          `http://${SERVER_IP}:${PORT}/aidstate/${route.params.keys}`,
+                          formData
+                        )
+                          .then((response) => {
+                            showThisAid();
+                          })
+                          .catch((error) => {
+                            console.log(error);
+                          });
+                      } else {
+                        return;
+                      }
+                    }}
                   >
-                    สถาณะ : ปิด
-                  </Badge>
+                    <Badge
+                      colorScheme="warning"
+                      alignSelf="center"
+                      variant={"outline"}
+                    >
+                      สถาณะ : ปิด
+                    </Badge>
+                  </Pressable>
                 ) : (
-                  <Badge
-                    colorScheme="success"
-                    alignSelf="center"
-                    variant={"outline"}
+                  <Pressable
+                    onPress={() => {
+                      if (thisAid.member_id == info.s_id) {
+                        let formData = {
+                          state: "ปิด",
+                        };
+                        Axios.put(
+                          `http://${SERVER_IP}:${PORT}/aidstate/${route.params.keys}`,
+                          formData
+                        )
+                          .then((response) => {
+                            showThisAid();
+                          })
+                          .catch((error) => {
+                            console.log(error);
+                          });
+                      } else {
+                        return;
+                      }
+                    }}
                   >
-                    สถาณะ : เปิด
-                  </Badge>
+                    <Badge
+                      colorScheme="success"
+                      alignSelf="center"
+                      variant={"outline"}
+                    >
+                      สถาณะ : เปิด
+                    </Badge>
+                  </Pressable>
                 )}
                 {thisAid.member_id == info.s_id ? (
                   <Text></Text>
@@ -237,6 +283,34 @@ function Help_Detail_Screen({ navigation, route }) {
                 )}
               </Stack>
             </Stack>
+            {subListForAmount.length == 0 ? (
+              <Box style={{ alignItems: "center" }}>
+                <Button
+                  colorScheme="danger"
+                  width="20%"
+                  size="sm"
+                  m={3}
+                  onPress={() => {
+                    Axios.delete(
+                      `http://${SERVER_IP}:${PORT}/aid/${route.params.keys}`
+                    )
+                      .then((response) => {
+                        let data = response.data;
+                        Alert.alert(data);
+                        // navigation.navigate(""); HERE TO ADD NAVIGATE
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
+                  }}
+                >
+                  ลบ
+                </Button>
+              </Box>
+            ) : (
+              <Box></Box>
+            )}
+
             <Divider my="2" />
             <Stack space={2}>
               <Text mx="auto" fontSize={20} color="tertiary.500">

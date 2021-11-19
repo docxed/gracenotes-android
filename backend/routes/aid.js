@@ -1,4 +1,4 @@
-const { SIGCHLD } = require("constants");
+
 const express = require("express");
 const path = require("path");
 const pool = require("../config");
@@ -63,6 +63,26 @@ router.get("/aid/:id", async function (req, res, next) {
   }
 });
 
+router.put("/aidstate/:id", async function (req, res, next) {
+  const uid = req.params.id;
+  const state = req.body.state;
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+    let [result, _] = await conn.query(
+      `UPDATE aid SET aid_state=? WHERE aid_id=?;`,
+      [state, uid]
+    );
+    res.status(200).send("ลบข้อมูลแล้ว");
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    return res.status(400).json(err);
+  } finally {
+    conn.release();
+  }
+});
+
 
 router.delete("/aid/:id", async function (req, res, next) {
   const uid = req.params.id;
@@ -99,6 +119,24 @@ router.get("/sub", async function (req, res, next) {
       conn.release();
     }
 });
+
+router.get("/sub/history", async function (req, res, next) {
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+    let [result, _] = await conn.query(
+      `SELECT * FROM aid JOIN aid_sub USING (aid_id) ORDER BY sub_id ASC;`
+    );
+    res.status(200).json(result);
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    return res.status(400).json(err);
+  } finally {
+    conn.release();
+  }
+});
+
 
 router.post("/sub/:id", async function (req, res, next) {
     const uid = req.params.id;
