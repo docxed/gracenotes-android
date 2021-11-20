@@ -2,8 +2,9 @@ import React, { useState, useEffect, useCallback } from "react";
 import Axios from "axios";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, StackActions } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { useValidation } from 'react-native-form-validator';
 import {
   Box,
   Heading,
@@ -27,6 +28,14 @@ import { Alert } from "react-native";
 
 const Card = (props) => {
   const [caption, setCaption] = useState("");
+
+  const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+    useValidation({
+      state: { caption },
+    });
+
+  const popAction = StackActions.pop(1);
+
   function renderDate() {
     let date = new Date(props.thisSocial.social_timestamp);
     return (
@@ -76,6 +85,7 @@ const Card = (props) => {
             md: "25%",
           }}
         />
+        {isFieldInError('caption') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รายละเอียดโพสต์</Text>) : (<Text></Text>)}
       </Stack>
       <Divider my="8" w="100%" />
       <HStack mx="auto" space={3}>
@@ -84,7 +94,12 @@ const Card = (props) => {
           size="lg"
           colorScheme="indigo"
           onPress={() => {
-            let formData = {
+
+            if(validate({
+              caption: { required: true},
+              
+            })){
+              let formData = {
               detail: caption,
             };
             Axios.put(
@@ -98,6 +113,15 @@ const Card = (props) => {
               .catch((error) => {
                 console.log(error);
               });
+
+
+            }else{
+
+              return false
+            }
+
+
+            
           }}
         >
           อัพเดต
@@ -113,6 +137,7 @@ const Card = (props) => {
               .then((response) => {
                 let data = response.data;
                 Alert.alert(data);
+                props.navigation.dispatch(popAction);
                 // navigation.navigate(""); HERE TO ADD NAVIGATE
               })
               .catch((error) => {

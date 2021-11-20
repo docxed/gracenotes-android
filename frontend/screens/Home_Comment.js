@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import { useValidation } from 'react-native-form-validator';
 import {
   Box,
   Heading,
@@ -26,6 +27,10 @@ import {
 } from "native-base";
 
 const Card = (props) => {
+
+
+
+
   return (
     <Box marginTop={50} p="5" py="15" w="100%" mx="auto">
       <Text textAlign="right" padding={1} fontSize={11} color="coolGray.600">
@@ -61,6 +66,11 @@ function Home_Screen_Comment({ navigation, route }) {
   const [commentList, setCommentList] = useState([]);
   const [userList, setUserList] = useState([]);
   const [statusList, setStatusList] = useState([]);
+
+  const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+    useValidation({
+      state: { comment },
+    });
 
   async function showStatusList() {
     await Axios.get(`http://${SERVER_IP}:${PORT}/status/${route.params.keys}`)
@@ -312,11 +322,18 @@ function Home_Screen_Comment({ navigation, route }) {
                 value={comment}
                 onChangeText={(text) => setComment(text)}
               />
+              
               <Button
                 size="lg"
                 colorScheme="indigo"
                 onPress={() => {
-                  let formData = {
+
+                  if(validate({
+                    comment: { required: true },
+                    
+    
+                  })){
+                    let formData = {
                     detail: comment,
                     sid: info.s_id,
                   };
@@ -331,11 +348,23 @@ function Home_Screen_Comment({ navigation, route }) {
                     .catch((error) => {
                       console.log(error);
                     });
+
+
+
+
+                  }else{
+                    return(false)
+
+                  }
+
+
+                  
                 }}
               >
                 ส่ง
               </Button>
             </HStack>
+            {isFieldInError('comment') ? (<Text margin="3" bold style={{ color: 'red' }}>โปรดใส่ข้อความ</Text>) : (<Text></Text>)}
           </Box>
           {commentList.length != 0 ? (
             commentList.map((item, index) => {

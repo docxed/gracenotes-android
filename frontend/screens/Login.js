@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import { useFocusEffect } from "@react-navigation/native";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
+import { useValidation } from 'react-native-form-validator';
 import {
   NativeBaseProvider,
   Box,
@@ -28,6 +29,14 @@ function Login_Screen({ navigation }) {
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
   const [info, setInfo] = useState({});
+
+
+  const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+    useValidation({
+      state: { user, pass },
+    });
+
+
 
   async function _retrieveData() {
     try {
@@ -97,6 +106,7 @@ function Login_Screen({ navigation }) {
               รหัสนักเรียน
             </FormControl.Label>
             <Input
+            
               InputLeftElement={
                 <Icon
                   as={<MaterialIcons name="person" />}
@@ -108,6 +118,9 @@ function Login_Screen({ navigation }) {
               value={user}
               onChangeText={(text) => setUser(text)}
             />
+            {isFieldInError('user') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รหัสนักเรียนให้ถูกต้อง</Text>) : (<Text></Text>)}
+            
+        
           </FormControl>
           <FormControl>
             <FormControl.Label
@@ -120,6 +133,7 @@ function Login_Screen({ navigation }) {
               รหัสผ่าน
             </FormControl.Label>
             <Input
+            secureTextEntry={true}
               type="password"
               InputLeftElement={
                 <Icon
@@ -132,48 +146,67 @@ function Login_Screen({ navigation }) {
               value={pass}
               onChangeText={(text) => setPass(text)}
             />
+            {isFieldInError('pass') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รหัสผ่านให้ถูกต้อง</Text>) : (<Text></Text>)}
           </FormControl>
           <Button
             mt="2"
             color="primary.300"
             _text={{ color: "white" }}
             onPress={() => {
-              const formData = {
-                user: user,
-                pass: pass,
-              };
-              Axios.post(`http://${SERVER_IP}:${PORT}/login`, formData)
-                .then((response) => {
-                  const data = response.data;
-                  if (data.status) {
-                    // Login Success
-                    let info = {
-                      // Create obj prepare to save in LocalStorage
-                      s_id: data.ses_id, // id of member '1, 2, 3, 4'
-                      s_user: data.ses_user, // student's code of member '06437'
-                      s_level: data.ses_level, // role of member 'student or teacher'
-                    };
-                    let myJSON = JSON.stringify(info); // parsing JSON
-                    async function _storeData() {
-                      try {
-                        await AsyncStorage.setItem("info", myJSON);
-                      } catch (error) {
-                        console.log(error);
+              if(validate({
+                user: {maxlength: 100, required: true },
+                pass: {maxlength: 100, required: true}
+
+              })){
+
+                const formData = {
+                  user: user,
+                  pass: pass,
+                };
+                Axios.post(`http://${SERVER_IP}:${PORT}/login`, formData)
+                  .then((response) => {
+                    const data = response.data;
+                    if (data.status) {
+                      // Login Success
+                      let info = {
+                        // Create obj prepare to save in LocalStorage
+                        s_id: data.ses_id, // id of member '1, 2, 3, 4'
+                        s_user: data.ses_user, // student's code of member '06437'
+                        s_level: data.ses_level, // role of member 'student or teacher'
+                      };
+                      let myJSON = JSON.stringify(info); // parsing JSON
+                      async function _storeData() {
+                        try {
+                          await AsyncStorage.setItem("info", myJSON);
+                        } catch (error) {
+                          console.log(error);
+                        }
                       }
+                      _storeData(); // Saving obj of member's info to LocalStorage
+                      setUser("");
+                      setPass("");
+                      navigation.navigate("Home_page");
+                    } else {
+                      // Login Fail But Nothing Error
+                      Alert.alert(data.message);
+                      setPass("");
                     }
-                    _storeData(); // Saving obj of member's info to LocalStorage
-                    setUser("");
-                    setPass("");
-                    navigation.navigate("Home_page");
-                  } else {
-                    // Login Fail But Nothing Error
-                    Alert.alert(data.message);
-                    setPass("");
-                  }
-                })
-                .catch((error) => {
-                  console.log(error); // Error
-                });
+                  })
+                  .catch((error) => {
+                    console.log(error); // Error
+                  });
+
+                
+
+              }
+              else{
+                return (false)
+              }
+
+              
+
+
+              
             }}
           >
             ลงชื่อเข้าใช้

@@ -78,31 +78,7 @@ const Admin_list_Help = (props) => {
             );
           })}
         </VStack>
-        <VStack alignItems="center" space={6}>
-          <Text bold fontSize={17}>
-            View
-          </Text>
-          {props.aidList.map((item, index) => {
-            return (
-              <IconButton
-                key={index}
-                colorScheme="success"
-                borderRadius="full"
-                variant="outline"
-                _icon={{
-                  as: Ionicons,
-                  name: "eye",
-                  size: "3",
-                }}
-                onPress={() => {
-                  //   props.navigation.navigate("Help_Details", {
-                  //     keys: item.aid_id,
-                  //   }); HERE TO ADD NAVIGATE
-                }}
-              />
-            );
-          })}
-        </VStack>
+
       </HStack>
     </Box>
   );

@@ -2,8 +2,9 @@ import React, { useState, useEffect, useCallback } from "react";
 import Axios from "axios";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, StackActions } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { useValidation } from 'react-native-form-validator';
 import {
   Box,
   Heading,
@@ -27,6 +28,13 @@ import { Alert } from "react-native";
 
 const Card = (props) => {
   const [caption, setCaption] = useState("");
+
+  const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+    useValidation({
+      state: { caption },
+    });
+
+
   return (
     <Box p="5" py="15" w="100%" mx="auto">
       <Heading
@@ -75,6 +83,7 @@ const Card = (props) => {
             md: "25%",
           }}
         />
+        {isFieldInError('caption') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รายละเอียดโพสต์</Text>) : (<Text></Text>)}
       </Stack>
       <Divider my="8" w="100%" />
       <HStack mx="auto" space={3}>
@@ -83,7 +92,13 @@ const Card = (props) => {
           size="lg"
           colorScheme="indigo"
           onPress={() => {
-            let formData = {
+
+
+            if(validate({
+              caption: { required: true},
+              
+            })){
+              let formData = {
               detail: caption,
               img: props.thisGrace.grace_img,
               sid: props.info.s_id,
@@ -93,11 +108,20 @@ const Card = (props) => {
                 let data = response.data;
                 Alert.alert(data);
                 setCaption("");
+                props.navigation.navigate("Home");
                 // props.navigation.navigate("Post_On"); HERE TO ADD NAVIGATE
               })
               .catch((error) => {
                 console.log(error);
               });
+
+
+
+            }else{
+              return false
+            }
+
+            
           }}
         >
           เผยแพร่
@@ -110,6 +134,7 @@ const Card = (props) => {
 function Admin_Post_notes({ navigation, route }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [thisGrace, setThisGrace] = useState({});
+
 
   async function showThisGrace() {
     await Axios.get(

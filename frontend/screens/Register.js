@@ -8,6 +8,7 @@ import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { useValidation } from 'react-native-form-validator';
 import {
   NativeBaseProvider,
   Box,
@@ -49,6 +50,11 @@ function Register_Screen({ navigation }) {
 
   var [mode, setMode] = useState("date");
   var [show, setShow] = useState(false);
+
+  const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+    useValidation({
+      state: { fname, lname, user, room, no, born, address1, address2, pass, repass },
+    });
 
   async function _retrieveData() {
     try {
@@ -157,7 +163,10 @@ function Register_Screen({ navigation }) {
                 value={fname}
                 onChangeText={(text) => setFname(text)}
               />
+              {isFieldInError('fname') ? (<Text bold style={{ color: 'red' }}>โปรดกรอกชื่อจริง(ไม่เกิน100ตัวอักษร)</Text>) : (<Text></Text>)}
+              
             </FormControl>
+            
             <FormControl>
               <FormControl.Label
                 _text={{
@@ -173,6 +182,7 @@ function Register_Screen({ navigation }) {
                 value={lname}
                 onChangeText={(text) => setLname(text)}
               />
+              {isFieldInError('lname') ? (<Text bold style={{ color: 'red' }}>โปรดกรอกชื่อนามสกุล(ไม่เกิน100ตัวอักษร)</Text>) : (<Text></Text>)}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -185,10 +195,12 @@ function Register_Screen({ navigation }) {
                 รหัสนักเรียน
               </FormControl.Label>
               <Input
+              keyboardType = "number-pad"
                 placeholder="รหัสนักเรียน"
                 value={user}
                 onChangeText={(text) => setUser(text)}
               />
+              {isFieldInError('user') ? (<Text bold style={{ color: 'red' }}>โปรดกรอกรหัสนักเรียน(ไม่เกิน8ตัว)</Text>) : (<Text></Text>)}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -201,6 +213,7 @@ function Register_Screen({ navigation }) {
                 ชั้นเรียน
               </FormControl.Label>
               <Input
+              keyboardType="phone-pad"
                 placeholder="ชั้นเรียน"
                 value={room}
                 onChangeText={(text) => setRoom(text)}
@@ -208,6 +221,7 @@ function Register_Screen({ navigation }) {
                   base: "35%",
                 }}
               />
+              {isFieldInError('room') ? (<Text bold style={{ color: 'red' }}>โปรดระบุชั้นเรียน</Text>) : (<Text></Text>)}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -220,6 +234,7 @@ function Register_Screen({ navigation }) {
                 เลขที่
               </FormControl.Label>
               <Input
+              keyboardType="number-pad"
                 placeholder="เลขที่"
                 value={no}
                 onChangeText={(text) => setNo(text)}
@@ -227,6 +242,7 @@ function Register_Screen({ navigation }) {
                   base: "35%",
                 }}
               />
+              {isFieldInError('no') ? (<Text bold style={{ color: 'red' }}>โปรดใส่เลขที่(ไม่เกิน3ตัว)</Text>) : (<Text></Text>)}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -249,6 +265,7 @@ function Register_Screen({ navigation }) {
                         onChange={onChange}
                       />
                     )}
+                   
                   </FormControl>
               </FormControl.Label>
               <HStack space={3}>
@@ -278,7 +295,9 @@ function Register_Screen({ navigation }) {
                     />
                   }
                 />
+                 
               </HStack>
+              {isFieldInError('born') ? (<Text bold style={{ color: 'red' }}>โปรดเลือกวันเกิด</Text>) : (<Text></Text>)}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -296,6 +315,7 @@ function Register_Screen({ navigation }) {
                 value={address1}
                 onChangeText={(text) => setAddress1(text)}
               />
+               {isFieldInError('address1') ? (<Text bold style={{ color: 'red' }}>โปรดระบุที่อยู่</Text>) : (<Text></Text>)}
               <Input
                 placeholder="ที่อยู่ 2 (ไม่บังคับ)"
                 value={address2}
@@ -357,6 +377,8 @@ function Register_Screen({ navigation }) {
                 value={pass}
                 onChangeText={(text) => setPass(text)}
               />
+              {isFieldInError('pass') ? (<Text bold style={{ color: 'red' }}>โปรดกรอกรหัสผ่าน(3-100ตัวอักษร)</Text>) : (<Text></Text>)}
+              
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -380,15 +402,33 @@ function Register_Screen({ navigation }) {
                 colorScheme="indigo"
                 _text={{ color: "white" }}
                 onPress={async () => {
-                  if (pass != repass) {
-                    Alert.alert("รหัสผ่าน และ ยืนยันรหัสผ่าน ไม่ตรงกัน!");
-                    setPass("");
-                    setRepass("");
-                    return;
-                  }
 
-                  // Bypass Network request failed when fetching || code from github :/
-                  const blob = await new Promise((resolve, reject) => {
+                  if(validate({
+                    fname: {maxlength: 100, required: true },
+                    lname: {maxlength: 100, required: true },
+                    user: {maxlength: 8, required: true},
+                    room: {maxlength: 100, required: true},
+                    born: { required: true},
+                    no: {maxlength: 3, required: true},
+                    address1: { required: true},
+                    pass: {minlength: 3,maxlength: 100, required: true},
+                    
+    
+                  })){
+
+                    if (image == "") {
+                      Alert.alert("โปรดอัปโหลดรูปภาพ");
+                      return;
+                    }
+
+                    if (pass != repass) {
+                      Alert.alert("รหัสผ่าน และ ยืนยันรหัสผ่าน ไม่ตรงกัน!");
+                      setPass("");
+                      setRepass("");
+                      return;
+                    }
+
+                     const blob = await new Promise((resolve, reject) => {
                     const xhr = new XMLHttpRequest();
                     xhr.onload = function () {
                       resolve(xhr.response);
@@ -452,6 +492,27 @@ function Register_Screen({ navigation }) {
                       });
                     }
                   );
+
+
+
+                  }else{
+                    return(false)
+                  }
+
+                  
+
+                  if (pass != repass) {
+                    Alert.alert("รหัสผ่าน และ ยืนยันรหัสผ่าน ไม่ตรงกัน!");
+                    setPass("");
+                    setRepass("");
+                    return;
+                  }
+
+
+                  
+
+                  // Bypass Network request failed when fetching || code from github :/
+                 
                 }}
               >
                 ลงทะเบียนเข้าใช้งาน

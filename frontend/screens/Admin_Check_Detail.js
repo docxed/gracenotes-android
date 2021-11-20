@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Axios from "axios";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, StackActions } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import {
   Box,
@@ -135,6 +135,8 @@ const Card = (props) => {
                 .then((response) => {
                   let data = response.data;
                   Alert.alert(data);
+                  const popAction = StackActions.pop(1);
+                    props.navigation.dispatch(popAction);
                   // navigation.navigate(""); HERE TO ADD NAVIGATE
                 })
                 .catch((error) => {

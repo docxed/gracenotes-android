@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Axios from "axios";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, StackActions } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import {
   NativeBaseProvider,
@@ -33,6 +33,10 @@ function Admin_option_user({ navigation, route }) {
   const [born, setBorn] = useState("");
   const [address, setAddress] = useState("");
   const [level, setLevel] = useState("");
+
+  const popAction = StackActions.pop(1);
+
+  
 
   async function showThisUser() {
     await Axios.get(`http://${SERVER_IP}:${PORT}/user/${route.params.keys}`)
@@ -168,11 +172,11 @@ function Admin_option_user({ navigation, route }) {
               </FormControl>
               <FormControl>
                 <FormControl.Label>ชื่อ</FormControl.Label>
-                <Input value={fname} placeholder="ชื่อ" />
+                <Input editable={false} value={fname} placeholder="ชื่อ" />
               </FormControl>
               <FormControl>
                 <FormControl.Label>นามสกุล</FormControl.Label>
-                <Input value={lname} placeholder="นามสกุล" />
+                <Input editable={false} value={lname} placeholder="นามสกุล" />
               </FormControl>
               <FormControl>
                 <FormControl.Label
@@ -185,6 +189,7 @@ function Admin_option_user({ navigation, route }) {
                   ชั้นเรียน
                 </FormControl.Label>
                 <Input
+                editable={false}
                   value={room}
                   placeholder="6/1"
                   w={{
@@ -203,6 +208,7 @@ function Admin_option_user({ navigation, route }) {
                   เลขที่
                 </FormControl.Label>
                 <Input
+                editable={false}
                   value={no}
                   placeholder="20"
                   w={{
@@ -221,6 +227,7 @@ function Admin_option_user({ navigation, route }) {
                   วัน/เดือน/ปีเกิด
                 </FormControl.Label>
                 <Input
+                editable={false}
                   value={born.substr(0, 10)}
                   placeholder="20/07/2543"
                   w={{
@@ -242,6 +249,7 @@ function Admin_option_user({ navigation, route }) {
               <FormControl>
                 <FormControl.Label>ที่อยู่</FormControl.Label>
                 <Input
+                editable={false}
                   value={address}
                   marginBottom={2}
                   placeholder="บนโลกเนี่ยแหละ"
@@ -263,6 +271,7 @@ function Admin_option_user({ navigation, route }) {
                     .then((response) => {
                       let data = response.data;
                       Alert.alert(data);
+                      navigation.dispatch(popAction);
                       // navigation.navigate(""); HERE TO ADD NAVIGATE
                     })
                     .catch((error) => {

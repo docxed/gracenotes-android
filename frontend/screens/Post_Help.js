@@ -3,10 +3,12 @@ import { useState, useEffect, useCallback } from "react";
 import Axios from "axios";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, StackActions } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { useValidation } from 'react-native-form-validator';
 import {
   Box,
+  Text,
   Heading,
   Image,
   TextArea,
@@ -35,6 +37,13 @@ function Help_Post_Screen({ navigation }) {
 
   var [mode, setMode] = useState("date");
   var [show, setShow] = useState(false);
+
+  const popAction = StackActions.pop(1);
+
+  const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+    useValidation({
+      state: { head, body, location, datetime },
+    });
 
   async function _retrieveData() {
     try {
@@ -108,6 +117,7 @@ function Help_Post_Screen({ navigation }) {
                   value={head}
                   onChangeText={(text) => setHead(text)}
                 />
+                {isFieldInError('head') ? (<Text bold style={{ color: 'red' }}>โปรดใส่หัวข้อ</Text>) : (<Text></Text>)}
               </FormControl>
               <FormControl>
                 <FormControl.Label>รายละเอียด</FormControl.Label>
@@ -116,6 +126,8 @@ function Help_Post_Screen({ navigation }) {
                   value={body}
                   onChangeText={(text) => setBody(text)}
                 />
+                {isFieldInError('body') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รายละเอียด</Text>) : (<Text></Text>)}
+                
               </FormControl>
               <FormControl>
                 <FormControl.Label>สถานที่</FormControl.Label>
@@ -124,6 +136,7 @@ function Help_Post_Screen({ navigation }) {
                   value={location}
                   onChangeText={(text) => setLocation(text)}
                 />
+                {isFieldInError('location') ? (<Text bold style={{ color: 'red' }}>โปรดระบุสถานที่</Text>) : (<Text></Text>)}
               </FormControl>
               <FormControl>
                 <FormControl.Label>เวลา</FormControl.Label>
@@ -181,6 +194,7 @@ function Help_Post_Screen({ navigation }) {
                     />
                   }
                 />
+                {isFieldInError('datetime') ? (<Text bold style={{ color: 'red' }}>โปรดระบุระยะเวลาและวันที่</Text>) : (<Text></Text>)}
               </FormControl>
             </VStack>
             <Divider my="5" />
@@ -190,7 +204,16 @@ function Help_Post_Screen({ navigation }) {
                 alignSelf="center"
                 colorScheme="secondary"
                 onPress={() => {
-                  const formData = {
+
+                  if(validate({
+                    head: {maxlength: 100, required: true },
+                    body: {maxlength: 100, required: true},
+                    location: {maxlength: 100, required: true},
+                    datetime: {required: true},
+    
+                  })){
+
+                    const formData = {
                     head: head,
                     body: body,
                     location: location,
@@ -201,11 +224,24 @@ function Help_Post_Screen({ navigation }) {
                     .then((response) => {
                       const data = response.data;
                       Alert.alert(data);
+                      navigation.navigate("MyHistory");
+                      setBody("")
+                      setDatetime(new Date())
+                      setHead("")
+                      setLocation("")
                       // navigation.navigate(""); HERE TO ADD NAVIGATE
                     })
                     .catch((error) => {
                       console.log(error);
                     });
+
+                  }else{
+                    return false
+                  }
+
+
+
+                  
                 }}
               >
                 โพสต์

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Axios from "axios";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, StackActions } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   Box,
@@ -26,6 +26,8 @@ function Grace_Detail_Screen({ navigation, route }) {
   const [me, setMe] = useState({}); // My Member Data query From info(LocalStorage)
   const [thisGrace, setThisGrace] = useState({}); // This Grace
   const [user, setUser] = useState({}); // User of This Grace
+
+  const popAction = StackActions.pop(1);
 
   async function showThisGrace() {
     // This Grace
@@ -120,6 +122,11 @@ function Grace_Detail_Screen({ navigation, route }) {
   }
 
   function renDerdelButton() {
+
+    
+                    
+
+
     if (thisGrace.member_id == info.s_id) {
       return (
         <Button.Group
@@ -140,7 +147,7 @@ function Grace_Detail_Screen({ navigation, route }) {
                 .then((response) => {
                   let data = response.data;
                   Alert.alert(data);
-                  navigation.navigate("Grace_lists");
+                  navigation.dispatch(popAction);
                 })
                 .catch((error) => {
                   console.log(error);

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Axios from "axios";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, StackActions } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   Box,
@@ -22,6 +22,9 @@ import {
 import { Alert } from "react-native";
 
 export const RenderUser = (props) => {
+
+  
+
   let uList = props.userList.filter((array) => array.member_id == props.memId);
   if (uList.length != 0) {
     return (
@@ -57,6 +60,8 @@ function Help_Detail_Screen({ navigation, route }) {
   const [subListForAmount, setSubListForAmount] = useState([]);
   const [subListValidate, setSubListValidate] = useState(false);
   const [userList, setUserList] = useState([]);
+
+  const popAction = StackActions.pop(1);
 
   async function showThisAid() {
     // This Aid
@@ -201,6 +206,7 @@ function Help_Detail_Screen({ navigation, route }) {
                     .then((response) => {
                       let data = response.data;
                       Alert.alert(data);
+                      navigation.dispatch(popAction);
                       // navigation.navigate() HERE TO ADD NAVIGATE
                     })
                     .catch((error) => {
