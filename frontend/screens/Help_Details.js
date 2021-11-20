@@ -285,7 +285,7 @@ function Help_Detail_Screen({ navigation, route }) {
                 )}
               </Stack>
             </Stack>
-            {subListForAmount.length == 0 ? (
+            {subListForAmount.length == 0 && thisAid.member_id == info.s_id ? (
               <Box style={{ alignItems: "center" }}>
                 <Button
                   colorScheme="danger"
