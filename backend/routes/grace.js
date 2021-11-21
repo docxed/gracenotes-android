@@ -83,4 +83,79 @@ router.delete("/grace/:id", async function (req, res, next) {
     }
 });
 
+router.get("/graceadmin", async function (req, res, next) {
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+    let [result, _] = await conn.query(
+      `SELECT * FROM grace JOIN members USING (member_id) ORDER BY grace_id ASC;`
+    );
+    res.status(200).json(result);
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    return res.status(400).json(err);
+  } finally {
+    conn.release();
+  }
+});
+
+router.get("/graceadmin/:id", async function (req, res, next) {
+  const uid = req.params.id;
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+    let [result, _] = await conn.query(
+      `SELECT * FROM grace JOIN members USING (member_id) WHERE grace_id=?;`
+      , [uid]
+    );
+    res.status(200).json(result[0]);
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    return res.status(400).json(err);
+  } finally {
+    conn.release();
+  }
+});
+
+router.put("/graceadmin/:id", async function (req, res, next) {
+  const check = req.body.check;
+  const uid = req.params.id;
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+    let [result, _] = await conn.query(
+      `UPDATE grace SET grace_check=? WHERE grace_id=?;`
+      , [check, uid]
+    );
+    res.status(200).send("อัปเดตสำเร็จ");
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    return res.status(400).json(err);
+  } finally {
+    conn.release();
+  }
+});
+
+router.delete("/graceadmin/:id", async function (req, res, next) {
+  const uid = req.params.id;
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+    let [result, _] = await conn.query(
+      `DELETE FROM grace WHERE grace_id=?;`
+      , [uid]
+    );
+    res.status(200).send("ลบบันทึกแล้ว");
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    return res.status(400).json(err);
+  } finally {
+    conn.release();
+  }
+});
+
 exports.router = router;

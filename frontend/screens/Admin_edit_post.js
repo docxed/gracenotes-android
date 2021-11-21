@@ -1,79 +1,221 @@
-import * as React from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import Axios from "axios";
+import { SERVER_IP, PORT } from "../database/serverIP";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect, StackActions } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { useValidation } from 'react-native-form-validator';
 import {
-    Box,
-    Heading,
-    AspectRatio,
-    Divider,
-    Image,
-    Text,
-    TextArea,
-    Center,
-    CheckIcon,
-    Stack,
-    Select,
-    ScrollView,
-    FormControl,
-    NativeBaseProvider,
-    Button,
-    HStack,
-    Spacer,
-  } from "native-base";
+  Box,
+  Heading,
+  AspectRatio,
+  Divider,
+  Image,
+  Text,
+  TextArea,
+  Center,
+  CheckIcon,
+  Stack,
+  Select,
+  ScrollView,
+  FormControl,
+  NativeBaseProvider,
+  Button,
+  HStack,
+  Spacer,
+} from "native-base";
+import { Alert } from "react-native";
 
-  const Card = (props) => {
+const Card = (props) => {
+  const [caption, setCaption] = useState("");
+
+  const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+    useValidation({
+      state: { caption },
+    });
+
+  const popAction = StackActions.pop(1);
+
+  function renderDate() {
+    let date = new Date(props.thisSocial.social_timestamp);
     return (
-      <Box p="5" py="15" w="100%" mx="auto">
-          <Heading mt="10" textAlign="center" size="lg" fontWeight="600" color="indigo.500">หมายเลขบันทึก 9</Heading>
-          <AspectRatio w="100%" ratio={16 / 9}>
-              <Image
-                  source={{
-                  uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg",
-                  }}
-                  alt="image"
-              />
-          </AspectRatio>
-          <Stack p="4" space={5}>
-                <Stack space={2}>
-                    <Text fontSize= {20} color="violet.500"
-                        ml="-3"
-                        mt="-1"
-                        >
-                        เอเรียม โมนาช
-                    </Text>
-                </Stack>
-                <Text fontSize= {15} ml="-3">
-                    ได้ช่วยแม่บ้านที่ตึกมหานครทำความชั้นดาดฟ้า
-                </Text>
-                <Text textAlign="right" padding={1} fontSize= {11} color="coolGray.600">วันที่ 30/07/2564  เวลา 14:35</Text>
-                <TextArea
-                    h={20}
-                    placeholder="เขียนโพสต์"
-                    w={{
-                        base: "100%",
-                        md: "25%",
-                    }}
-                />
-            </Stack>
-            <Divider my="8" w="100%"/>
-            <HStack mx="auto" space={3}>
-                <Button w={{base: "30%"}} size="lg" colorScheme="indigo" onPress={() => { props.navigation.navigate("") }}>อัพเดต</Button>
-                <Button w={{base: "20%"}} size="lg" colorScheme="error" onPress={() => { props.navigation.navigate("") }}>ลบ</Button>
-            </HStack>
-      </Box>
+      <Text textAlign="right" padding={1} fontSize={11} color="coolGray.600">
+        โพสต์เมื่อ{" "}
+        {date.getFullYear() +
+          "-" +
+          (date.getMonth() + 1) +
+          "-" +
+          date.getDate()}{" "}
+        เวลา {date.getHours() + ":" + date.getMinutes()}
+      </Text>
     );
   }
+  useEffect(() => {
+    setCaption(props.thisSocial.social_detail);
+  }, []);
+  return (
+    <Box p="5" py="15" w="100%" mx="auto">
+      <Heading
+        mt="10"
+        textAlign="center"
+        size="lg"
+        fontWeight="600"
+        color="indigo.500"
+        mb={5}
+      >
+        หมายเลขบันทึก {props.thisSocial.social_id}
+      </Heading>
+      <AspectRatio w="100%" ratio={16 / 9}>
+        <Image
+          source={{
+            uri: props.thisSocial.social_img,
+          }}
+          alt="image"
+        />
+      </AspectRatio>
+      <Stack p="4" space={5}>
+        {renderDate()}
+        <TextArea
+          value={caption}
+          onChangeText={(text) => setCaption(text)}
+          h={20}
+          placeholder="เขียนโพสต์"
+          w={{
+            base: "100%",
+            md: "25%",
+          }}
+        />
+        {isFieldInError('caption') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รายละเอียดโพสต์</Text>) : (<Text></Text>)}
+      </Stack>
+      <Divider my="8" w="100%" />
+      <HStack mx="auto" space={3}>
+        <Button
+          w={{ base: "30%" }}
+          size="lg"
+          colorScheme="indigo"
+          onPress={() => {
+
+            if(validate({
+              caption: { required: true},
+              
+            })){
+              let formData = {
+              detail: caption,
+            };
+            Axios.put(
+              `http://${SERVER_IP}:${PORT}/socialadmin/${props.thisSocial.social_id}`,
+              formData
+            )
+              .then((response) => {
+                let data = response.data;
+                Alert.alert(data);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
 
 
-  function Admin_edit_Post({ navigation }) {
-      return (
-        <NativeBaseProvider>
-        <ScrollView>
-            <Center>
-                <Card navigation={navigation}/>
-            </Center>
-        </ScrollView>
-      </NativeBaseProvider>
-      );
+            }else{
+
+              return false
+            }
+
+
+            
+          }}
+        >
+          อัพเดต
+        </Button>
+        <Button
+          w={{ base: "20%" }}
+          size="lg"
+          colorScheme="error"
+          onPress={() => {
+            Axios.delete(
+              `http://${SERVER_IP}:${PORT}/socialadmin/${props.thisSocial.social_id}`
+            )
+              .then((response) => {
+                let data = response.data;
+                Alert.alert(data);
+                props.navigation.dispatch(popAction);
+                // navigation.navigate(""); HERE TO ADD NAVIGATE
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }}
+        >
+          ลบ
+        </Button>
+      </HStack>
+    </Box>
+  );
+};
+
+function Admin_edit_Post({ navigation, route }) {
+  const [info, setInfo] = useState({}); // LocalStorage Data
+  const [thisSocial, setThisSocial] = useState({});
+
+  async function showSocial() {
+    await Axios.get(
+      `http://${SERVER_IP}:${PORT}/socialadmin/${route.params.keys}`
+    )
+      .then((response) => {
+        let data = response.data;
+        setThisSocial(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
-  export default Admin_edit_Post;
+  async function _retrieveData() {
+    try {
+      const value = await AsyncStorage.getItem("info"); // Get member's info from LocalStorage
+      if (value == null) {
+        // LocalStorage doesn't has Data
+        // Unauthorized
+        navigation.navigate("Login");
+        return;
+      }
+      setInfo(JSON.parse(value));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      //  When the screen is focused (coming back to it). What do you do?
+      _retrieveData(); // Call Check Authorized
+      return () => {
+        // When the screen is unfocused (leaving). What do you do?
+      };
+    }, [])
+  );
+
+  const innerFunction = useCallback(() => {
+    showSocial();
+  }, [info]);
+
+  useEffect(() => {
+    // useState is Asynchronous!!!, Thus you need to Hook for getValue on created info(LocalStorage)
+    innerFunction();
+  }, [innerFunction]);
+
+  return (
+    <NativeBaseProvider>
+      <ScrollView>
+        <Center>
+          {thisSocial.social_id != undefined ? (
+            <Card navigation={navigation} thisSocial={thisSocial} />
+          ) : (
+            <Box></Box>
+          )}
+        </Center>
+      </ScrollView>
+    </NativeBaseProvider>
+  );
+}
+
+export default Admin_edit_Post;

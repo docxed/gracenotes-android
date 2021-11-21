@@ -90,4 +90,27 @@ router.delete("/user/:id", async function (req, res, next) {
   }
 });
 
+router.put("/userlevel/:id", async function (req, res, next) {
+  const uid = req.params.id;
+  const level = req.body.level;
+  console.log(uid)
+  console.log(req.body)
+
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+    let [result, _] = await conn.query(
+      `UPDATE members SET member_level=? WHERE member_id=?;`,
+      [level, uid]
+    );
+    res.status(200).send("ตั้งบทบาทแล้ว");
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    return res.status(400).json(err);
+  } finally {
+    conn.release();
+  }
+});
+
 exports.router = router;

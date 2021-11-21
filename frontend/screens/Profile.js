@@ -5,6 +5,7 @@ import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { useValidation } from "react-native-form-validator";
 import {
   NativeBaseProvider,
   Box,
@@ -44,6 +45,11 @@ function Profile_Screen({ navigation }) {
   var [mode, setMode] = useState("date");
   var [show, setShow] = useState(false);
 
+  const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+    useValidation({
+      state: { fname, lname, user, room, no, born, address, pass, repass },
+    });
+
   async function showMe() {
     // My Member
     await Axios.get(`http://${SERVER_IP}:${PORT}/user/${info.s_id}`)
@@ -55,6 +61,7 @@ function Profile_Screen({ navigation }) {
         setUser(data.member_user);
         setRoom(data.member_class);
         setNo(data.member_no);
+        setBorn(new Date(data.member_dob));
         setAddress(data.member_address);
         setoldPass(data.member_pass);
       })
@@ -142,6 +149,13 @@ function Profile_Screen({ navigation }) {
                 value={fname}
                 onChangeText={(text) => setFname(text)}
               />
+              {isFieldInError("fname") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดกรอกชื่อจริง(ไม่เกิน100ตัวอักษร)
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label>นามสกุล</FormControl.Label>
@@ -150,6 +164,13 @@ function Profile_Screen({ navigation }) {
                 value={lname}
                 onChangeText={(text) => setLname(text)}
               />
+              {isFieldInError("lname") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดกรอกนามสกุล(ไม่เกิน100ตัวอักษร)
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -169,6 +190,13 @@ function Profile_Screen({ navigation }) {
                 value={room}
                 onChangeText={(text) => setRoom(text)}
               />
+              {isFieldInError("room") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดระบุชั้นเรียน
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -188,6 +216,13 @@ function Profile_Screen({ navigation }) {
                 value={no}
                 onChangeText={(text) => setNo(text)}
               />
+              {isFieldInError("no") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดใส่เลขที่(ไม่เกิน3ตัว)
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -242,6 +277,13 @@ function Profile_Screen({ navigation }) {
                     : me.member_dob.substr(0, 10)
                 }
               />
+              {isFieldInError("born") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดเลือกวันเกิด
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label>ที่อยู่</FormControl.Label>
@@ -251,6 +293,13 @@ function Profile_Screen({ navigation }) {
                 value={address}
                 onChangeText={(text) => setAddress(text)}
               />
+              {isFieldInError("address") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดระบุที่อยู่
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label>รหัสผ่านใหม่</FormControl.Label>
@@ -261,6 +310,13 @@ function Profile_Screen({ navigation }) {
                 value={pass}
                 onChangeText={(text) => setPass(text)}
               />
+              {isFieldInError("pass") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดกรอกรหัสผ่าน(3-100ตัวอักษร)
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label>ยืนยันรหัสผ่านใหม่</FormControl.Label>
@@ -280,36 +336,51 @@ function Profile_Screen({ navigation }) {
             alignSelf="center"
             colorScheme="info"
             onPress={() => {
-              if (pass != repass) {
-                Alert.alert("รหัสผ่าน และ ยืนยันรหัสผ่าน ไม่ตรงกัน!");
-                setPass("");
-                setRepass("");
-                return;
-              }
-              const formData = {
-                user: user,
-                fname: fname,
-                lname: lname,
-                classes: room,
-                no: no,
-                dob: born,
-                address: address,
-                pass: pass,
-                level: me.member_level,
-              };
-              Axios.put(
-                `http://${SERVER_IP}:${PORT}/user/${me.member_id}`,
-                formData
-              )
-                .then(async (response) => {
-                  const data = response.data;
-                  Alert.alert(data+' ลงชื่อออก');
-                  await AsyncStorage.clear();
-                  navigation.navigate("Login");
+              if (
+                validate({
+                  fname: { maxlength: 100, required: true },
+                  lname: { maxlength: 100, required: true },
+                  room: { maxlength: 100, required: true },
+                  born: { maxlength: 100, required: true },
+                  no: { maxlength: 3, required: true },
+                  address: { required: true },
+                  pass: { minlength: 3, maxlength: 100, required: true },
                 })
-                .catch((error) => {
-                  console.log(error);
-                });
+              ) {
+                if (pass != repass) {
+                  Alert.alert("รหัสผ่าน และ ยืนยันรหัสผ่าน ไม่ตรงกัน!");
+                  setPass("");
+                  setRepass("");
+                  return;
+                }
+
+                const formData = {
+                  user: user,
+                  fname: fname,
+                  lname: lname,
+                  classes: room,
+                  no: no,
+                  dob: born,
+                  address: address,
+                  pass: pass,
+                  level: me.member_level,
+                };
+                Axios.put(
+                  `http://${SERVER_IP}:${PORT}/user/${me.member_id}`,
+                  formData
+                )
+                  .then(async (response) => {
+                    const data = response.data;
+                    Alert.alert(data + " ลงชื่อออก");
+                    await AsyncStorage.clear();
+                    navigation.navigate("Login");
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              } else {
+                return false;
+              }
             }}
           >
             อัปเดต

@@ -8,6 +8,7 @@ import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { useValidation } from "react-native-form-validator";
 import {
   NativeBaseProvider,
   Box,
@@ -49,6 +50,22 @@ function Register_Screen({ navigation }) {
 
   var [mode, setMode] = useState("date");
   var [show, setShow] = useState(false);
+
+  const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+    useValidation({
+      state: {
+        fname,
+        lname,
+        user,
+        room,
+        no,
+        born,
+        address1,
+        address2,
+        pass,
+        repass,
+      },
+    });
 
   async function _retrieveData() {
     try {
@@ -141,7 +158,7 @@ function Register_Screen({ navigation }) {
             minW: "72",
           }}
         >
-          <VStack space={3} mt="3" borderRadius={6} padding={5} shadow={4}>
+          <VStack space={3} mt="3" padding={5}>
             <FormControl>
               <FormControl.Label
                 _text={{
@@ -157,7 +174,15 @@ function Register_Screen({ navigation }) {
                 value={fname}
                 onChangeText={(text) => setFname(text)}
               />
+              {isFieldInError("fname") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดกรอกชื่อจริง(ไม่เกิน100ตัวอักษร)
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
+
             <FormControl>
               <FormControl.Label
                 _text={{
@@ -173,6 +198,13 @@ function Register_Screen({ navigation }) {
                 value={lname}
                 onChangeText={(text) => setLname(text)}
               />
+              {isFieldInError("lname") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดกรอกชื่อนามสกุล(ไม่เกิน100ตัวอักษร)
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -185,10 +217,18 @@ function Register_Screen({ navigation }) {
                 รหัสนักเรียน
               </FormControl.Label>
               <Input
+                keyboardType="number-pad"
                 placeholder="รหัสนักเรียน"
                 value={user}
                 onChangeText={(text) => setUser(text)}
               />
+              {isFieldInError("user") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดกรอกรหัสนักเรียน(ไม่เกิน8ตัว)
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -208,6 +248,13 @@ function Register_Screen({ navigation }) {
                   base: "35%",
                 }}
               />
+              {isFieldInError("room") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดระบุชั้นเรียน
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -220,6 +267,7 @@ function Register_Screen({ navigation }) {
                 เลขที่
               </FormControl.Label>
               <Input
+                keyboardType="number-pad"
                 placeholder="เลขที่"
                 value={no}
                 onChangeText={(text) => setNo(text)}
@@ -227,6 +275,13 @@ function Register_Screen({ navigation }) {
                   base: "35%",
                 }}
               />
+              {isFieldInError("no") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดใส่เลขที่(ไม่เกิน3ตัว)
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -238,18 +293,18 @@ function Register_Screen({ navigation }) {
               >
                 วัน/เดือน/ปีเกิด
                 <FormControl>
-                    {show && (
-                      <DateTimePicker
-                        style={{ margin: 50 }}
-                        value={born}
-                        mode={mode}
-                        is24Hour={true}
-                        display="default"
-                        placeholder="DD/MM/YYYY"
-                        onChange={onChange}
-                      />
-                    )}
-                  </FormControl>
+                  {show && (
+                    <DateTimePicker
+                      style={{ margin: 50 }}
+                      value={born}
+                      mode={mode}
+                      is24Hour={true}
+                      display="default"
+                      placeholder="DD/MM/YYYY"
+                      onChange={onChange}
+                    />
+                  )}
+                </FormControl>
               </FormControl.Label>
               <HStack space={3}>
                 <Input
@@ -279,6 +334,13 @@ function Register_Screen({ navigation }) {
                   }
                 />
               </HStack>
+              {isFieldInError("born") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดเลือกวันเกิด
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -296,6 +358,13 @@ function Register_Screen({ navigation }) {
                 value={address1}
                 onChangeText={(text) => setAddress1(text)}
               />
+              {isFieldInError("address1") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดระบุที่อยู่
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
               <Input
                 placeholder="ที่อยู่ 2 (ไม่บังคับ)"
                 value={address2}
@@ -357,6 +426,13 @@ function Register_Screen({ navigation }) {
                 value={pass}
                 onChangeText={(text) => setPass(text)}
               />
+              {isFieldInError("pass") ? (
+                <Text bold style={{ color: "red" }}>
+                  โปรดกรอกรหัสผ่าน(3-100ตัวอักษร)
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </FormControl>
             <FormControl>
               <FormControl.Label
@@ -380,6 +456,101 @@ function Register_Screen({ navigation }) {
                 colorScheme="indigo"
                 _text={{ color: "white" }}
                 onPress={async () => {
+                  if (
+                    validate({
+                      fname: { maxlength: 100, required: true },
+                      lname: { maxlength: 100, required: true },
+                      user: { maxlength: 8, required: true },
+                      room: { maxlength: 100, required: true },
+                      born: { required: true },
+                      no: { maxlength: 3, required: true },
+                      address1: { required: true },
+                      pass: { minlength: 3, maxlength: 100, required: true },
+                    })
+                  ) {
+                    if (image == "") {
+                      Alert.alert("โปรดอัปโหลดรูปภาพ");
+                      return;
+                    }
+
+                    if (pass != repass) {
+                      Alert.alert("รหัสผ่าน และ ยืนยันรหัสผ่าน ไม่ตรงกัน!");
+                      setPass("");
+                      setRepass("");
+                      return;
+                    }
+
+                    const blob = await new Promise((resolve, reject) => {
+                      const xhr = new XMLHttpRequest();
+                      xhr.onload = function () {
+                        resolve(xhr.response);
+                      };
+                      xhr.onerror = function () {
+                        reject(new TypeError("Network request ล้มเหลว"));
+                      };
+                      xhr.responseType = "blob";
+                      xhr.open("GET", image, true);
+                      xhr.send(null);
+                    });
+
+                    const ref = firebase
+                      .storage()
+                      .ref()
+                      .child(new Date().toISOString()); // define name via TimeStamp DateTime
+                    const snapshot = ref.put(blob);
+                    snapshot.on(
+                      firebase.storage.TaskEvent.STATE_CHANGED,
+                      () => {
+                        setUploading(true);
+                      },
+                      (error) => {
+                        setUploading(false);
+                        console.log(error);
+                        blob.close();
+                        return;
+                      },
+                      () => {
+                        snapshot.snapshot.ref.getDownloadURL().then((url) => {
+                          setUploading(false);
+                          blob.close();
+                          const formData = {
+                            user: user,
+                            fname: fname,
+                            lname: lname,
+                            classes: room,
+                            no: no,
+                            dob: born,
+                            address: address1 + address2,
+                            pass: pass,
+                            img: url,
+                          };
+                          Axios.post(
+                            `http://${SERVER_IP}:${PORT}/register`,
+                            formData
+                          )
+                            .then((response) => {
+                              const data = response.data;
+                              if (data.status) {
+                                Alert.alert(data.message);
+                                navigation.navigate("Login");
+                              } else {
+                                Alert.alert(data.message);
+                                setPass("");
+                                setRepass("");
+                              }
+                            })
+                            .catch((error) => {
+                              console.log(error);
+                            });
+
+                          return url;
+                        });
+                      }
+                    );
+                  } else {
+                    return false;
+                  }
+
                   if (pass != repass) {
                     Alert.alert("รหัสผ่าน และ ยืนยันรหัสผ่าน ไม่ตรงกัน!");
                     setPass("");
@@ -388,70 +559,6 @@ function Register_Screen({ navigation }) {
                   }
 
                   // Bypass Network request failed when fetching || code from github :/
-                  const blob = await new Promise((resolve, reject) => {
-                    const xhr = new XMLHttpRequest();
-                    xhr.onload = function () {
-                      resolve(xhr.response);
-                    };
-                    xhr.onerror = function () {
-                      reject(new TypeError("Network request ล้มเหลว"));
-                    };
-                    xhr.responseType = "blob";
-                    xhr.open("GET", image, true);
-                    xhr.send(null);
-                  });
-
-                  const ref = firebase
-                    .storage()
-                    .ref()
-                    .child(new Date().toISOString()); // define name via TimeStamp DateTime
-                  const snapshot = ref.put(blob);
-                  snapshot.on(
-                    firebase.storage.TaskEvent.STATE_CHANGED,
-                    () => {
-                      setUploading(true);
-                    },
-                    (error) => {
-                      setUploading(false);
-                      console.log(error);
-                      blob.close();
-                      return;
-                    },
-                    () => {
-                      snapshot.snapshot.ref.getDownloadURL().then((url) => {
-                        setUploading(false);
-                        blob.close();
-                        const formData = {
-                          user: user,
-                          fname: fname,
-                          lname: lname,
-                          classes: room,
-                          no: no,
-                          dob: born,
-                          address: address1 + address2,
-                          pass: pass,
-                          img: url,
-                        };
-                        Axios.post(`http://${SERVER_IP}:${PORT}/register`, formData)
-                          .then((response) => {
-                            const data = response.data;
-                            if (data.status) {
-                              Alert.alert(data.message);
-                              navigation.navigate("Login");
-                            } else {
-                              Alert.alert(data.message);
-                              setPass("");
-                              setRepass("");
-                            }
-                          })
-                          .catch((error) => {
-                            console.log(error);
-                          });
-
-                        return url;
-                      });
-                    }
-                  );
                 }}
               >
                 ลงทะเบียนเข้าใช้งาน

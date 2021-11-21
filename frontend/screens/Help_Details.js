@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Axios from "axios";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, StackActions } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   Box,
@@ -17,7 +17,9 @@ import {
   NativeBaseProvider,
   Button,
   Spinner,
+  Pressable,
 } from "native-base";
+import { Alert } from "react-native";
 
 export const RenderUser = (props) => {
   let uList = props.userList.filter((array) => array.member_id == props.memId);
@@ -55,6 +57,8 @@ function Help_Detail_Screen({ navigation, route }) {
   const [subListForAmount, setSubListForAmount] = useState([]);
   const [subListValidate, setSubListValidate] = useState(false);
   const [userList, setUserList] = useState([]);
+
+  const popAction = StackActions.pop(1);
 
   async function showThisAid() {
     // This Aid
@@ -160,7 +164,7 @@ function Help_Detail_Screen({ navigation, route }) {
                 fontSize={11}
                 color="coolGray.600"
               >
-                ประกาศเมื่อวันที่{" "}
+                เริ่มวันที่{" "}
                 {datetime.getFullYear() +
                   "-" +
                   (datetime.getMonth() + 1) +
@@ -172,21 +176,65 @@ function Help_Detail_Screen({ navigation, route }) {
                 {thisAid.aid_state == undefined ? (
                   <Text></Text>
                 ) : thisAid.aid_state == "ปิด" ? (
-                  <Badge
-                    colorScheme="warning"
-                    alignSelf="center"
-                    variant={"outline"}
+                  <Pressable
+                    onPress={() => {
+                      if (thisAid.member_id == info.s_id) {
+                        let formData = {
+                          state: "เปิด",
+                        };
+                        Axios.put(
+                          `http://${SERVER_IP}:${PORT}/aidstate/${route.params.keys}`,
+                          formData
+                        )
+                          .then((response) => {
+                            showThisAid();
+                          })
+                          .catch((error) => {
+                            console.log(error);
+                          });
+                      } else {
+                        return;
+                      }
+                    }}
                   >
-                    สถาณะ : ปิด
-                  </Badge>
+                    <Badge
+                      colorScheme="warning"
+                      alignSelf="center"
+                      variant={"outline"}
+                    >
+                      สถานะ : ปิด
+                    </Badge>
+                  </Pressable>
                 ) : (
-                  <Badge
-                    colorScheme="success"
-                    alignSelf="center"
-                    variant={"outline"}
+                  <Pressable
+                    onPress={() => {
+                      if (thisAid.member_id == info.s_id) {
+                        let formData = {
+                          state: "ปิด",
+                        };
+                        Axios.put(
+                          `http://${SERVER_IP}:${PORT}/aidstate/${route.params.keys}`,
+                          formData
+                        )
+                          .then((response) => {
+                            showThisAid();
+                          })
+                          .catch((error) => {
+                            console.log(error);
+                          });
+                      } else {
+                        return;
+                      }
+                    }}
                   >
-                    สถาณะ : เปิด
-                  </Badge>
+                    <Badge
+                      colorScheme="success"
+                      alignSelf="center"
+                      variant={"outline"}
+                    >
+                      สถานะ : เปิด
+                    </Badge>
+                  </Pressable>
                 )}
                 {thisAid.member_id == info.s_id ? (
                   <Text></Text>
@@ -197,7 +245,6 @@ function Help_Detail_Screen({ navigation, route }) {
                       colorScheme="indigo"
                       onPress={() => {
                         const formData = {
-                          uid: route.params.keys,
                           sid: info.s_id,
                         };
                         Axios.post(
@@ -238,6 +285,35 @@ function Help_Detail_Screen({ navigation, route }) {
                 )}
               </Stack>
             </Stack>
+            {subListForAmount.length == 0 && thisAid.member_id == info.s_id ? (
+              <Box style={{ alignItems: "center" }}>
+                <Button
+                  colorScheme="danger"
+                  width="20%"
+                  size="sm"
+                  m={3}
+                  onPress={() => {
+                    Axios.delete(
+                      `http://${SERVER_IP}:${PORT}/aid/${route.params.keys}`
+                    )
+                      .then((response) => {
+                        let data = response.data;
+                        Alert.alert(data);
+                        navigation.dispatch(popAction);
+                        // navigation.navigate(""); HERE TO ADD NAVIGATE
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
+                  }}
+                >
+                  ลบ
+                </Button>
+              </Box>
+            ) : (
+              <Box></Box>
+            )}
+
             <Divider my="2" />
             <Stack space={2}>
               <Text mx="auto" fontSize={20} color="tertiary.500">

@@ -30,6 +30,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useValidation } from 'react-native-form-validator';
 
 function Note_Screen({ navigation }) {
   if (!firebase.apps.length) {
@@ -45,6 +46,11 @@ function Note_Screen({ navigation }) {
 
   var [mode, setMode] = useState("date");
   var [show, setShow] = useState(false);
+
+  const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+    useValidation({
+      state: { time, date, detail, agency },
+    });
 
   async function _retrieveData() {
     try {
@@ -126,7 +132,7 @@ function Note_Screen({ navigation }) {
           <ScrollView
             _contentContainerStyle={{ px: "10px", mb: "4", minW: "72" }}
           >
-            <VStack space={3} mt="3" borderRadius={6} padding={5} shadow={4}>
+            <VStack space={3} mt="3" padding={5}>
               <FormControl>
                 <FormControl.Label
                   _text={{
@@ -138,6 +144,8 @@ function Note_Screen({ navigation }) {
                   จำนวนเวลาที่ทำความดี ชั่วโมง:นาที
                 </FormControl.Label>
                 <Input
+                
+                keyboardType = "numbers-and-punctuation"
                   placeholder="00:00"
                   InputRightElement={
                     <IconButton
@@ -152,6 +160,7 @@ function Note_Screen({ navigation }) {
                   value={time}
                   onChangeText={(text) => setTime(text)}
                 />
+                {isFieldInError('time') ? (<Text bold style={{ color: 'red' }}>โปรดกรอกเวลาที่ใช้ทำความดี(ชช:นน)</Text>) : (<Text></Text>)}
               </FormControl>
               <FormControl>
                 <FormControl.Label
@@ -198,6 +207,7 @@ function Note_Screen({ navigation }) {
                     />
                   }
                 />
+                {isFieldInError('date') ? (<Text bold style={{ color: 'red' }}>โปรดใส่วันที่ทำความดี</Text>) : (<Text></Text>)}
               </FormControl>
               <FormControl>
                 <FormControl.Label
@@ -214,6 +224,7 @@ function Note_Screen({ navigation }) {
                   value={detail}
                   onChangeText={(text) => setDetail(text)}
                 />
+                {isFieldInError('detail') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รายละเอียดการทำความดี</Text>) : (<Text></Text>)}
               </FormControl>
               <FormControl>
                 <FormControl.Label
@@ -230,6 +241,7 @@ function Note_Screen({ navigation }) {
                   value={agency}
                   onChangeText={(text) => setAgency(text)}
                 />
+                {isFieldInError('agency') ? (<Text bold style={{ color: 'red' }}>โปรดใส่หน่วยงานที่ทำความดี(ไม่เกิน100ตัวอักษร)</Text>) : (<Text></Text>)}
               </FormControl>
               <FormControl>
                 <FormControl.Label
@@ -284,8 +296,21 @@ function Note_Screen({ navigation }) {
                   alignSelf="center"
                   colorScheme="secondary"
                   onPress={async () => {
-                    // Bypass Network request failed when fetching || code from github :/
-                    const blob = await new Promise((resolve, reject) => {
+
+                    if(validate({
+                      time: {minlength:5 ,maxlength: 5, required: true, hasNumber: true  },
+                      date: { required: true},
+                      detail: { required: true},
+                      agency: {maxlength: 100, required: true}
+      
+                    })){ 
+                      if(image == ""){
+                        Alert.alert("โปรดอัปโหลดรูป")
+                        return ;
+                      }
+
+
+                      const blob = await new Promise((resolve, reject) => {
                       const xhr = new XMLHttpRequest();
                       xhr.onload = function () {
                         resolve(xhr.response);
@@ -335,7 +360,16 @@ function Note_Screen({ navigation }) {
                             .then((response) => {
                               const data = response.data;
                               Alert.alert(data);
-                              navigation.navigate("Grace_lists");
+                              setImage("")
+                              setDetail("")
+                              setTime("")
+                              setDate(new Date())
+                              setAgency("")
+                              
+
+                              
+
+                              // navigation.navigate(); HERE TO ADD NAVIGATE
                             })
                             .catch((error) => {
                               console.log(error);
@@ -345,6 +379,19 @@ function Note_Screen({ navigation }) {
                         });
                       }
                     );
+
+
+
+
+
+                    }else{
+
+                      return(false)
+                    }
+
+
+                    // Bypass Network request failed when fetching || code from github :/
+                   
                   }}
                 >
                   บันทึก
