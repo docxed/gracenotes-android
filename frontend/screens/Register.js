@@ -158,7 +158,7 @@ function Register_Screen({ navigation }) {
             minW: "72",
           }}
         >
-          <VStack space={3} mt="3" borderRadius={6} padding={5} shadow={4}>
+          <VStack space={3} mt="3" padding={5}>
             <FormControl>
               <FormControl.Label
                 _text={{

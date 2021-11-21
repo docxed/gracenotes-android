@@ -132,7 +132,7 @@ function Note_Screen({ navigation }) {
           <ScrollView
             _contentContainerStyle={{ px: "10px", mb: "4", minW: "72" }}
           >
-            <VStack space={3} mt="3" borderRadius={6} padding={5} shadow={4}>
+            <VStack space={3} mt="3" padding={5}>
               <FormControl>
                 <FormControl.Label
                   _text={{
