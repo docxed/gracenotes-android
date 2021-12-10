@@ -6,6 +6,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useValidation } from 'react-native-form-validator';
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 import {
   Box,
   Heading,
@@ -33,7 +34,7 @@ const Card = (props) => {
 
   return (
     <Box marginTop={50} p="5" py="15" w="100%" mx="auto">
-      <Text textAlign="right" padding={1} fontSize={11} color="coolGray.600">
+      <Text textAlign="right" padding={1} fontSize={11} color="coolGray.600" style={{ fontFamily: 'Kanit_400Regular'}}>
         วันที่{" "}
         {props.date.getFullYear() +
           "-" +
@@ -51,7 +52,7 @@ const Card = (props) => {
         />
       </AspectRatio>
       <Stack p="4" space={5}>
-        <Text fontSize={16} ml="-3">
+        <Text fontSize={16} ml="-3" style={{ fontFamily: 'Kanit_400Regular'}}>
           {props.thisSocical.social_detail}
         </Text>
       </Stack>
@@ -66,6 +67,9 @@ function Home_Screen_Comment({ navigation, route }) {
   const [commentList, setCommentList] = useState([]);
   const [userList, setUserList] = useState([]);
   const [statusList, setStatusList] = useState([]);
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
     useValidation({
@@ -156,11 +160,11 @@ function Home_Screen_Comment({ navigation, route }) {
 
   function renderLike() {
     let amountLike = statusList.filter((array) => array.status_type == "like");
-    return <Text color="gray.400">{amountLike.length}</Text>;
+    return <Text color="gray.400" style={{ fontFamily: 'Kanit_400Regular'}}>{amountLike.length}</Text>;
   }
   function renderLove() {
     let amountLove = statusList.filter((array) => array.status_type == "love");
-    return <Text color="gray.400">{amountLove.length}</Text>;
+    return <Text color="gray.400" style={{ fontFamily: 'Kanit_400Regular'}}>{amountLove.length}</Text>;
   }
   function renderIcoLike() {
     let have = statusList.filter(
@@ -284,6 +288,12 @@ function Home_Screen_Comment({ navigation, route }) {
     }
   }
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <ScrollView>
@@ -315,6 +325,7 @@ function Home_Screen_Comment({ navigation, route }) {
           <Box>
             <HStack justifyContent="center" space={2}>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 placeholder="เพิ่มความคิดเห็น"
                 w={{
                   base: "85%",
@@ -324,6 +335,7 @@ function Home_Screen_Comment({ navigation, route }) {
               />
               
               <Button
+              
                 size="lg"
                 colorScheme="indigo"
                 onPress={() => {
@@ -361,17 +373,18 @@ function Home_Screen_Comment({ navigation, route }) {
                   
                 }}
               >
-                ส่ง
+                <Text style={{ fontFamily: 'Kanit_400Regular', color:"white"}}>ส่ง</Text>
+                
               </Button>
             </HStack>
-            {isFieldInError('comment') ? (<Text margin="3" bold style={{ color: 'red' }}>โปรดใส่ข้อความ</Text>) : (<Text></Text>)}
+            {isFieldInError('comment') ? (<Text margin="3" style={{ color: 'red', fontFamily: 'Kanit_400Regular' }}>โปรดใส่ข้อความ</Text>) : (<Text></Text>)}
           </Box>
           {commentList.length != 0 ? (
             commentList.map((item, index) => {
               function renderDate() {
                 let date = new Date(item.comment_timestamp);
                 return (
-                  <Text textAlign="right" fontSize="12">
+                  <Text textAlign="right" fontSize="12" style={{ fontFamily: 'Kanit_400Regular'}}>
                     {date.getFullYear() +
                       "-" +
                       (date.getMonth() + 1) +
@@ -387,7 +400,7 @@ function Home_Screen_Comment({ navigation, route }) {
                     (array) => array.member_id == item.member_id
                   );
                   return (
-                    <Text fontSize="12" marginBottom="1">
+                    <Text fontSize="12" marginBottom="1" style={{ fontFamily: 'Kanit_400Regular'}}>
                       {user[0].member_fname} {user[0].member_lname}
                     </Text>
                   );
@@ -398,6 +411,7 @@ function Home_Screen_Comment({ navigation, route }) {
               return (
                 <Box key={index}>
                   <VStack
+                  style={{ fontFamily: 'Kanit_400Regular'}}
                     marginTop="5"
                     width={350}
                     rounded="lg"
@@ -408,7 +422,7 @@ function Home_Screen_Comment({ navigation, route }) {
                     padding="3"
                   >
                     {renderUser()}
-                    <Text fontSize="14">{item.comment_detail}</Text>
+                    <Text fontSize="14" style={{ fontFamily: 'Kanit_400Regular'}}>{item.comment_detail}</Text>
                     {renderDate()}
                     {info.s_level == "teacher" && info.s_level != undefined ? (
                       <Box style={{ alignItems: "flex-end" }}>
@@ -429,7 +443,8 @@ function Home_Screen_Comment({ navigation, route }) {
                               });
                           }}
                         >
-                          ลบ
+                          <Text style={{ fontFamily: 'Kanit_400Regular', color:"white"}}>ลบ</Text>
+                          
                         </Button>
                       </Box>
                     ) : (
@@ -446,7 +461,7 @@ function Home_Screen_Comment({ navigation, route }) {
         </Center>
       </ScrollView>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Home_Screen_Comment;

@@ -31,6 +31,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useValidation } from 'react-native-form-validator';
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 function Note_Screen({ navigation }) {
   if (!firebase.apps.length) {
@@ -46,6 +47,10 @@ function Note_Screen({ navigation }) {
 
   var [mode, setMode] = useState("date");
   var [show, setShow] = useState(false);
+
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
     useValidation({
@@ -116,9 +121,16 @@ function Note_Screen({ navigation }) {
     showMode("date");
   };
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <Heading
+      style={{ fontFamily: 'Kanit_400Regular'}}
         marginTop={45}
         textAlign="center"
         size="lg"
@@ -136,6 +148,7 @@ function Note_Screen({ navigation }) {
               <FormControl>
                 <FormControl.Label
                   _text={{
+                    fontFamily: 'Kanit_400Regular',
                     color: "coolGray.800",
                     fontSize: 15,
                     fontWeight: 500,
@@ -144,6 +157,7 @@ function Note_Screen({ navigation }) {
                   จำนวนเวลาที่ทำความดี ชั่วโมง:นาที
                 </FormControl.Label>
                 <Input
+      style={{ fontFamily: 'Kanit_400Regular'}}
                 
                 keyboardType = "numbers-and-punctuation"
                   placeholder="00:00"
@@ -160,11 +174,12 @@ function Note_Screen({ navigation }) {
                   value={time}
                   onChangeText={(text) => setTime(text)}
                 />
-                {isFieldInError('time') ? (<Text bold style={{ color: 'red' }}>โปรดกรอกเวลาที่ใช้ทำความดี(ชช:นน)</Text>) : (<Text></Text>)}
+                {isFieldInError('time') ? (<Text  style={{ color: 'red', fontFamily: 'Kanit_400Regular', }}>โปรดกรอกเวลาที่ใช้ทำความดี(ชช:นน)</Text>) : (<Text></Text>)}
               </FormControl>
               <FormControl>
                 <FormControl.Label
                   _text={{
+                    fontFamily: 'Kanit_400Regular',
                     color: "coolGray.800",
                     fontSize: 15,
                     fontWeight: 500,
@@ -174,7 +189,7 @@ function Note_Screen({ navigation }) {
                   <FormControl>
                     {show && (
                       <DateTimePicker
-                        style={{ margin: 50 }}
+                        style={{ margin: 50, fontFamily: 'Kanit_400Regular' }}
                         value={date}
                         mode={mode}
                         is24Hour={true}
@@ -186,6 +201,7 @@ function Note_Screen({ navigation }) {
                   </FormControl>
                 </FormControl.Label>
                 <Input
+                style={{ fontFamily: 'Kanit_400Regular'}}
                   value={
                     date.getFullYear() +
                     "-" +
@@ -207,11 +223,12 @@ function Note_Screen({ navigation }) {
                     />
                   }
                 />
-                {isFieldInError('date') ? (<Text bold style={{ color: 'red' }}>โปรดใส่วันที่ทำความดี</Text>) : (<Text></Text>)}
+                {isFieldInError('date') ? (<Text  style={{ color: 'red', fontFamily: 'Kanit_400Regular', }}>โปรดใส่วันที่ทำความดี</Text>) : (<Text></Text>)}
               </FormControl>
               <FormControl>
                 <FormControl.Label
                   _text={{
+                    fontFamily: 'Kanit_400Regular',
                     color: "coolGray.800",
                     fontSize: 15,
                     fontWeight: 500,
@@ -220,15 +237,17 @@ function Note_Screen({ navigation }) {
                   รายละเอียดการทำความดี
                 </FormControl.Label>
                 <TextArea
+                style={{ fontFamily: 'Kanit_400Regular'}}
                   placeholder="เพิ่มรายละเอียดการทำความดี"
                   value={detail}
                   onChangeText={(text) => setDetail(text)}
                 />
-                {isFieldInError('detail') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รายละเอียดการทำความดี</Text>) : (<Text></Text>)}
+                {isFieldInError('detail') ? (<Text style={{ color: 'red', fontFamily: 'Kanit_400Regular', }}>โปรดใส่รายละเอียดการทำความดี</Text>) : (<Text></Text>)}
               </FormControl>
               <FormControl>
                 <FormControl.Label
                   _text={{
+                    fontFamily: 'Kanit_400Regular',
                     color: "coolGray.800",
                     fontSize: 15,
                     fontWeight: 500,
@@ -237,15 +256,17 @@ function Note_Screen({ navigation }) {
                   หน่วยงานที่ทำความดี
                 </FormControl.Label>
                 <Input
+                style={{ fontFamily: 'Kanit_400Regular'}}
                   placeholder="หน่วยงานที่ทำความดี"
                   value={agency}
                   onChangeText={(text) => setAgency(text)}
                 />
-                {isFieldInError('agency') ? (<Text bold style={{ color: 'red' }}>โปรดใส่หน่วยงานที่ทำความดี(ไม่เกิน100ตัวอักษร)</Text>) : (<Text></Text>)}
+                {isFieldInError('agency') ? (<Text  style={{ color: 'red', fontFamily: 'Kanit_400Regular', }}>โปรดใส่หน่วยงานที่ทำความดี(ไม่เกิน100ตัวอักษร)</Text>) : (<Text></Text>)}
               </FormControl>
               <FormControl>
                 <FormControl.Label
                   _text={{
+                    fontFamily: 'Kanit_400Regular',
                     color: "coolGray.800",
                     fontSize: 14,
                     fontWeight: 500,
@@ -284,7 +305,8 @@ function Note_Screen({ navigation }) {
                     }
                     onPress={pickImage}
                   >
-                    อัปโหลด
+                    <Text style={{ fontFamily: 'Kanit_400Regular', color:"white"}}>อัปโหลด</Text>
+                    
                   </Button>
                 </Button.Group>
               </FormControl>
@@ -394,7 +416,8 @@ function Note_Screen({ navigation }) {
                    
                   }}
                 >
-                  บันทึก
+                  <Text style={{ fontFamily: 'Kanit_400Regular', color:"white"}}>บันทึก</Text>
+                  
                 </Button>
               ) : (
                 <Spinner size="lg" />
@@ -404,7 +427,7 @@ function Note_Screen({ navigation }) {
         </Box>
       </Center>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Note_Screen;

@@ -24,10 +24,15 @@ import {
   Spacer,
   Spinner,
 } from "native-base";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 function Menu_Screen({ navigation }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [me, setMe] = useState({}); // My Member Data query From info(LocalStorage)
+
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function showMe() {
     // My Member
@@ -75,13 +80,21 @@ function Menu_Screen({ navigation }) {
     innerFunction();
   }, [innerFunction]);
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <Center flex={1} px="3">
         <Box alignItems="center" w="90%" mx="auto">
-          <Heading fontSize="xl" p="4" pb="3" color="indigo.500">
+          <Text style={{ fontFamily: 'Kanit_400Regular'}} fontSize="xl" p="4" pb="3">
+          <Heading color="indigo.500">
             โปรไฟล์
           </Heading>
+          </Text>
           {me.member_img != undefined ? (
             <Avatar
               size="120"
@@ -99,7 +112,9 @@ function Menu_Screen({ navigation }) {
               navigation.navigate("editProfile");
             }}
           >
-            แก้ไข้โปรไฟล์ส่วนตัว
+            <Text style={{ fontFamily: 'Kanit_400Regular', color:"white"}}>
+            แก้ไขโปรไฟล์ส่วนตัว
+            </Text>
           </Button>
           <Divider my="2" />
           <VStack space={2}>
@@ -116,7 +131,7 @@ function Menu_Screen({ navigation }) {
                     as={MaterialCommunityIcons}
                     name="note-multiple"
                   />
-                  <Text color="success.400" fontSize={20}>
+                  <Text style={{ fontFamily: 'Kanit_400Regular'}}  color="success.400" fontSize={20}>
                     บันทึกความดีของฉัน
                   </Text>
                 </HStack>
@@ -131,7 +146,7 @@ function Menu_Screen({ navigation }) {
               <Box>
                 <HStack space={3}>
                   <Icon color="teal.400" as={MaterialIcons} name="history" />
-                  <Text color="teal.400" fontSize={20}>
+                  <Text color="teal.400" fontSize={20} style={{ fontFamily: 'Kanit_400Regular'}}>
                     ประวัติความช่วยเหลือ
                   </Text>
                 </HStack>
@@ -150,7 +165,7 @@ function Menu_Screen({ navigation }) {
                     as={MaterialIcons}
                     name="post-add"
                   />
-                  <Text color="warning.400" fontSize={20}>
+                  <Text color="warning.400" fontSize={20} style={{ fontFamily: 'Kanit_400Regular'}}>
                     โพสต์ขอความช่วยเหลือ
                   </Text>
                 </HStack>
@@ -170,7 +185,7 @@ function Menu_Screen({ navigation }) {
                       as={MaterialIcons}
                       name="admin-panel-settings"
                     />
-                    <Text color="rose.500" fontSize={20}>
+                    <Text color="rose.500" fontSize={20} style={{ fontFamily: 'Kanit_400Regular'}}>
                       Admin Panel
                     </Text>
                   </HStack>
@@ -192,12 +207,13 @@ function Menu_Screen({ navigation }) {
               navigation.navigate("Login");
             }}
           >
-            ออกจากระบบ
+            <Text style={{ fontFamily: 'Kanit_400Regular', color:"white"}}>ออกจากระบบ</Text>
+            
           </Button>
         </Box>
       </Center>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 const styles = StyleSheet.create({

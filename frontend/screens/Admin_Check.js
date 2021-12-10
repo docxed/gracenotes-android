@@ -23,10 +23,14 @@ import {
   Spinner,
   ScrollView,
 } from "native-base";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 function Admin_check_Screen({ navigation }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [graceList, setGraceList] = useState([]);
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function showGrace() {
     await Axios.get(`http://${SERVER_IP}:${PORT}/graceadmin`)
@@ -73,6 +77,12 @@ function Admin_check_Screen({ navigation }) {
     // useState is Asynchronous!!!, Thus you need to Hook for getValue on created info(LocalStorage)
     innerFunction();
   }, [innerFunction]);
+
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
   return (
     <NativeBaseProvider>
       <Center flex={1} px="3">
@@ -82,39 +92,43 @@ function Admin_check_Screen({ navigation }) {
             as={MaterialIcons}
             name="admin-panel-settings"
           />
+          <Text style={{ fontFamily: 'Kanit_400Regular'}} fontSize={30}>
           <Heading fontSize={30} color="indigo.500">
             Admin Panel
           </Heading>
+          </Text>
         </HStack>
-        <Heading fontSize={30} color="info.500">
+        <Text style={{ fontFamily: 'Kanit_400Regular'}} fontSize={30}>
+        <Heading fontSize={30} color="info.500" >
           ตวรจบันทึกความดี
         </Heading>
+        </Text>
         <Divider my="3" />
         <ScrollView>
           <Box alignItems="center" w="80%" mx="auto">
             <HStack space={5}>
               <VStack alignItems="center" space={5}>
-                <Text bold fontSize={17}>
+                <Text  fontSize={17} style={{ fontFamily: 'Kanit_400Regular'}}>
                   หมายเลขบันทึก
                 </Text>
                 <Divider my="1" />
                 {graceList.map((item, index) => {
                   return (
                     <Box key={index}>
-                      <Text fontSize={16}>{item.grace_id}</Text>
+                      <Text fontSize={16} style={{ fontFamily: 'Kanit_400Regular'}}>{item.grace_id}</Text>
                     </Box>
                   );
                 })}
               </VStack>
               <VStack alignItems="center" space={5}>
-                <Text bold fontSize={17}>
+                <Text  fontSize={17} style={{ fontFamily: 'Kanit_400Regular'}}>
                   ผู้บันทึก
                 </Text>
                 <Divider my="1" />
                 {graceList.map((item, index) => {
                   return (
                     <Box key={index}>
-                      <Text fontSize={16}>
+                      <Text fontSize={16} style={{ fontFamily: 'Kanit_400Regular'}}>
                         {item.member_fname} {item.member_lname}
                       </Text>
                     </Box>
@@ -122,13 +136,14 @@ function Admin_check_Screen({ navigation }) {
                 })}
               </VStack>
               <VStack alignItems="center" space={5}>
-                <Text bold fontSize={17}>
+                <Text  fontSize={17} style={{ fontFamily: 'Kanit_400Regular'}}>
                   สถานะตรวจ
                 </Text>
                 <Divider my="1" />
                 {graceList.map((item, index) => {
                   return item.grace_check == "รอการอนุมัติ" ? (
                     <Button
+                    _text={{ fontFamily: 'Kanit_400Regular'}}
                       key={index}
                       w={{ base: "60%" }}
                       size="6"
@@ -140,7 +155,7 @@ function Admin_check_Screen({ navigation }) {
                       รอการตรวจ
                     </Button>
                   ) : (
-                    <Button key={index} w={{ base: "60%" }} size="6" colorScheme="success" onPress={() => {
+                    <Button _text={{ fontFamily: 'Kanit_400Regular'}} key={index} w={{ base: "60%" }} size="6" colorScheme="success" onPress={() => {
                       navigation.navigate("Check_Detail", {keys: item.grace_id});
                     }}>
                       ตรวจแล้ว
@@ -153,7 +168,7 @@ function Admin_check_Screen({ navigation }) {
         </ScrollView>
       </Center>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Admin_check_Screen;

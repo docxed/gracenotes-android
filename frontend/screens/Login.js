@@ -1,11 +1,13 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import Axios from "axios";
+import * as Font from 'expo-font'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import { useFocusEffect } from "@react-navigation/native";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { useValidation } from 'react-native-form-validator';
+
 import {
   NativeBaseProvider,
   Box,
@@ -22,6 +24,7 @@ import {
   Center,
 } from "native-base";
 import { Image, Alert } from "react-native";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 // const img = require('../assets/logo.png');
 
@@ -30,11 +33,18 @@ function Login_Screen({ navigation }) {
   const [pass, setPass] = useState("");
   const [info, setInfo] = useState({});
 
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
+
+
 
   const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
     useValidation({
       state: { user, pass },
     });
+
+  
 
 
 
@@ -62,8 +72,14 @@ function Login_Screen({ navigation }) {
     }, [])
   );
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider >
       <Box safeArea flex={1} p="3" py="10" w="90%" mx="auto">
         <Center>
           <Image
@@ -77,6 +93,7 @@ function Login_Screen({ navigation }) {
           />
         </Center>
         <Heading
+        style={{ fontFamily: 'Kanit_400Regular'}}
           padding={3}
           textAlign="center"
           size="lg"
@@ -86,6 +103,7 @@ function Login_Screen({ navigation }) {
           GraceNotes
         </Heading>
         <Heading
+        style={{ fontFamily: 'Kanit_400Regular', fontSize: 18 }}
           textAlign="center"
           mt="1"
           color="gray.500"
@@ -98,6 +116,7 @@ function Login_Screen({ navigation }) {
           <FormControl>
             <FormControl.Label
               _text={{
+                fontFamily: 'Kanit_500Medium',
                 color: "coolGray.800",
                 fontSize: 15,
                 fontWeight: 600,
@@ -106,6 +125,7 @@ function Login_Screen({ navigation }) {
               รหัสนักเรียน
             </FormControl.Label>
             <Input
+            style={{fontFamily: 'Kanit_400Regular'}}
             
               InputLeftElement={
                 <Icon
@@ -118,13 +138,14 @@ function Login_Screen({ navigation }) {
               value={user}
               onChangeText={(text) => setUser(text)}
             />
-            {isFieldInError('user') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รหัสนักเรียนให้ถูกต้อง</Text>) : (<Text></Text>)}
+            {isFieldInError('user') ? (<Text  style={{ color: 'red', fontFamily: 'Kanit_400Regular' }}>โปรดใส่รหัสนักเรียนให้ถูกต้อง</Text>) : (<Text></Text>)}
             
         
           </FormControl>
           <FormControl>
             <FormControl.Label
               _text={{
+                fontFamily: 'Kanit_500Medium',
                 color: "coolGray.800",
                 fontSize: 15,
                 fontWeight: 600,
@@ -133,6 +154,7 @@ function Login_Screen({ navigation }) {
               รหัสผ่าน
             </FormControl.Label>
             <Input
+            style={{fontFamily: 'Kanit_400Regular'}}
             secureTextEntry={true}
               type="password"
               InputLeftElement={
@@ -146,12 +168,12 @@ function Login_Screen({ navigation }) {
               value={pass}
               onChangeText={(text) => setPass(text)}
             />
-            {isFieldInError('pass') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รหัสผ่านให้ถูกต้อง</Text>) : (<Text></Text>)}
+            {isFieldInError('pass') ? (<Text  style={{ color: 'red', fontFamily: 'Kanit_400Regular' }}>โปรดใส่รหัสผ่านให้ถูกต้อง</Text>) : (<Text></Text>)}
           </FormControl>
           <Button
             mt="2"
             color="primary.300"
-            _text={{ color: "white" }}
+            _text={{fontFamily: 'Kanit_500Medium', color: "white", fontSize: 15 }}
             onPress={() => {
               if(validate({
                 user: {maxlength: 100, required: true },
@@ -214,6 +236,7 @@ function Login_Screen({ navigation }) {
           <HStack mt="6" justifyContent="center">
             <Link
               _text={{
+                fontFamily: 'Kanit_500Medium',
                 color: "indigo.500",
                 fontWeight: "medium",
                 fontSize: 15,
@@ -228,7 +251,8 @@ function Login_Screen({ navigation }) {
         </VStack>
       </Box>
     </NativeBaseProvider>
-  );
+  );}
+
 }
 
 export default Login_Screen;

@@ -23,9 +23,11 @@ import {
   Spacer,
 } from "native-base";
 import { Alert } from "react-native";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 const Card = (props) => {
   const [check, setCheck] = useState("");
+
 
   useEffect(() => {
     setCheck(props.thisGrace.grace_check);
@@ -34,6 +36,7 @@ const Card = (props) => {
   return (
     <Box p="5" py="15" w="100%" mx="auto">
       <Heading
+      style={{ fontFamily: 'Kanit_400Regular'}}
         mt="10"
         textAlign="center"
         size="lg"
@@ -52,15 +55,15 @@ const Card = (props) => {
       </AspectRatio>
       <Stack p="4" space={5}>
         <Stack space={2}>
-          <Text fontSize={20} color="violet.500" ml="-3" mt="-1">
+          <Text fontSize={20} color="violet.500" ml="-3" mt="-1" style={{ fontFamily: 'Kanit_400Regular', paddingTop:5}}>
             {props.thisGrace.member_fname} {props.thisGrace.member_lname}
           </Text>
         </Stack>
-        <Text textAlign="left" ml="-3" fontSize={11} color="coolGray.600">
+        <Text textAlign="left" ml="-3" fontSize={11} color="coolGray.600" style={{ fontFamily: 'Kanit_400Regular'}}>
           {props.thisGrace.grace_agency}
         </Text>
-        <Text fontSize={15}>{props.thisGrace.grace_detail}</Text>
-        <Text textAlign="right" fontSize={11} color="coolGray.600">
+        <Text fontSize={15} style={{ fontFamily: 'Kanit_400Regular'}}>{props.thisGrace.grace_detail}</Text>
+        <Text textAlign="right" fontSize={11} color="coolGray.600" style={{ fontFamily: 'Kanit_400Regular'}}>
           เมื่อวันที่{" "}
           {props.date.getFullYear() +
             "-" +
@@ -69,7 +72,7 @@ const Card = (props) => {
             props.date.getDate()}{" "}
           เป็นเวลา {props.thisGrace.grace_time} ชั่วโมง
         </Text>
-        <Text textAlign="center" fontSize={11} color="coolGray.600">
+        <Text textAlign="center" fontSize={11} color="coolGray.600" style={{ fontFamily: 'Kanit_400Regular'}}>
           บันทึกเมื่อ{" "}
           {props.stamp.getFullYear() +
             "-" +
@@ -80,6 +83,7 @@ const Card = (props) => {
           {props.stamp.getSeconds()}
         </Text>
         <Select
+        style={{ fontFamily: 'Kanit_400Regular'}}
           selectedValue={check}
           onValueChange={(text) => setCheck(text)}
           minWidth="100"
@@ -89,11 +93,12 @@ const Card = (props) => {
           }}
           mt={1}
         >
-          <Select.Item label="ผ่าน" value="ผ่าน" />
-          <Select.Item label="ไม่ผ่าน" value="ไม่ผ่าน" />
-          <Select.Item label="รอการตรวจ" value="รอการอนุมัติ" />
+          <Select.Item _text={{ fontFamily: 'Kanit_400Regular'}} label="ผ่าน" value="ผ่าน" />
+          <Select.Item _text={{ fontFamily: 'Kanit_400Regular'}} label="ไม่ผ่าน" value="ไม่ผ่าน" />
+          <Select.Item _text={{ fontFamily: 'Kanit_400Regular'}} label="รอการตรวจ" value="รอการอนุมัติ" />
         </Select>
         <Button
+        _text={{ fontFamily: 'Kanit_400Regular'}}
           mx="auto"
           w={{ base: "20%" }}
           size="md"
@@ -121,6 +126,7 @@ const Card = (props) => {
       <Divider my="8" w="100%" />
       <HStack mx="auto" space={3}>
         <Button
+        _text={{ fontFamily: 'Kanit_400Regular'}}
           w={{ base: "30%" }}
           size="lg"
           colorScheme="indigo"
@@ -130,7 +136,7 @@ const Card = (props) => {
         >
           เผยแพร่
         </Button>
-        <Button w={{ base: "15%" }} size="lg" colorScheme="error" onPress={() => {
+        <Button _text={{ fontFamily: 'Kanit_400Regular'}} w={{ base: "15%" }} size="lg" colorScheme="error" onPress={() => {
             Axios.delete(`http://${SERVER_IP}:${PORT}/graceadmin/${props.thisGrace.grace_id}`)
                 .then((response) => {
                   let data = response.data;
@@ -153,6 +159,9 @@ const Card = (props) => {
 function Admin_Check_Detail_Screen({ navigation, route }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [thisGrace, setThisGrace] = useState({});
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function showThisGrace() {
     await Axios.get(
@@ -200,6 +209,12 @@ function Admin_Check_Detail_Screen({ navigation, route }) {
     // useState is Asynchronous!!!, Thus you need to Hook for getValue on created info(LocalStorage)
     innerFunction();
   }, [innerFunction]);
+
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
   return (
     <NativeBaseProvider>
       <ScrollView>
@@ -217,7 +232,7 @@ function Admin_Check_Detail_Screen({ navigation, route }) {
         </Center>
       </ScrollView>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Admin_Check_Detail_Screen;

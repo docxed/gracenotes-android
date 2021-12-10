@@ -19,24 +19,26 @@ import {
   Spinner,
 } from "native-base";
 
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
+
 export const Grace_list = (props) => {
   function renderCheck() {
     let statusCheck = props.item.grace_check;
     if (statusCheck == "ผ่าน") {
       return (
-        <Text textAlign="left" color="success.500" fontSize={11}>
+        <Text textAlign="left" color="success.500" fontSize={11} style={{ fontFamily: 'Kanit_400Regular'}}>
           รับรองแล้ว
         </Text>
       );
     } else if (statusCheck == "ไม่ผ่าน") {
       return (
-        <Text textAlign="left" color="warning.500" fontSize={11}>
+        <Text textAlign="left" color="warning.500" fontSize={11} style={{ fontFamily: 'Kanit_400Regular'}}>
           ไม่รับรอง
         </Text>
       );
     } else {
       return (
-        <Text textAlign="left" fontSize={11}>
+        <Text textAlign="left" fontSize={11} style={{ fontFamily: 'Kanit_400Regular'}}>
           รอการรับรอง
         </Text>
       );
@@ -62,16 +64,18 @@ export const Grace_list = (props) => {
       >
         <Stack p="4" space={3}>
           <Stack space={2}>
+            <Text style={{ fontFamily: 'Kanit_400Regular', paddingTop:2}} >
             <Heading color="indigo.500" size="md" ml="-1">
               {props.item.grace_detail}
             </Heading>
+            </Text>
           </Stack>
-          <Text color="coolGray.700" fontSize={12}>
+          <Text color="coolGray.700" fontSize={12} style={{ fontFamily: 'Kanit_400Regular'}}>
             ที่ {props.item.grace_agency} ทำความดีเป็นเวลา{" "}
             {props.item.grace_time} ชั่วโมง
           </Text>
           {renderCheck()}
-          <Text textAlign="right" color="coolGray.600" fontSize={11}>
+          <Text textAlign="right" color="coolGray.600" fontSize={11} style={{ fontFamily: 'Kanit_400Regular'}}>
             {/* substr For cutting string of date to simple display */}
             วันที่ {props.item.grace_date.substr(0, 10)}
           </Text>
@@ -90,6 +94,10 @@ function Grace_list_Screen({ navigation }) {
   const [checkAmount, setCheckAmount] = useState(0); // Amount of ความดี ผ่าน
   const [unCheckAmount, setUnCheckAmount] = useState(0); // Amount of ความดี ไม่ผ่าน
   const [loading, setLoading] = useState(true);
+
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function showGrace() {
     // My Grace List
@@ -162,9 +170,16 @@ function Grace_list_Screen({ navigation }) {
     innerFunction();
   }, [innerFunction]);
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <Heading
+      style={{ fontFamily: 'Kanit_400Regular'}}
         marginTop={45}
         textAlign="center"
         size="lg"
@@ -183,8 +198,8 @@ function Grace_list_Screen({ navigation }) {
               setGraceList(data);
             }}
           >
-            <Text color="warning.500">ทั้งหมด</Text>
-            <Text color="warning.500">{allAmount}</Text>
+            <Text color="warning.500" style={{ fontFamily: 'Kanit_400Regular'}}>ทั้งหมด</Text>
+            <Text color="warning.500" style={{ fontFamily: 'Kanit_400Regular'}}>{allAmount}</Text>
           </TouchableOpacity>
           <Divider orientation="vertical" mx="3" />
           <TouchableOpacity
@@ -196,8 +211,8 @@ function Grace_list_Screen({ navigation }) {
               setGraceList(data);
             }}
           >
-            <Text color="success.500">รับรอง</Text>
-            <Text color="success.500">{checkAmount}</Text>
+            <Text color="success.500" style={{ fontFamily: 'Kanit_400Regular'}}>รับรอง</Text>
+            <Text color="success.500" style={{ fontFamily: 'Kanit_400Regular'}}>{checkAmount}</Text>
           </TouchableOpacity>
           <Divider orientation="vertical" mx="3" />
           <TouchableOpacity
@@ -209,8 +224,8 @@ function Grace_list_Screen({ navigation }) {
               setGraceList(data);
             }}
           >
-            <Text color="error.500">ไม่รับรอง</Text>
-            <Text color="error.500">{unCheckAmount}</Text>
+            <Text color="error.500" style={{ fontFamily: 'Kanit_400Regular'}}>ไม่รับรอง</Text>
+            <Text color="error.500" style={{ fontFamily: 'Kanit_400Regular'}}>{unCheckAmount}</Text>
           </TouchableOpacity>
         </Flex>
       </Center>
@@ -237,7 +252,7 @@ function Grace_list_Screen({ navigation }) {
         </Center>
       </ScrollView>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 const styles = StyleSheet.create({

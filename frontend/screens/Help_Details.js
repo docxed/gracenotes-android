@@ -4,6 +4,7 @@ import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect, StackActions } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 import {
   Box,
   Badge,
@@ -25,7 +26,7 @@ export const RenderUser = (props) => {
   let uList = props.userList.filter((array) => array.member_id == props.memId);
   if (uList.length != 0) {
     return (
-      <Text mx="auto" fontSize={14} color="info.700">
+      <Text mx="auto" fontSize={14} color="info.700" style={{ fontFamily: 'Kanit_400Regular'}}>
         {uList[0].member_fname} {uList[0].member_lname}
       </Text>
     );
@@ -40,7 +41,7 @@ export const RenderOwner = (props) => {
   );
   if (user.length != 0) {
     return (
-      <Text fontSize={18} color="violet.500" ml="-2" mt="-1">
+      <Text fontSize={18} color="violet.500" ml="-2" mt="-1" style={{ fontFamily: 'Kanit_400Regular'}}>
         โดย {user[0].member_fname} {user[0].member_lname}
       </Text>
     );
@@ -59,6 +60,11 @@ function Help_Detail_Screen({ navigation, route }) {
   const [userList, setUserList] = useState([]);
 
   const popAction = StackActions.pop(1);
+
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
+
 
   async function showThisAid() {
     // This Aid
@@ -140,25 +146,36 @@ function Help_Detail_Screen({ navigation, route }) {
     innerFunction();
   }, [innerFunction]);
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <ScrollView>
         <Center flex={1} px="2">
           <Box marginTop={50} p="5" py="15" w="100%" mx="auto">
-            <Heading padding={3} Size={18} ml="-3" color="indigo.600">
+            <Text style={{ fontFamily: 'Kanit_400Regular'}} padding={3} Size={18} ml="-3" color="indigo.600">
+            <Heading  color="indigo.600">
               ขอความช่วยเหลือ
             </Heading>
+            </Text>
             <Stack p="4" space={5} borderRadius="6" borderWidth="0.25">
               <Stack space={2}>
-                <Heading Size={18} color="tertiary.600" ml="-2">
+              <Text style={{ fontFamily: 'Kanit_400Regular'}} fontSize="23" paddingTop="2"   ml="-2">
+                <Heading color="tertiary.600" >
                   {thisAid.aid_head}
                 </Heading>
+                </Text>
                 <RenderOwner userList={userList} thisAid={thisAid} />
               </Stack>
-              <Text fontSize={15} ml="-2">
+              <Text fontSize={15} ml="-2" style={{ fontFamily: 'Kanit_400Regular'}}>
                 {thisAid.aid_body}
               </Text>
               <Text
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 textAlign="right"
                 padding={1}
                 fontSize={11}
@@ -198,11 +215,12 @@ function Help_Detail_Screen({ navigation, route }) {
                     }}
                   >
                     <Badge
+                    _text={{ fontFamily: 'Kanit_400Regular'}}
                       colorScheme="warning"
                       alignSelf="center"
                       variant={"outline"}
                     >
-                      สถานะ : ปิด
+                      <Text style={{ fontFamily: 'Kanit_400Regular'}} color="warning.500" >สถานะ : ปิด</Text>
                     </Badge>
                   </Pressable>
                 ) : (
@@ -227,13 +245,16 @@ function Help_Detail_Screen({ navigation, route }) {
                       }
                     }}
                   >
-                    <Badge
-                      colorScheme="success"
+                   
+                    <Badge 
+                    colorScheme="success"
                       alignSelf="center"
-                      variant={"outline"}
-                    >
-                      สถานะ : เปิด
+                      variant={"outline"}>
+                        <Text style={{ fontFamily: 'Kanit_400Regular'}} color="success.500">สถานะ : เปิด</Text>
+                      
+                      
                     </Badge>
+                    
                   </Pressable>
                 )}
                 {thisAid.member_id == info.s_id ? (
@@ -259,7 +280,8 @@ function Help_Detail_Screen({ navigation, route }) {
                           });
                       }}
                     >
-                      เข้าร่วม
+                      <Text style={{ fontFamily: 'Kanit_400Regular', color:"white"}} fontSize="18">เข้าร่วม</Text>
+                      
                     </Button>
                   ) : (
                     <Button
@@ -277,7 +299,7 @@ function Help_Detail_Screen({ navigation, route }) {
                           });
                       }}
                     >
-                      ยกเลิกเข้าร่วม
+                      <Text style={{ fontFamily: 'Kanit_400Regular', color:"white"}} fontSize="18">ยกเลิกเข้าร่วม</Text>
                     </Button>
                   )
                 ) : (
@@ -316,7 +338,7 @@ function Help_Detail_Screen({ navigation, route }) {
 
             <Divider my="2" />
             <Stack space={2}>
-              <Text mx="auto" fontSize={20} color="tertiary.500">
+              <Text mx="auto" fontSize={20} color="tertiary.500" style={{ fontFamily: 'Kanit_400Regular'}}>
                 จำนวนคนที่เข้ารวม {subListForAmount.length}
               </Text>
               <Divider my="1" />
@@ -335,7 +357,7 @@ function Help_Detail_Screen({ navigation, route }) {
         </Center>
       </ScrollView>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Help_Detail_Screen;

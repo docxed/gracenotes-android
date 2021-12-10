@@ -26,37 +26,38 @@ import {
   Spinner,
   ScrollView,
 } from "native-base";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 const Admin_list_post = (props) => {
   return (
     <Box alignItems="center" w="80%" mx="auto">
       <HStack space={9}>
         <VStack alignItems="center" space={7}>
-          <Text bold fontSize={17}>
+          <Text  fontSize={17} style={{ fontFamily: 'Kanit_400Regular'}}>
             โพสต์ที่
           </Text>
           {props.socialList.map((item, index) => {
             return (
               <Box key={index}>
-                <Text fontSize={18}>{item.social_id}</Text>
+                <Text fontSize={18} style={{ fontFamily: 'Kanit_400Regular'}}>{item.social_id}</Text>
               </Box>
             );
           })}
         </VStack>
         <VStack alignItems="center" space={7}>
-          <Text bold fontSize={17}>
+          <Text fontSize={17} style={{ fontFamily: 'Kanit_400Regular'}}>
             เวลา
           </Text>
           {props.socialList.map((item, index) => {
             return (
               <Box key={index}>
-                <Text fontSize={18}>{item.social_timestamp.substr(0, 10)}</Text>
+                <Text fontSize={18} style={{ fontFamily: 'Kanit_400Regular'}}>{item.social_timestamp.substr(0, 10)}</Text>
               </Box>
             );
           })}
         </VStack>
         <VStack alignItems="center" space={6}>
-          <Text bold fontSize={17}>
+          <Text  fontSize={17} style={{ fontFamily: 'Kanit_400Regular'}}>
             Edit
           </Text>
           {props.socialList.map((item, index) => {
@@ -81,7 +82,7 @@ const Admin_list_post = (props) => {
           })}
         </VStack>
         <VStack alignItems="center" space={6}>
-          <Text bold fontSize={17}>
+          <Text  fontSize={17} style={{ fontFamily: 'Kanit_400Regular'}}>
             View
           </Text>
           {props.socialList.map((item, index) => {
@@ -114,6 +115,9 @@ const Admin_list_post = (props) => {
 function Admin_post_Screen({ navigation }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [socialList, setSocialList] = useState([]);
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function showSocial() {
     await Axios.get(`http://${SERVER_IP}:${PORT}/social`)
@@ -161,6 +165,12 @@ function Admin_post_Screen({ navigation }) {
     innerFunction();
   }, [innerFunction]);
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <Center flex={1} px="3">
@@ -170,13 +180,15 @@ function Admin_post_Screen({ navigation }) {
             as={MaterialIcons}
             name="admin-panel-settings"
           />
-          <Heading fontSize={30} color="indigo.500">
+          <Text style={{ fontFamily: 'Kanit_400Regular'}} fontSize={30}>
+          <Heading fontSize={30} color="indigo.500" >
             Admin Panel
-          </Heading>
+          </Heading></Text>
         </HStack>
+        <Text style={{ fontFamily: 'Kanit_400Regular'}} fontSize={30}>
         <Heading fontSize={30} color="success.500">
           จัดการโพสต์
-        </Heading>
+        </Heading></Text>
         <Divider my="3" />
         <ScrollView>
           {socialList.length != 0 ? (
@@ -187,7 +199,7 @@ function Admin_post_Screen({ navigation }) {
         </ScrollView>
       </Center>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Admin_post_Screen;

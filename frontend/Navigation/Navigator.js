@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, MaterialIcons, Entypo, FontAwesome5} from '@expo/vector-icons';
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 import Login_Screen from '../screens/Login.js';
 import Register_Screen from "../screens/Register.js";
@@ -29,6 +30,7 @@ import Admin_Post_notes from '../screens/Admin_post.js';
 import Admin_edit_Post from '../screens/Admin_edit_post.js';
 import Admin_option_user from '../screens/Admin_option_user.js';
 import Admin_edit_help from '../screens/Admin_edit_help.js';
+import { fontFamily } from 'styled-system';
 
 const Login_page = createNativeStackNavigator();
 const Home_page = createNativeStackNavigator();
@@ -39,6 +41,8 @@ const Grace_page = createNativeStackNavigator();
 const Admin_page = createNativeStackNavigator();
 const Admin_CheckandPost = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
+
 
 function inhome() {
     return (
@@ -131,12 +135,27 @@ function inAdminCheck( ){
 }
 
 function inside() {
+
+    let [fontsLoaded] = useFonts({
+        Kanit_500Medium, Kanit_400Regular
+      });
+
+      if(!fontsLoaded){
+        return(<Text></Text>)
+        
+      }
+      else{
+    
     return (
-        <Tab.Navigator initialRouteName="Home">
+        <Tab.Navigator initialRouteName="Home" screenOptions={{labelStyle: {
+            fontSize: 20,
+        },}}>
             <Tab.Screen name="Home" component={inhome} 
+            
             options={
-                {
-                    title: "หน้าแรก",
+                {   
+                    tabBarLabel: "หน้าแรก",
+                    tabBarLabelStyle:{fontFamily:'Kanit_400Regular'},
                     headerShown: false,
                     tabBarActiveTintColor: "seagreen",
                     tabBarIcon: ({color, focused}) => {
@@ -146,7 +165,8 @@ function inside() {
             }/>
             <Tab.Screen name="Note" component={Note_Screen} options={
                 {
-                    title: "เพิ่มบันทึกความดี",
+                    tabBarLabelStyle:{fontFamily:'Kanit_400Regular'},
+                    tabBarLabel: "เพิ่มบันทึกความดี",
                     headerShown:false,
                     tabBarActiveTintColor: "darkblue",
                     tabBarIcon: ({color, focused}) => {
@@ -156,7 +176,8 @@ function inside() {
             }/>
             <Tab.Screen name="Help" component={inHelp} options={
                 {
-                    title: "ความช่วยเหลือ",
+                    tabBarLabelStyle:{fontFamily:'Kanit_400Regular'},
+                    tabBarLabel: "ความช่วยเหลือ",
                     headerShown:false,
                     tabBarActiveTintColor: "darkorange",
                     tabBarIcon: ({color, focused}) => {
@@ -164,9 +185,10 @@ function inside() {
                       }
                 }
             }/>          
-            <Tab.Screen name="Menu" component={inMenu} options={
+            <Tab.Screen name="Menu" component={inMenu}  options={
                 {
-                    title: "เมนู",
+                    tabBarLabelStyle:{fontFamily:'Kanit_400Regular'},
+                    tabBarLabel: "เมนู",
                     headerShown:false,
                     tabBarActiveTintColor: "slateblue",
                     tabBarIcon: ({color, focused}) => {
@@ -176,10 +198,20 @@ function inside() {
             }/>
             
         </Tab.Navigator>
-    );
+    );}
 }
 
 export default function MyNavigator() {
+
+    let [fontsLoaded] = useFonts({
+        Kanit_500Medium, Kanit_400Regular
+      });
+
+    if(!fontsLoaded){
+        return(<Text></Text>)
+        
+      }
+      else{
     return (
         <NavigationContainer>
             <Login_page.Navigator initialRouteName="Login">
@@ -197,5 +229,5 @@ export default function MyNavigator() {
                     options={{headerShown:false}}/>
             </Login_page.Navigator>
         </NavigationContainer>
-    );
+    );}
 }

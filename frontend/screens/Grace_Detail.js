@@ -20,6 +20,7 @@ import {
   Spinner,
 } from "native-base";
 import { Alert } from "react-native";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 function Grace_Detail_Screen({ navigation, route }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
@@ -28,6 +29,10 @@ function Grace_Detail_Screen({ navigation, route }) {
   const [user, setUser] = useState({}); // User of This Grace
 
   const popAction = StackActions.pop(1);
+
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function showThisGrace() {
     // This Grace
@@ -102,19 +107,19 @@ function Grace_Detail_Screen({ navigation, route }) {
   function renderStatusCheck() {
     if (thisGrace.grace_check == "ผ่าน") {
       return (
-        <Badge colorScheme="success" alignSelf="flex-end" variant={"outline"}>
+        <Badge colorScheme="success" _text={{ fontFamily: 'Kanit_400Regular'}} alignSelf="flex-end" variant={"outline"}>
           รับรองแล้ว
         </Badge>
       );
     } else if (thisGrace.grace_check == "ไม่ผ่าน") {
       return (
-        <Badge colorScheme="warning" alignSelf="flex-end" variant={"outline"}>
+        <Badge colorScheme="warning" _text={{ fontFamily: 'Kanit_400Regular'}} alignSelf="flex-end" variant={"outline"}>
           ไม่รับรอง
         </Badge>
       );
     } else {
       return (
-        <Badge colorScheme="light" alignSelf="flex-end" variant={"outline"}>
+        <Badge colorScheme="light" _text={{ fontFamily: 'Kanit_400Regular'}} alignSelf="flex-end" variant={"outline"}>
           รอการรับรอง
         </Badge>
       );
@@ -139,6 +144,7 @@ function Grace_Detail_Screen({ navigation, route }) {
           mb={10}
         >
           <Button
+          _text={{ fontFamily: 'Kanit_400Regular'}}
             onPress={() => {
               // Delete This Grace
               Axios.delete(
@@ -160,6 +166,11 @@ function Grace_Detail_Screen({ navigation, route }) {
       );
     }
   }
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
 
   return (
     <NativeBaseProvider>
@@ -168,9 +179,10 @@ function Grace_Detail_Screen({ navigation, route }) {
           <Box marginTop={50} p="5" py="15" w="100%" mx="auto">
             <Stack p="4" space={5} borderRadius="6" borderWidth="0.25">
               <Stack space={2}>
-                <Heading padding={3} Size={18} ml="-3" color="indigo.600">
+                <Text style={{ fontFamily: 'Kanit_400Regular'}} padding={3} Size={18} ml="-3">
+                <Heading  color="indigo.600">
                   บันทึกความดี
-                </Heading>
+                </Heading></Text>
                 <Box style={{ alignItems: "center" }} my={5}>
                   {thisGrace.grace_img != undefined ? (
                     <Image
@@ -185,21 +197,22 @@ function Grace_Detail_Screen({ navigation, route }) {
                   )}
                 </Box>
                 {renderStatusCheck()}
-                <Text textAlign="right" fontSize={11} color="coolGray.600">
+                <Text textAlign="right" fontSize={11} color="coolGray.600" style={{ fontFamily: 'Kanit_400Regular'}}>
                   เมื่อวันที่{" "}
                   {thisGrace.grace_date != undefined
                     ? thisGrace.grace_date.substr(0, 10)
                     : ""}{" "}
                   เป็นเวลา {thisGrace.grace_time} ชั่วโมง
                 </Text>
-                <Text textAlign="right" fontSize={11} color="coolGray.600">
+                <Text textAlign="right" fontSize={11} color="coolGray.600" style={{ fontFamily: 'Kanit_400Regular'}}>
                   ที่ {thisGrace.grace_agency}
                 </Text>
               </Stack>
-              <Text fontSize={15} ml="-2">
+              <Text fontSize={15} ml="-2" style={{ fontFamily: 'Kanit_400Regular'}}>
                 {thisGrace.grace_detail}
               </Text>
               <Text
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 textAlign="right"
                 fontSize={16}
                 color="violet.500"
@@ -214,7 +227,7 @@ function Grace_Detail_Screen({ navigation, route }) {
         </Center>
       </ScrollView>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Grace_Detail_Screen;

@@ -21,6 +21,7 @@ import {
   Text,
 } from "native-base";
 import { Alert } from "react-native";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 function Admin_option_user({ navigation, route }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
@@ -35,6 +36,10 @@ function Admin_option_user({ navigation, route }) {
   const [level, setLevel] = useState("");
 
   const popAction = StackActions.pop(1);
+
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   
 
@@ -95,6 +100,7 @@ function Admin_option_user({ navigation, route }) {
     if (level == "student") {
       return (
         <Button
+        _text={{ fontFamily: 'Kanit_400Regular'}}
           w={{ base: "90%" }}
           size="lg"
           alignSelf="center"
@@ -123,6 +129,7 @@ function Admin_option_user({ navigation, route }) {
     } else {
       return (
         <Button
+        _text={{ fontFamily: 'Kanit_400Regular'}}
           w={{ base: "90%" }}
           size="lg"
           alignSelf="center"
@@ -151,14 +158,21 @@ function Admin_option_user({ navigation, route }) {
     }
   }
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <Box flex={1} py="8" w="90%" mx="auto">
         {thisUser.member_id != undefined ? (
           <ScrollView>
-            <Heading alignSelf="center" fontSize="xl" p="4" pb="3">
+            <Text style={{ fontFamily: 'Kanit_400Regular'}} alignSelf="center" fontSize="xl" p="4" pb="3" >
+            <Heading>
               หมายเลขบัญชี {thisUser.member_id}
-            </Heading>
+            </Heading></Text>
             <VStack space={2} mt="3" padding={5}>
               <Avatar
                 alignSelf="center"
@@ -168,19 +182,20 @@ function Admin_option_user({ navigation, route }) {
                 }}
               />
               <FormControl>
-                <FormControl.Label>รหัสนักเรียน {user}</FormControl.Label>
+                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>รหัสนักเรียน {user}</FormControl.Label>
               </FormControl>
               <FormControl>
-                <FormControl.Label>ชื่อ</FormControl.Label>
-                <Input editable={false} value={fname} placeholder="ชื่อ" />
+                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>ชื่อ</FormControl.Label>
+                <Input style={{ fontFamily: 'Kanit_400Regular'}} editable={false} value={fname} placeholder="ชื่อ" />
               </FormControl>
               <FormControl>
-                <FormControl.Label>นามสกุล</FormControl.Label>
-                <Input editable={false} value={lname} placeholder="นามสกุล" />
+                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>นามสกุล</FormControl.Label>
+                <Input style={{ fontFamily: 'Kanit_400Regular'}} editable={false} value={lname} placeholder="นามสกุล" />
               </FormControl>
               <FormControl>
                 <FormControl.Label
                   _text={{
+                    fontFamily: 'Kanit_400Regular',
                     color: "coolGray.800",
                     fontSize: 15,
                     fontWeight: 500,
@@ -189,6 +204,7 @@ function Admin_option_user({ navigation, route }) {
                   ชั้นเรียน
                 </FormControl.Label>
                 <Input
+                style={{ fontFamily: 'Kanit_400Regular'}}
                 editable={false}
                   value={room}
                   placeholder="6/1"
@@ -200,6 +216,7 @@ function Admin_option_user({ navigation, route }) {
               <FormControl>
                 <FormControl.Label
                   _text={{
+                    fontFamily: 'Kanit_400Regular',
                     color: "coolGray.800",
                     fontSize: 15,
                     fontWeight: 500,
@@ -208,6 +225,7 @@ function Admin_option_user({ navigation, route }) {
                   เลขที่
                 </FormControl.Label>
                 <Input
+                style={{ fontFamily: 'Kanit_400Regular'}}
                 editable={false}
                   value={no}
                   placeholder="20"
@@ -219,6 +237,7 @@ function Admin_option_user({ navigation, route }) {
               <FormControl>
                 <FormControl.Label
                   _text={{
+                    fontFamily: 'Kanit_400Regular',
                     color: "coolGray.800",
                     fontSize: 15,
                     fontWeight: 500,
@@ -227,6 +246,7 @@ function Admin_option_user({ navigation, route }) {
                   วัน/เดือน/ปีเกิด
                 </FormControl.Label>
                 <Input
+                style={{ fontFamily: 'Kanit_400Regular'}}
                 editable={false}
                   value={born.substr(0, 10)}
                   placeholder="20/07/2543"
@@ -247,8 +267,9 @@ function Admin_option_user({ navigation, route }) {
                 />
               </FormControl>
               <FormControl>
-                <FormControl.Label>ที่อยู่</FormControl.Label>
+                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>ที่อยู่</FormControl.Label>
                 <Input
+                style={{ fontFamily: 'Kanit_400Regular'}}
                 editable={false}
                   value={address}
                   marginBottom={2}
@@ -259,6 +280,7 @@ function Admin_option_user({ navigation, route }) {
             {renderBtn()}
             {thisUser.member_id != info.s_id ? (
               <Button
+              _text={{ fontFamily: 'Kanit_400Regular'}}
                 w={{ base: "90%" }}
                 size="lg"
                 alignSelf="center"
@@ -290,7 +312,7 @@ function Admin_option_user({ navigation, route }) {
         )}
       </Box>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Admin_option_user;

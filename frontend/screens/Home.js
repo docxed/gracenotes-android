@@ -3,6 +3,7 @@ import Axios from "axios";
 import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 import {
   Box,
@@ -20,6 +21,11 @@ import {
 } from "native-base";
 
 const Card = (props) => {
+  
+
+  
+
+
   return (
     <Box
       maxW="80"
@@ -49,13 +55,14 @@ const Card = (props) => {
             alt="image"
           />
         </AspectRatio>
-        <Center bg="success.500" position="absolute" bottom="0" px="3" py="1.5">
-          ตรวจแล้ว
+        <Center bg="success.500" position="absolute" bottom="0" px="3" py="1.5" >
+          <Text style={{ fontFamily: 'Kanit_400Regular', color:"white"}}>ตรวจแล้ว</Text>
+          
         </Center>
       </Box>
       <Stack p="4" space={3}>
         <Stack space={2}></Stack>
-        <Text isTruncated fontWeight="400">
+        <Text isTruncated fontWeight="400" style={{ fontFamily: 'Kanit_400Regular'}} >
           {props.item.social_detail}
         </Text>
         <HStack alignItems="center" space={4} justifyContent="space-between">
@@ -69,6 +76,9 @@ const Card = (props) => {
 function Home_Screen({ navigation }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [socialList, setSocialList] = useState([]);
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function showSocial() {
     await Axios.get(`http://${SERVER_IP}:${PORT}/social`)
@@ -117,10 +127,17 @@ function Home_Screen({ navigation }) {
     innerFunction();
   }, [innerFunction]);
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <ScrollView>
         <Heading
+        style={{ fontFamily: 'Kanit_400Regular'}}
           marginTop={45}
           textAlign="center"
           size="lg"
@@ -152,7 +169,7 @@ function Home_Screen({ navigation }) {
         )}
       </ScrollView>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Home_Screen;

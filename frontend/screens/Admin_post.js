@@ -25,6 +25,7 @@ import {
   Spacer,
 } from "native-base";
 import { Alert } from "react-native";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 const Card = (props) => {
   const [caption, setCaption] = useState("");
@@ -38,6 +39,7 @@ const Card = (props) => {
   return (
     <Box p="5" py="15" w="100%" mx="auto">
       <Heading
+      style={{ fontFamily: 'Kanit_400Regular'}}
         mt="10"
         textAlign="center"
         size="lg"
@@ -56,15 +58,15 @@ const Card = (props) => {
       </AspectRatio>
       <Stack p="4" space={5}>
         <Stack space={2}>
-          <Text fontSize={20} color="violet.500" ml="-3" mt="-1">
+          <Text fontSize={20} color="violet.500" ml="-3" mt="-1" style={{ fontFamily: 'Kanit_400Regular', paddingTop:5}}>
             โดย {props.thisGrace.member_fname} {props.thisGrace.member_lname}
           </Text>
         </Stack>
-        <Text textAlign="left" ml="-3" fontSize={11} color="coolGray.600">
+        <Text textAlign="left" ml="-3" fontSize={11} color="coolGray.600" style={{ fontFamily: 'Kanit_400Regular'}}>
           {props.thisGrace.grace_agency}
         </Text>
-        <Text fontSize={15}>{props.thisGrace.grace_detail}</Text>
-        <Text textAlign="right" fontSize={11} color="coolGray.600">
+        <Text fontSize={15} style={{ fontFamily: 'Kanit_400Regular'}}>{props.thisGrace.grace_detail}</Text>
+        <Text textAlign="right" fontSize={11} color="coolGray.600" style={{ fontFamily: 'Kanit_400Regular'}}>
           เมื่อวันที่{" "}
           {props.date.getFullYear() +
             "-" +
@@ -74,6 +76,7 @@ const Card = (props) => {
           เป็นเวลา {props.thisGrace.grace_time} ชั่วโมง
         </Text>
         <TextArea
+        style={{ fontFamily: 'Kanit_400Regular'}}
           value={caption}
           onChangeText={(text) => setCaption(text)}
           h={20}
@@ -83,11 +86,12 @@ const Card = (props) => {
             md: "25%",
           }}
         />
-        {isFieldInError('caption') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รายละเอียดโพสต์</Text>) : (<Text></Text>)}
+        {isFieldInError('caption') ? (<Text  style={{ color: 'red', fontFamily: 'Kanit_400Regular' }}>โปรดใส่รายละเอียดโพสต์</Text>) : (<Text></Text>)}
       </Stack>
       <Divider my="8" w="100%" />
       <HStack mx="auto" space={3}>
         <Button
+        _text={{ fontFamily: 'Kanit_400Regular'}}
           w={{ base: "30%" }}
           size="lg"
           colorScheme="indigo"
@@ -134,6 +138,9 @@ const Card = (props) => {
 function Admin_Post_notes({ navigation, route }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [thisGrace, setThisGrace] = useState({});
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
 
   async function showThisGrace() {
@@ -182,6 +189,12 @@ function Admin_Post_notes({ navigation, route }) {
     // useState is Asynchronous!!!, Thus you need to Hook for getValue on created info(LocalStorage)
     innerFunction();
   }, [innerFunction]);
+
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
   return (
     <NativeBaseProvider>
       <ScrollView>
@@ -200,7 +213,7 @@ function Admin_Post_notes({ navigation, route }) {
         </Center>
       </ScrollView>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Admin_Post_notes;

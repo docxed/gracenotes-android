@@ -20,6 +20,7 @@ import {
   Pressable,
 } from "native-base";
 import { Alert } from "react-native";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 export const RenderUser = (props) => {
 
@@ -28,7 +29,7 @@ export const RenderUser = (props) => {
   let uList = props.userList.filter((array) => array.member_id == props.memId);
   if (uList.length != 0) {
     return (
-      <Text mx="auto" fontSize={14} color="info.700">
+      <Text mx="auto" fontSize={14} color="info.700" style={{ fontFamily: 'Kanit_400Regular'}}>
         {uList[0].member_fname} {uList[0].member_lname}
       </Text>
     );
@@ -43,7 +44,7 @@ export const RenderOwner = (props) => {
   );
   if (user.length != 0) {
     return (
-      <Text fontSize={18} color="violet.500" ml="-2" mt="-1">
+      <Text fontSize={18} color="violet.500" ml="-2" mt="-1" style={{ fontFamily: 'Kanit_400Regular'}}>
         โดย {user[0].member_fname} {user[0].member_lname}
       </Text>
     );
@@ -62,6 +63,9 @@ function Help_Detail_Screen({ navigation, route }) {
   const [userList, setUserList] = useState([]);
 
   const popAction = StackActions.pop(1);
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function showThisAid() {
     // This Aid
@@ -143,25 +147,34 @@ function Help_Detail_Screen({ navigation, route }) {
     innerFunction();
   }, [innerFunction]);
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <ScrollView>
         <Center flex={1} px="2">
           <Box marginTop={50} p="5" py="15" w="100%" mx="auto">
+          <Text style={{ fontFamily: 'Kanit_400Regular'}} fontSize={18}>
             <Heading padding={3} Size={18} ml="-3" color="indigo.600">
               ขอความช่วยเหลือ
-            </Heading>
+            </Heading></Text>
             <Stack p="4" space={5} borderRadius="6" borderWidth="0.25">
               <Stack space={2}>
-                <Heading Size={18} color="tertiary.600" ml="-2">
+              <Text style={{ fontFamily: 'Kanit_400Regular', paddingTop:5}} fontSize={18}>
+                <Heading Size={18} color="tertiary.600" ml="-2" >
                   {thisAid.aid_head}
-                </Heading>
+                </Heading></Text>
                 <RenderOwner userList={userList} thisAid={thisAid} />
               </Stack>
-              <Text fontSize={15} ml="-2">
+              <Text fontSize={15} ml="-2" style={{ fontFamily: 'Kanit_400Regular'}}>
                 {thisAid.aid_body}
               </Text>
               <Text
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 textAlign="right"
                 padding={1}
                 fontSize={11}
@@ -180,6 +193,7 @@ function Help_Detail_Screen({ navigation, route }) {
                   <Text></Text>
                 ) : thisAid.aid_state == "ปิด" ? (
                   <Badge
+                  _text={{ fontFamily: 'Kanit_400Regular'}}
                     colorScheme="warning"
                     alignSelf="center"
                     variant={"outline"}
@@ -188,6 +202,7 @@ function Help_Detail_Screen({ navigation, route }) {
                   </Badge>
                 ) : (
                   <Badge
+                  _text={{ fontFamily: 'Kanit_400Regular'}}
                     colorScheme="success"
                     alignSelf="center"
                     variant={"outline"}
@@ -199,7 +214,7 @@ function Help_Detail_Screen({ navigation, route }) {
             </Stack>
 
             <Box style={{ alignItems: "center" }}>
-              <Button colorScheme="danger" width="20%" size="sm" m={3} onPress={() => {
+              <Button _text={{ fontFamily: 'Kanit_400Regular'}} colorScheme="danger" width="20%" size="sm" m={3} onPress={() => {
                   Axios.delete(
                     `http://${SERVER_IP}:${PORT}/aidadmin/${route.params.keys}`
                   )
@@ -219,8 +234,8 @@ function Help_Detail_Screen({ navigation, route }) {
 
             <Divider my="2" />
             <Stack space={2}>
-              <Text mx="auto" fontSize={20} color="tertiary.500">
-                จำนวนคนที่เข้ารวม {subListForAmount.length}
+              <Text style={{ fontFamily: 'Kanit_400Regular'}} mx="auto" fontSize={20} color="tertiary.500">
+                จำนวนคนที่เข้าร่วม {subListForAmount.length}
               </Text>
               <Divider my="1" />
               {subListForAmount.map((item, index) => {
@@ -238,7 +253,7 @@ function Help_Detail_Screen({ navigation, route }) {
         </Center>
       </ScrollView>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Help_Detail_Screen;

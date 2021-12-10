@@ -25,6 +25,7 @@ import {
   Spacer,
 } from "native-base";
 import { Alert } from "react-native";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 const Card = (props) => {
   const [caption, setCaption] = useState("");
@@ -39,7 +40,7 @@ const Card = (props) => {
   function renderDate() {
     let date = new Date(props.thisSocial.social_timestamp);
     return (
-      <Text textAlign="right" padding={1} fontSize={11} color="coolGray.600">
+      <Text textAlign="right" padding={1} fontSize={11} color="coolGray.600" style={{ fontFamily: 'Kanit_400Regular'}}>
         โพสต์เมื่อ{" "}
         {date.getFullYear() +
           "-" +
@@ -56,6 +57,7 @@ const Card = (props) => {
   return (
     <Box p="5" py="15" w="100%" mx="auto">
       <Heading
+      style={{ fontFamily: 'Kanit_400Regular'}}
         mt="10"
         textAlign="center"
         size="lg"
@@ -76,6 +78,7 @@ const Card = (props) => {
       <Stack p="4" space={5}>
         {renderDate()}
         <TextArea
+        style={{ fontFamily: 'Kanit_400Regular'}}
           value={caption}
           onChangeText={(text) => setCaption(text)}
           h={20}
@@ -85,11 +88,12 @@ const Card = (props) => {
             md: "25%",
           }}
         />
-        {isFieldInError('caption') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รายละเอียดโพสต์</Text>) : (<Text></Text>)}
+        {isFieldInError('caption') ? (<Text  style={{ color: 'red', fontFamily: 'Kanit_400Regular' }}>โปรดใส่รายละเอียดโพสต์</Text>) : (<Text></Text>)}
       </Stack>
       <Divider my="8" w="100%" />
       <HStack mx="auto" space={3}>
         <Button
+        _text={{ fontFamily: 'Kanit_400Regular'}}
           w={{ base: "30%" }}
           size="lg"
           colorScheme="indigo"
@@ -127,6 +131,7 @@ const Card = (props) => {
           อัพเดต
         </Button>
         <Button
+        _text={{ fontFamily: 'Kanit_400Regular'}}
           w={{ base: "20%" }}
           size="lg"
           colorScheme="error"
@@ -155,6 +160,9 @@ const Card = (props) => {
 function Admin_edit_Post({ navigation, route }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [thisSocial, setThisSocial] = useState({});
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function showSocial() {
     await Axios.get(
@@ -203,6 +211,12 @@ function Admin_edit_Post({ navigation, route }) {
     innerFunction();
   }, [innerFunction]);
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <ScrollView>
@@ -215,7 +229,7 @@ function Admin_edit_Post({ navigation, route }) {
         </Center>
       </ScrollView>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Admin_edit_Post;

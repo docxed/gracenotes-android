@@ -22,9 +22,13 @@ import {
   NativeBaseProvider,
   Spinner,
 } from "native-base";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 function Admin_menu_Screen({ navigation }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function _retrieveData() {
     try {
@@ -59,6 +63,12 @@ function Admin_menu_Screen({ navigation }) {
     // useState is Asynchronous!!!, Thus you need to Hook for getValue on created info(LocalStorage)
     innerFunction();
   }, [innerFunction]);
+
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
   return (
     <NativeBaseProvider>
       <Center flex={1} px="3">
@@ -68,14 +78,16 @@ function Admin_menu_Screen({ navigation }) {
             as={MaterialIcons}
             name="admin-panel-settings"
           />
+          <Text style={{ fontFamily: 'Kanit_400Regular'}} fontSize={30}>
           <Heading fontSize={30} color="error.500">
             Admin Panel
-          </Heading>
+          </Heading></Text>
         </HStack>
         <Divider my="10" />
         <Box alignItems="center" w="90%" mx="auto">
           <VStack space={10}>
             <Button
+            _text={{ fontFamily: 'Kanit_400Regular'}}
               size="lg"
               colorScheme="info"
               onPress={() => {
@@ -85,6 +97,7 @@ function Admin_menu_Screen({ navigation }) {
               ตวรจบันทึกความดี
             </Button>
             <Button
+            _text={{ fontFamily: 'Kanit_400Regular'}}
               size="lg"
               colorScheme="success"
               onPress={() => {
@@ -94,6 +107,7 @@ function Admin_menu_Screen({ navigation }) {
               จัดการโพสต์
             </Button>
             <Button
+            _text={{ fontFamily: 'Kanit_400Regular'}}
               size="lg"
               colorScheme="rose"
               onPress={() => {
@@ -103,6 +117,7 @@ function Admin_menu_Screen({ navigation }) {
               จัดการบัญชีนักเรียน
             </Button>
             <Button
+            _text={{ fontFamily: 'Kanit_400Regular'}}
               size="lg"
               colorScheme="warning"
               onPress={() => {
@@ -115,7 +130,7 @@ function Admin_menu_Screen({ navigation }) {
         </Box>
       </Center>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Admin_menu_Screen;

@@ -4,6 +4,7 @@ import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { TouchableOpacity, StyleSheet } from "react-native";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 import {
   Box,
   Heading,
@@ -18,7 +19,7 @@ export const Help_list = (props) => {
   function renderDate() {
     let datetime = new Date(props.item.aid_datetime);
     return (
-      <Text textAlign="right" color="coolGray.600" fontSize={11}>
+      <Text textAlign="right" color="coolGray.600" fontSize={11} style={{ fontFamily: 'Kanit_400Regular'}}>
         เริ่มวันที่{" "}
         {datetime.getFullYear() +
           "-" +
@@ -36,6 +37,7 @@ export const Help_list = (props) => {
     if (user.length != 0) {
       return (
         <Text
+        style={{ fontFamily: 'Kanit_400Regular'}}
           fontSize={14}
           _light={{
             color: "violet.500",
@@ -70,13 +72,13 @@ export const Help_list = (props) => {
         backgroundColor="dark.600"
       >
         <Stack p="4" space={3}>
-          <Stack space={2}>
-            <Heading size="md" ml="-1">
-              ขอความช่วยเหลือ : {props.item.aid_head}
+          <Stack space={2} >
+            <Heading>
+              <Text style={{ fontFamily: 'Kanit_400Regular'}} size="md" ml="-1"> <Heading size="md" ml="-1">ขอความช่วยเหลือ : {props.item.aid_head}</Heading></Text>
             </Heading>
             {renderUser()}
           </Stack>
-          <Text color="coolGray.600" fontSize={12}>
+          <Text color="coolGray.600" fontSize={12} style={{ fontFamily: 'Kanit_400Regular'}}>
             สถานที่ {props.item.aid_location}
           </Text>
           {renderDate()}
@@ -90,6 +92,9 @@ function Help_Screen({ navigation }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [aidList, setAidList] = useState([]);
   const [userList, setUserList] = useState([]);
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function showAid() {
     // Show Aid
@@ -152,10 +157,17 @@ function Help_Screen({ navigation }) {
     innerFunction();
   }, [innerFunction]);
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <Heading
-        marginTop={45}
+      style={{ fontFamily: 'Kanit_400Regular'}}
+        marginTop={50}
         textAlign="center"
         size="lg"
         fontWeight="600"
@@ -184,7 +196,7 @@ function Help_Screen({ navigation }) {
         </Center>
       </ScrollView>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 const styles = StyleSheet.create({

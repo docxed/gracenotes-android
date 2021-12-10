@@ -16,6 +16,7 @@ import {
   Stack,
   NativeBaseProvider,
 } from "native-base";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 export const History_Post = (props) => {
   return (
@@ -37,27 +38,28 @@ export const History_Post = (props) => {
       >
         <Stack p="4" space={3}>
           <Stack space={2}>
+          <Text style={{ fontFamily: 'Kanit_400Regular', paddingTop:5}}>
             <Heading color="indigo.500" size="md" ml="-1">
               ขอความช่วยเหลือ: {props.item.aid_head}
-            </Heading>
+            </Heading></Text>
           </Stack>
-          <Text color="coolGray.700" fontSize={14}>
+          <Text color="coolGray.700" fontSize={14} style={{ fontFamily: 'Kanit_400Regular'}}>
             {props.item.aid_body}
           </Text>
-          <Text color="coolGray.700" fontSize={11}>
+          <Text color="coolGray.700" fontSize={11} style={{ fontFamily: 'Kanit_400Regular'}}>
             ที่: {props.item.aid_location}
           </Text>
           {props.item.aid_state == "เปิด" ? (
-            <Text textAlign="left" color="success.500" fontSize={11}>
+            <Text textAlign="left" color="success.500" fontSize={11} style={{ fontFamily: 'Kanit_400Regular'}}>
               สถานะ: {props.item.aid_state}
             </Text>
           ) : (
-            <Text textAlign="left" color="warning.500" fontSize={11}>
+            <Text textAlign="left" color="warning.500" fontSize={11} style={{ fontFamily: 'Kanit_400Regular'}}>
               สถานะ: {props.item.aid_state}อยู่
             </Text>
           )}
 
-          <Text textAlign="right" color="coolGray.600" fontSize={11}>
+          <Text textAlign="right" color="coolGray.600" fontSize={11} style={{ fontFamily: 'Kanit_400Regular'}}>
             เริ่มวันที่{" "}
             {props.date.getFullYear() +
               "-" +
@@ -90,17 +92,19 @@ export const History_list = (props) => {
       >
         <Stack p="4" space={3}>
           <Stack space={2}>
-            <Heading color="indigo.500" size="md" ml="-1">
+            <Text style={{ fontFamily: 'Kanit_400Regular', paddingTop:5}}>
+            <Heading color="indigo.500" size="md" ml="-1"  >
               ช่วยเหลือ: {props.item.aid_head}
             </Heading>
+            </Text>
           </Stack>
-          <Text color="coolGray.700" fontSize={12}>
+          <Text color="coolGray.700" fontSize={12} style={{ fontFamily: 'Kanit_400Regular'}}>
             ที่: {props.item.aid_location}
           </Text>
-          <Text textAlign="left" color="success.500" fontSize={11}>
+          <Text textAlign="left" color="success.500" fontSize={11} style={{ fontFamily: 'Kanit_400Regular'}}>
             เข้าร่วมแล้ว
           </Text>
-          <Text textAlign="right" color="coolGray.600" fontSize={11}>
+          <Text textAlign="right" color="coolGray.600" fontSize={11} style={{ fontFamily: 'Kanit_400Regular'}}>
             เข้าร่วมเมื่อวันที่{" "}
             {props.date.getFullYear() +
               "-" +
@@ -120,6 +124,9 @@ function History_Screen({ navigation }) {
   const [myAidList, setMyAidList] = useState([]);
   const [mySubList, setMySubList] = useState([]);
   const [filter, setFilter] = useState("");
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function showPage(page) {
     setFilter(page);
@@ -187,9 +194,17 @@ function History_Screen({ navigation }) {
     // useState is Asynchronous!!!, Thus you need to Hook for getValue on created info(LocalStorage)
     innerFunction();
   }, [innerFunction]);
+
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <Heading
+      style={{ fontFamily: 'Kanit_400Regular'}}
         marginTop={45}
         textAlign="center"
         size="lg"
@@ -213,8 +228,8 @@ function History_Screen({ navigation }) {
               showPage("one");
             }}
           >
-            <Text color="warning.500">โพสต์ของฉัน</Text>
-            <Text color="warning.500">{myAidList.length}</Text>
+            <Text color="warning.500" style={{ fontFamily: 'Kanit_400Regular'}}>โพสต์ของฉัน</Text>
+            <Text color="warning.500" style={{ fontFamily: 'Kanit_400Regular'}}>{myAidList.length}</Text>
           </TouchableOpacity>
           <Divider orientation="vertical" mx="auto" />
           <TouchableOpacity
@@ -223,8 +238,8 @@ function History_Screen({ navigation }) {
               showPage("two");
             }}
           >
-            <Text color="error.500">ประวัติช่วยเหลือ</Text>
-            <Text color="error.500">{mySubList.length}</Text>
+            <Text color="error.500" style={{ fontFamily: 'Kanit_400Regular'}}>ประวัติช่วยเหลือ</Text>
+            <Text color="error.500" style={{ fontFamily: 'Kanit_400Regular'}}>{mySubList.length}</Text>
           </TouchableOpacity>
           <Spacer />
         </Flex>
@@ -269,7 +284,7 @@ function History_Screen({ navigation }) {
         </Center>
       </ScrollView>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 const styles = StyleSheet.create({

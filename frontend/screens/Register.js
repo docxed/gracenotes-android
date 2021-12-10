@@ -27,6 +27,8 @@ import {
 } from "native-base";
 import { Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
+import { color } from "react-native-reanimated";
 
 function Register_Screen({ navigation }) {
   // Check firebase exist
@@ -50,6 +52,10 @@ function Register_Screen({ navigation }) {
 
   var [mode, setMode] = useState("date");
   var [show, setShow] = useState(false);
+
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
     useValidation({
@@ -131,6 +137,12 @@ function Register_Screen({ navigation }) {
     showMode("date");
   };
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <Box flex={1} py="10" w="90%" mx="auto">
@@ -143,6 +155,7 @@ function Register_Screen({ navigation }) {
           }}
         />
         <Heading
+        style={{ fontFamily: 'Kanit_400Regular'}}
           padding={2}
           textAlign="center"
           size="md"
@@ -164,18 +177,20 @@ function Register_Screen({ navigation }) {
                 _text={{
                   color: "coolGray.800",
                   fontSize: 15,
+                  fontFamily: 'Kanit_400Regular',
                   fontWeight: 500,
                 }}
               >
                 ชื่อจริง
               </FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 placeholder="ชื่อ"
                 value={fname}
                 onChangeText={(text) => setFname(text)}
               />
               {isFieldInError("fname") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text  style={{ color: "red", fontFamily: 'Kanit_400Regular' }}>
                   โปรดกรอกชื่อจริง(ไม่เกิน100ตัวอักษร)
                 </Text>
               ) : (
@@ -186,6 +201,7 @@ function Register_Screen({ navigation }) {
             <FormControl>
               <FormControl.Label
                 _text={{
+                  fontFamily: 'Kanit_400Regular',
                   color: "coolGray.800",
                   fontSize: 15,
                   fontWeight: 500,
@@ -194,12 +210,14 @@ function Register_Screen({ navigation }) {
                 นามสกุล
               </FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
+
                 placeholder="นามสกุล"
                 value={lname}
                 onChangeText={(text) => setLname(text)}
               />
               {isFieldInError("lname") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text  style={{ color: "red", fontFamily: 'Kanit_400Regular' }}>
                   โปรดกรอกชื่อนามสกุล(ไม่เกิน100ตัวอักษร)
                 </Text>
               ) : (
@@ -209,6 +227,7 @@ function Register_Screen({ navigation }) {
             <FormControl>
               <FormControl.Label
                 _text={{
+                  fontFamily: 'Kanit_400Regular',
                   color: "coolGray.800",
                   fontSize: 15,
                   fontWeight: 500,
@@ -217,13 +236,14 @@ function Register_Screen({ navigation }) {
                 รหัสนักเรียน
               </FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 keyboardType="number-pad"
                 placeholder="รหัสนักเรียน"
                 value={user}
                 onChangeText={(text) => setUser(text)}
               />
               {isFieldInError("user") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text  style={{ color: "red", fontFamily: 'Kanit_400Regular', }}>
                   โปรดกรอกรหัสนักเรียน(ไม่เกิน8ตัว)
                 </Text>
               ) : (
@@ -233,6 +253,7 @@ function Register_Screen({ navigation }) {
             <FormControl>
               <FormControl.Label
                 _text={{
+                  fontFamily: 'Kanit_400Regular',
                   color: "coolGray.800",
                   fontSize: 15,
                   fontWeight: 500,
@@ -241,6 +262,7 @@ function Register_Screen({ navigation }) {
                 ชั้นเรียน
               </FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 placeholder="ชั้นเรียน"
                 value={room}
                 onChangeText={(text) => setRoom(text)}
@@ -249,7 +271,7 @@ function Register_Screen({ navigation }) {
                 }}
               />
               {isFieldInError("room") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text  style={{ color: "red", fontFamily: 'Kanit_400Regular' }}>
                   โปรดระบุชั้นเรียน
                 </Text>
               ) : (
@@ -259,6 +281,7 @@ function Register_Screen({ navigation }) {
             <FormControl>
               <FormControl.Label
                 _text={{
+                  fontFamily: 'Kanit_400Regular',
                   color: "coolGray.800",
                   fontSize: 15,
                   fontWeight: 500,
@@ -267,6 +290,7 @@ function Register_Screen({ navigation }) {
                 เลขที่
               </FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 keyboardType="number-pad"
                 placeholder="เลขที่"
                 value={no}
@@ -276,7 +300,7 @@ function Register_Screen({ navigation }) {
                 }}
               />
               {isFieldInError("no") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text  style={{ color: "red", fontFamily: 'Kanit_400Regular' }}>
                   โปรดใส่เลขที่(ไม่เกิน3ตัว)
                 </Text>
               ) : (
@@ -286,6 +310,7 @@ function Register_Screen({ navigation }) {
             <FormControl>
               <FormControl.Label
                 _text={{
+                  fontFamily: 'Kanit_400Regular',
                   color: "coolGray.800",
                   fontSize: 15,
                   fontWeight: 500,
@@ -295,7 +320,7 @@ function Register_Screen({ navigation }) {
                 <FormControl>
                   {show && (
                     <DateTimePicker
-                      style={{ margin: 50 }}
+                      style={{ margin: 50, fontFamily: 'Kanit_400Regular' }}
                       value={born}
                       mode={mode}
                       is24Hour={true}
@@ -308,6 +333,7 @@ function Register_Screen({ navigation }) {
               </FormControl.Label>
               <HStack space={3}>
                 <Input
+                style={{ fontFamily: 'Kanit_400Regular'}}
                   placeholder="วว/ดด/ปปปป"
                   value={
                     born.getFullYear() +
@@ -335,7 +361,7 @@ function Register_Screen({ navigation }) {
                 />
               </HStack>
               {isFieldInError("born") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text  style={{ color: "red", fontFamily: 'Kanit_400Regular' }}>
                   โปรดเลือกวันเกิด
                 </Text>
               ) : (
@@ -345,6 +371,7 @@ function Register_Screen({ navigation }) {
             <FormControl>
               <FormControl.Label
                 _text={{
+                  fontFamily: 'Kanit_400Regular',
                   color: "coolGray.800",
                   fontSize: 15,
                   fontWeight: 500,
@@ -353,19 +380,21 @@ function Register_Screen({ navigation }) {
                 ที่อยู่
               </FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 marginBottom={2}
                 placeholder="ที่อยู่ 1"
                 value={address1}
                 onChangeText={(text) => setAddress1(text)}
               />
               {isFieldInError("address1") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text  style={{ color: "red", fontFamily: 'Kanit_400Regular' }}>
                   โปรดระบุที่อยู่
                 </Text>
               ) : (
                 <Text></Text>
               )}
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 placeholder="ที่อยู่ 2 (ไม่บังคับ)"
                 value={address2}
                 onChangeText={(text) => setAddress2(text)}
@@ -373,6 +402,7 @@ function Register_Screen({ navigation }) {
             </FormControl>
             <FormControl.Label
               _text={{
+                fontFamily: 'Kanit_400Regular',
                 color: "coolGray.800",
                 fontSize: 15,
                 fontWeight: 600,
@@ -406,13 +436,16 @@ function Register_Screen({ navigation }) {
                   <Icon as={Ionicons} name="cloud-upload-outline" size="sm" />
                 }
                 onPress={pickImage}
+                
               >
-                อัปโหลด
+                <Text style={{ fontFamily: 'Kanit_400Regular', color:"white"}}>อัปโหลด</Text>
+                
               </Button>
             </Button.Group>
             <FormControl>
               <FormControl.Label
                 _text={{
+                  fontFamily: 'Kanit_400Regular',
                   color: "coolGray.800",
                   fontSize: 15,
                   fontWeight: 600,
@@ -421,13 +454,14 @@ function Register_Screen({ navigation }) {
                 รหัสผ่าน
               </FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 type="password"
                 placeholder="รหัสผ่าน"
                 value={pass}
                 onChangeText={(text) => setPass(text)}
               />
               {isFieldInError("pass") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text  style={{ color: "red", fontFamily: 'Kanit_400Regular'  }}>
                   โปรดกรอกรหัสผ่าน(3-100ตัวอักษร)
                 </Text>
               ) : (
@@ -437,6 +471,7 @@ function Register_Screen({ navigation }) {
             <FormControl>
               <FormControl.Label
                 _text={{
+                  fontFamily: 'Kanit_400Regular',
                   color: "coolGray.800",
                   fontSize: 15,
                   fontWeight: 600,
@@ -445,6 +480,7 @@ function Register_Screen({ navigation }) {
                 ยืนยันรหัสผ่าน
               </FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 type="password"
                 placeholder="รหัสผ่าน"
                 value={repass}
@@ -454,7 +490,7 @@ function Register_Screen({ navigation }) {
             {!uploading ? (
               <Button
                 colorScheme="indigo"
-                _text={{ color: "white" }}
+                _text={{ color: "white", fontFamily: 'Kanit_400Regular' }}
                 onPress={async () => {
                   if (
                     validate({
@@ -570,7 +606,7 @@ function Register_Screen({ navigation }) {
         </ScrollView>
       </Box>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Register_Screen;

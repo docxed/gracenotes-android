@@ -25,37 +25,38 @@ import {
   Spinner,
   ScrollView,
 } from "native-base";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 const Admin_list_Help = (props) => {
   return (
     <Box alignItems="center" w="80%" mx="auto">
       <HStack space={9}>
         <VStack alignItems="center" space={7}>
-          <Text bold fontSize={17}>
+          <Text  fontSize={17} style={{ fontFamily: 'Kanit_400Regular'}}>
             โพสต์ที่
           </Text>
           {props.aidList.map((item, index) => {
             return (
               <Box key={index}>
-                <Text fontSize={18}>{item.aid_id}</Text>
+                <Text fontSize={18} style={{ fontFamily: 'Kanit_400Regular'}}>{item.aid_id}</Text>
               </Box>
             );
           })}
         </VStack>
         <VStack alignItems="center" space={7}>
-          <Text bold fontSize={17}>
+          <Text  fontSize={17} style={{ fontFamily: 'Kanit_400Regular'}}>
             สถานที่
           </Text>
           {props.aidList.map((item, index) => {
             return (
               <Box key={index}>
-                <Text fontSize={18}>{item.aid_location}</Text>
+                <Text fontSize={18} style={{ fontFamily: 'Kanit_400Regular'}}>{item.aid_location}</Text>
               </Box>
             );
           })}
         </VStack>
         <VStack alignItems="center" space={6}>
-          <Text bold fontSize={17}>
+          <Text  fontSize={17} style={{ fontFamily: 'Kanit_400Regular'}}>
             Edit
           </Text>
           {props.aidList.map((item, index) => {
@@ -87,6 +88,9 @@ const Admin_list_Help = (props) => {
 function Admin_help_Screen({ navigation, route }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [aidList, setAidList] = useState([]);
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   async function showAid() {
     await Axios.get(`http://${SERVER_IP}:${PORT}/aid`)
@@ -134,6 +138,12 @@ function Admin_help_Screen({ navigation, route }) {
     innerFunction();
   }, [innerFunction]);
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <Center flex={1} px="3">
@@ -143,13 +153,15 @@ function Admin_help_Screen({ navigation, route }) {
             as={MaterialIcons}
             name="admin-panel-settings"
           />
+          <Text style={{ fontFamily: 'Kanit_400Regular'}} fontSize={30}>
           <Heading fontSize={30} color="indigo.500">
             Admin Panel
-          </Heading>
+          </Heading></Text>
         </HStack>
+        <Text style={{ fontFamily: 'Kanit_400Regular'}} fontSize={30}>
         <Heading fontSize={30} color="warning.500">
           จัดการโพสต์ความช่วยเหลือ
-        </Heading>
+        </Heading></Text>
         <Divider my="3" />
         <ScrollView>
           {aidList.length != 0 ? (
@@ -160,7 +172,7 @@ function Admin_help_Screen({ navigation, route }) {
         </ScrollView>
       </Center>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Admin_help_Screen;

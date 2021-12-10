@@ -27,6 +27,7 @@ import {
 } from "native-base";
 import { Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 function Help_Post_Screen({ navigation }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
@@ -39,6 +40,10 @@ function Help_Post_Screen({ navigation }) {
   var [show, setShow] = useState(false);
 
   const popAction = StackActions.pop(1);
+
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
     useValidation({
@@ -88,9 +93,16 @@ function Help_Post_Screen({ navigation }) {
     showMode("time");
   };
 
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <Heading
+      style={{ fontFamily: 'Kanit_400Regular'}}
         mt={45}
         textAlign="center"
         size="lg"
@@ -111,36 +123,40 @@ function Help_Post_Screen({ navigation }) {
               backgroundColor="gray.100"
             >
               <FormControl>
-                <FormControl.Label>เรื่องที่ต้องการให้ช่วย</FormControl.Label>
+                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>เรื่องที่ต้องการให้ช่วย</FormControl.Label>
                 <Input
+                style={{ fontFamily: 'Kanit_400Regular'}}
                   placeholder="ชื่อเรื่อง"
                   value={head}
                   onChangeText={(text) => setHead(text)}
                 />
-                {isFieldInError('head') ? (<Text bold style={{ color: 'red' }}>โปรดใส่หัวข้อ</Text>) : (<Text></Text>)}
+                {isFieldInError('head') ? (<Text  style={{ color: 'red', fontFamily: 'Kanit_400Regular' }}>โปรดใส่หัวข้อ</Text>) : (<Text></Text>)}
               </FormControl>
               <FormControl>
-                <FormControl.Label>รายละเอียด</FormControl.Label>
+                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>รายละเอียด</FormControl.Label>
                 <TextArea
+                style={{ fontFamily: 'Kanit_400Regular'}}
                   placeholder="เพิ่มรายละเอียด"
                   value={body}
                   onChangeText={(text) => setBody(text)}
                 />
-                {isFieldInError('body') ? (<Text bold style={{ color: 'red' }}>โปรดใส่รายละเอียด</Text>) : (<Text></Text>)}
+                {isFieldInError('body') ? (<Text  style={{ color: 'red',fontFamily: 'Kanit_400Regular'  }}>โปรดใส่รายละเอียด</Text>) : (<Text></Text>)}
                 
               </FormControl>
               <FormControl>
-                <FormControl.Label>สถานที่</FormControl.Label>
+                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>สถานที่</FormControl.Label>
                 <Input
+                style={{ fontFamily: 'Kanit_400Regular'}}
                   placeholder="สถานที่"
                   value={location}
                   onChangeText={(text) => setLocation(text)}
                 />
-                {isFieldInError('location') ? (<Text bold style={{ color: 'red' }}>โปรดระบุสถานที่</Text>) : (<Text></Text>)}
+                {isFieldInError('location') ? (<Text  style={{ color: 'red', fontFamily: 'Kanit_400Regular' }}>โปรดระบุสถานที่</Text>) : (<Text></Text>)}
               </FormControl>
               <FormControl>
-                <FormControl.Label>เวลา</FormControl.Label>
+                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>เวลา</FormControl.Label>
                 <Input
+                style={{ fontFamily: 'Kanit_400Regular'}}
                   editable={false}
                   value={datetime.getHours() + ":" + datetime.getMinutes()}
                   InputRightElement={
@@ -157,7 +173,7 @@ function Help_Post_Screen({ navigation }) {
                 />
               </FormControl>
               <FormControl>
-                <FormControl.Label>
+                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>
                   วันที่
                   <FormControl>
                     {show && (
@@ -174,6 +190,7 @@ function Help_Post_Screen({ navigation }) {
                   </FormControl>
                 </FormControl.Label>
                 <Input
+                style={{ fontFamily: 'Kanit_400Regular'}}
                   editable={false}
                   value={
                     datetime.getFullYear() +
@@ -194,12 +211,13 @@ function Help_Post_Screen({ navigation }) {
                     />
                   }
                 />
-                {isFieldInError('datetime') ? (<Text bold style={{ color: 'red' }}>โปรดระบุระยะเวลาและวันที่</Text>) : (<Text></Text>)}
+                {isFieldInError('datetime') ? (<Text style={{ color: 'red', fontFamily: 'Kanit_400Regular' }}>โปรดระบุระยะเวลาและวันที่</Text>) : (<Text></Text>)}
               </FormControl>
             </VStack>
             <Divider my="5" />
             <VStack padding={15}>
               <Button
+              _text={{ fontFamily: 'Kanit_400Regular'}}
                 size="lg"
                 alignSelf="center"
                 colorScheme="secondary"
@@ -251,7 +269,7 @@ function Help_Post_Screen({ navigation }) {
         </Box>
       </Center>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Help_Post_Screen;

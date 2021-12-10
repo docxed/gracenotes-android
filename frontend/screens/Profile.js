@@ -24,6 +24,7 @@ import {
 } from "native-base";
 import { Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
 
 function Profile_Screen({ navigation }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
@@ -44,6 +45,10 @@ function Profile_Screen({ navigation }) {
 
   var [mode, setMode] = useState("date");
   var [show, setShow] = useState(false);
+
+  let [fontsLoaded] = useFonts({
+    Kanit_500Medium, Kanit_400Regular
+  });
 
   const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
     useValidation({
@@ -117,13 +122,21 @@ function Profile_Screen({ navigation }) {
   const showDatepicker = () => {
     showMode("date");
   };
+
+  if(!fontsLoaded){
+    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
+    
+  }
+  else{
+
   return (
     <NativeBaseProvider>
       <Box flex={1} py="8" w="90%" mx="auto">
         <ScrollView>
-          <Heading alignSelf="center" fontSize="xl" p="4" pb="3">
+          <Text alignSelf="center" fontSize="xl" p="4" pb="3"  style={{ fontFamily: 'Kanit_400Regular'}}>
+          <Heading>
             โปรไฟล์
-          </Heading>
+          </Heading></Text>
           <VStack>
             {me.member_img != undefined ? (
               <Avatar
@@ -139,18 +152,19 @@ function Profile_Screen({ navigation }) {
           </VStack>
           <VStack space={2} mt="3" padding={5}>
             <FormControl>
-              <FormControl.Label>รหัสนักเรียน</FormControl.Label>
-              <Input placeholder={user} variant="filled" editable={false} />
+              <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}} >รหัสนักเรียน</FormControl.Label>
+              <Input style={{ fontFamily: 'Kanit_400Regular'}} placeholder={user} variant="filled" editable={false} />
             </FormControl>
             <FormControl>
-              <FormControl.Label>ชื่อ</FormControl.Label>
+              <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>ชื่อ</FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 placeholder="ชื่อ"
                 value={fname}
                 onChangeText={(text) => setFname(text)}
               />
               {isFieldInError("fname") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text style={{ color: "red", fontFamily: 'Kanit_400Regular' }}>
                   โปรดกรอกชื่อจริง(ไม่เกิน100ตัวอักษร)
                 </Text>
               ) : (
@@ -158,14 +172,15 @@ function Profile_Screen({ navigation }) {
               )}
             </FormControl>
             <FormControl>
-              <FormControl.Label>นามสกุล</FormControl.Label>
+              <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>นามสกุล</FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 placeholder="นามสกุล"
                 value={lname}
                 onChangeText={(text) => setLname(text)}
               />
               {isFieldInError("lname") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text style={{ color: "red", fontFamily: 'Kanit_400Regular' }}>
                   โปรดกรอกนามสกุล(ไม่เกิน100ตัวอักษร)
                 </Text>
               ) : (
@@ -175,6 +190,7 @@ function Profile_Screen({ navigation }) {
             <FormControl>
               <FormControl.Label
                 _text={{
+                  fontFamily: 'Kanit_400Regular',
                   color: "coolGray.800",
                   fontSize: 15,
                   fontWeight: 500,
@@ -183,6 +199,7 @@ function Profile_Screen({ navigation }) {
                 ชั้นเรียน
               </FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 placeholder="6/1"
                 w={{
                   base: "35%",
@@ -191,7 +208,7 @@ function Profile_Screen({ navigation }) {
                 onChangeText={(text) => setRoom(text)}
               />
               {isFieldInError("room") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text style={{ color: "red", fontFamily: 'Kanit_400Regular' }}>
                   โปรดระบุชั้นเรียน
                 </Text>
               ) : (
@@ -201,6 +218,7 @@ function Profile_Screen({ navigation }) {
             <FormControl>
               <FormControl.Label
                 _text={{
+                  fontFamily: 'Kanit_400Regular',
                   color: "coolGray.800",
                   fontSize: 15,
                   fontWeight: 500,
@@ -209,6 +227,7 @@ function Profile_Screen({ navigation }) {
                 เลขที่
               </FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 placeholder="20"
                 w={{
                   base: "35%",
@@ -217,7 +236,7 @@ function Profile_Screen({ navigation }) {
                 onChangeText={(text) => setNo(text)}
               />
               {isFieldInError("no") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text style={{ color: "red", fontFamily: 'Kanit_400Regular' }}>
                   โปรดใส่เลขที่(ไม่เกิน3ตัว)
                 </Text>
               ) : (
@@ -227,6 +246,7 @@ function Profile_Screen({ navigation }) {
             <FormControl>
               <FormControl.Label
                 _text={{
+                  fontFamily: 'Kanit_400Regular',
                   color: "coolGray.800",
                   fontSize: 15,
                   fontWeight: 500,
@@ -248,6 +268,7 @@ function Profile_Screen({ navigation }) {
                 </FormControl>
               </FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 placeholder="20/07/2543"
                 w={{
                   base: "55%",
@@ -278,7 +299,7 @@ function Profile_Screen({ navigation }) {
                 }
               />
               {isFieldInError("born") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text  style={{ color: "red", fontFamily: 'Kanit_400Regular' }}>
                   โปรดเลือกวันเกิด
                 </Text>
               ) : (
@@ -286,15 +307,16 @@ function Profile_Screen({ navigation }) {
               )}
             </FormControl>
             <FormControl>
-              <FormControl.Label>ที่อยู่</FormControl.Label>
+              <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>ที่อยู่</FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 marginBottom={2}
                 placeholder="บนโลกเนี่ยแหละ"
                 value={address}
                 onChangeText={(text) => setAddress(text)}
               />
               {isFieldInError("address") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text  style={{ color: "red", fontFamily: 'Kanit_400Regular' }}>
                   โปรดระบุที่อยู่
                 </Text>
               ) : (
@@ -302,8 +324,9 @@ function Profile_Screen({ navigation }) {
               )}
             </FormControl>
             <FormControl>
-              <FormControl.Label>รหัสผ่านใหม่</FormControl.Label>
+              <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>รหัสผ่านใหม่</FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 type="password"
                 marginBottom={2}
                 placeholder="รหัสผ่านใหม่"
@@ -311,7 +334,7 @@ function Profile_Screen({ navigation }) {
                 onChangeText={(text) => setPass(text)}
               />
               {isFieldInError("pass") ? (
-                <Text bold style={{ color: "red" }}>
+                <Text style={{ color: "red", fontFamily: 'Kanit_400Regular' }} >
                   โปรดกรอกรหัสผ่าน(3-100ตัวอักษร)
                 </Text>
               ) : (
@@ -319,8 +342,9 @@ function Profile_Screen({ navigation }) {
               )}
             </FormControl>
             <FormControl>
-              <FormControl.Label>ยืนยันรหัสผ่านใหม่</FormControl.Label>
+              <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>ยืนยันรหัสผ่านใหม่</FormControl.Label>
               <Input
+              style={{ fontFamily: 'Kanit_400Regular'}}
                 type="password"
                 marginBottom={2}
                 placeholder="ยืนยันรหัสผ่านใหม่"
@@ -331,6 +355,7 @@ function Profile_Screen({ navigation }) {
           </VStack>
           <Divider my="5" />
           <Button
+          _text={{fontFamily: 'Kanit_400Regular'}}
             w={{ base: "40%" }}
             size="lg"
             alignSelf="center"
@@ -388,7 +413,7 @@ function Profile_Screen({ navigation }) {
         </ScrollView>
       </Box>
     </NativeBaseProvider>
-  );
+  );}
 }
 
 export default Profile_Screen;
