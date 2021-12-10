@@ -24,32 +24,42 @@ import {
   Spinner,
   ScrollView,
 } from "native-base";
-import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
+import {
+  useFonts,
+  Kanit_500Medium,
+  Kanit_400Regular,
+} from "@expo-google-fonts/kanit";
 
 const Admin_list_User = (props) => {
   return (
     <Box alignItems="center" w="80%" mx="auto">
       <HStack space={8}>
         <VStack w={{ base: "40%" }} alignItems="center" space={7}>
-          <Text  textAlign="center" fontSize={17} style={{ fontFamily: 'Kanit_400Regular'}}>
+          <Text
+            textAlign="center"
+            fontSize={17}
+            style={{ fontFamily: "Kanit_400Regular" }}
+          >
             หมายเลขบัญชี
           </Text>
           {props.userList.map((item, index) => {
             return (
               <Box key={index}>
-                <Text fontSize={18} style={{ fontFamily: 'Kanit_400Regular'}}>{item.member_id}</Text>
+                <Text fontSize={18} style={{ fontFamily: "Kanit_400Regular" }}>
+                  {item.member_id}
+                </Text>
               </Box>
             );
           })}
         </VStack>
         <VStack alignItems="center" space={7}>
-          <Text  fontSize={18} style={{ fontFamily: 'Kanit_400Regular'}}>
+          <Text fontSize={18} style={{ fontFamily: "Kanit_400Regular" }}>
             ชื่อ-นามสกุล
           </Text>
           {props.userList.map((item, index) => {
             return (
               <Box key={index}>
-                <Text fontSize={18} style={{ fontFamily: 'Kanit_400Regular'}}>
+                <Text fontSize={18} style={{ fontFamily: "Kanit_400Regular" }}>
                   {item.member_fname} {item.member_lname}
                 </Text>
               </Box>
@@ -57,7 +67,7 @@ const Admin_list_User = (props) => {
           })}
         </VStack>
         <VStack alignItems="center" space={7}>
-          <Text  fontSize={17} style={{fontFamily: 'Kanit_400Regular'}}>
+          <Text fontSize={17} style={{ fontFamily: "Kanit_400Regular" }}>
             Option
           </Text>
           {props.userList.map((item, index) => {
@@ -73,7 +83,9 @@ const Admin_list_User = (props) => {
                   size: "3",
                 }}
                 onPress={() => {
-                  props.navigation.navigate("Admin_Show_user", {keys: item.member_id});
+                  props.navigation.navigate("Admin_Show_user", {
+                    keys: item.member_id,
+                  });
                 }}
               />
             );
@@ -88,7 +100,8 @@ function Admin_user_Screen({ navigation }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [userList, setUserList] = useState([]);
   let [fontsLoaded] = useFonts({
-    Kanit_500Medium, Kanit_400Regular
+    Kanit_500Medium,
+    Kanit_400Regular,
   });
 
   async function showUser() {
@@ -137,41 +150,48 @@ function Admin_user_Screen({ navigation }) {
     innerFunction();
   }, [innerFunction]);
 
-  if(!fontsLoaded){
-    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
-    
+  if (!fontsLoaded) {
+    return (
+      <NativeBaseProvider>
+        <Text></Text>
+      </NativeBaseProvider>
+    );
+  } else {
+    return (
+      <NativeBaseProvider>
+        <Center flex={1} px="3">
+          <HStack space={2} mt="10">
+            <Icon
+              color="indigo.500"
+              as={MaterialIcons}
+              name="admin-panel-settings"
+            />
+            <Text style={{ fontFamily: "Kanit_400Regular" }} fontSize={30}>
+              <Heading fontSize={30} color="indigo.500">
+                Admin Panel
+              </Heading>
+            </Text>
+          </HStack>
+          <Text style={{ fontFamily: "Kanit_400Regular" }} fontSize={30}>
+            <Heading fontSize={30} color="rose.500">
+              จัดการบัญชีนักเรียน
+            </Heading>
+          </Text>
+          <Text style={{ fontFamily: "Kanit_400Regular" }} fontSize={18} my={3} color="secondary.500">
+            จำนวนบัญชีทั้งหมด {userList.length}
+          </Text>
+          <Divider my="3" />
+          <ScrollView>
+            {userList.length != 0 ? (
+              <Admin_list_User navigation={navigation} userList={userList} />
+            ) : (
+              <Box></Box>
+            )}
+          </ScrollView>
+        </Center>
+      </NativeBaseProvider>
+    );
   }
-  else{
-
-  return (
-    <NativeBaseProvider>
-      <Center flex={1} px="3">
-        <HStack space={2} mt="10">
-          <Icon
-            color="indigo.500"
-            as={MaterialIcons}
-            name="admin-panel-settings"
-          />
-          <Text style={{ fontFamily: 'Kanit_400Regular'}} fontSize={30}>
-          <Heading fontSize={30} color="indigo.500">
-            Admin Panel
-          </Heading></Text>
-        </HStack>
-        <Text style={{ fontFamily: 'Kanit_400Regular'}} fontSize={30}>
-        <Heading fontSize={30} color="rose.500">
-          จัดการบัญชีนักเรียน
-        </Heading></Text>
-        <Divider my="3" />
-        <ScrollView>
-          {userList.length != 0 ? (
-            <Admin_list_User navigation={navigation} userList={userList} />
-          ) : (
-            <Box></Box>
-          )}
-        </ScrollView>
-      </Center>
-    </NativeBaseProvider>
-  );}
 }
 
 export default Admin_user_Screen;

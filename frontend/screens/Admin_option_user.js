@@ -21,11 +21,18 @@ import {
   Text,
 } from "native-base";
 import { Alert } from "react-native";
-import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
+import {
+  useFonts,
+  Kanit_500Medium,
+  Kanit_400Regular,
+} from "@expo-google-fonts/kanit";
 
 function Admin_option_user({ navigation, route }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [thisUser, setThisUser] = useState({});
+  const [thisGrace, setThisGrace] = useState([]);
+  const [thisSub, setThisSub] = useState([]);
+  const [thisAid, setThisAid] = useState([]);
   const [user, setUser] = useState("");
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
@@ -38,10 +45,9 @@ function Admin_option_user({ navigation, route }) {
   const popAction = StackActions.pop(1);
 
   let [fontsLoaded] = useFonts({
-    Kanit_500Medium, Kanit_400Regular
+    Kanit_500Medium,
+    Kanit_400Regular,
   });
-
-  
 
   async function showThisUser() {
     await Axios.get(`http://${SERVER_IP}:${PORT}/user/${route.params.keys}`)
@@ -56,6 +62,42 @@ function Admin_option_user({ navigation, route }) {
         setAddress(data.member_address);
         setLevel(data.member_level);
         setThisUser(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function showThisGrace() {
+    await Axios.get(`http://${SERVER_IP}:${PORT}/grace`)
+      .then((response) => {
+        let data = response.data;
+        data = data.filter((array) => array.member_id == route.params.keys)
+        setThisGrace(data)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function showThisAid() {
+    await Axios.get(`http://${SERVER_IP}:${PORT}/aid`)
+      .then((response) => {
+        let data = response.data;
+        data = data.filter((array) => array.member_id == route.params.keys)
+        setThisAid(data)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function showThisSub() {
+    await Axios.get(`http://${SERVER_IP}:${PORT}/sub`)
+      .then((response) => {
+        let data = response.data;
+        data = data.filter((array) => array.member_id == route.params.keys)
+        setThisSub(data)
       })
       .catch((error) => {
         console.log(error);
@@ -89,6 +131,9 @@ function Admin_option_user({ navigation, route }) {
 
   const innerFunction = useCallback(() => {
     showThisUser();
+    showThisGrace();
+    showThisAid();
+    showThisSub();
   }, [info]);
 
   useEffect(() => {
@@ -100,7 +145,7 @@ function Admin_option_user({ navigation, route }) {
     if (level == "student") {
       return (
         <Button
-        _text={{ fontFamily: 'Kanit_400Regular'}}
+          _text={{ fontFamily: "Kanit_400Regular" }}
           w={{ base: "90%" }}
           size="lg"
           alignSelf="center"
@@ -129,7 +174,7 @@ function Admin_option_user({ navigation, route }) {
     } else {
       return (
         <Button
-        _text={{ fontFamily: 'Kanit_400Regular'}}
+          _text={{ fontFamily: "Kanit_400Regular" }}
           w={{ base: "90%" }}
           size="lg"
           alignSelf="center"
@@ -158,161 +203,210 @@ function Admin_option_user({ navigation, route }) {
     }
   }
 
-  if(!fontsLoaded){
-    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
-    
-  }
-  else{
-
-  return (
-    <NativeBaseProvider>
-      <Box flex={1} py="8" w="90%" mx="auto">
-        {thisUser.member_id != undefined ? (
-          <ScrollView>
-            <Text style={{ fontFamily: 'Kanit_400Regular'}} alignSelf="center" fontSize="xl" p="4" pb="3" >
-            <Heading>
-              หมายเลขบัญชี {thisUser.member_id}
-            </Heading></Text>
-            <VStack space={2} mt="3" padding={5}>
-              <Avatar
+  if (!fontsLoaded) {
+    return (
+      <NativeBaseProvider>
+        <Text></Text>
+      </NativeBaseProvider>
+    );
+  } else {
+    return (
+      <NativeBaseProvider>
+        <Box flex={1} py="8" w="90%" mx="auto">
+          {thisUser.member_id != undefined ? (
+            <ScrollView>
+              <Text
+                style={{ fontFamily: "Kanit_400Regular" }}
                 alignSelf="center"
-                size="110"
-                source={{
-                  uri: thisUser.member_img,
-                }}
-              />
-              <FormControl>
-                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>รหัสนักเรียน {user}</FormControl.Label>
-              </FormControl>
-              <FormControl>
-                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>ชื่อ</FormControl.Label>
-                <Input style={{ fontFamily: 'Kanit_400Regular'}} editable={false} value={fname} placeholder="ชื่อ" />
-              </FormControl>
-              <FormControl>
-                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>นามสกุล</FormControl.Label>
-                <Input style={{ fontFamily: 'Kanit_400Regular'}} editable={false} value={lname} placeholder="นามสกุล" />
-              </FormControl>
-              <FormControl>
-                <FormControl.Label
-                  _text={{
-                    fontFamily: 'Kanit_400Regular',
-                    color: "coolGray.800",
-                    fontSize: 15,
-                    fontWeight: 500,
-                  }}
-                >
-                  ชั้นเรียน
-                </FormControl.Label>
-                <Input
-                style={{ fontFamily: 'Kanit_400Regular'}}
-                editable={false}
-                  value={room}
-                  placeholder="6/1"
-                  w={{
-                    base: "35%",
-                  }}
-                />
-              </FormControl>
-              <FormControl>
-                <FormControl.Label
-                  _text={{
-                    fontFamily: 'Kanit_400Regular',
-                    color: "coolGray.800",
-                    fontSize: 15,
-                    fontWeight: 500,
-                  }}
-                >
-                  เลขที่
-                </FormControl.Label>
-                <Input
-                style={{ fontFamily: 'Kanit_400Regular'}}
-                editable={false}
-                  value={no}
-                  placeholder="20"
-                  w={{
-                    base: "35%",
-                  }}
-                />
-              </FormControl>
-              <FormControl>
-                <FormControl.Label
-                  _text={{
-                    fontFamily: 'Kanit_400Regular',
-                    color: "coolGray.800",
-                    fontSize: 15,
-                    fontWeight: 500,
-                  }}
-                >
-                  วัน/เดือน/ปีเกิด
-                </FormControl.Label>
-                <Input
-                style={{ fontFamily: 'Kanit_400Regular'}}
-                editable={false}
-                  value={born.substr(0, 10)}
-                  placeholder="20/07/2543"
-                  w={{
-                    base: "55%",
-                    md: "25%",
-                  }}
-                  InputRightElement={
-                    <IconButton
-                      icon={<Icon as={AntDesign} name="calendar" />}
-                      borderRadius="full"
-                      _icon={{
-                        color: "gray.400",
-                        size: "sm",
-                      }}
-                    />
-                  }
-                />
-              </FormControl>
-              <FormControl>
-                <FormControl.Label _text={{ fontFamily: 'Kanit_400Regular'}}>ที่อยู่</FormControl.Label>
-                <Input
-                style={{ fontFamily: 'Kanit_400Regular'}}
-                editable={false}
-                  value={address}
-                  marginBottom={2}
-                  placeholder="บนโลกเนี่ยแหละ"
-                />
-              </FormControl>
-            </VStack>
-            {renderBtn()}
-            {thisUser.member_id != info.s_id ? (
-              <Button
-              _text={{ fontFamily: 'Kanit_400Regular'}}
-                w={{ base: "90%" }}
-                size="lg"
-                alignSelf="center"
-                colorScheme="error"
-                m={3}
-                onPress={() => {
-                  Axios.delete(
-                    `http://${SERVER_IP}:${PORT}/user/${route.params.keys}`
-                  )
-                    .then((response) => {
-                      let data = response.data;
-                      Alert.alert(data);
-                      navigation.dispatch(popAction);
-                      // navigation.navigate(""); HERE TO ADD NAVIGATE
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                    });
-                }}
+                fontSize="xl"
+                p="4"
+                pb="3"
               >
-                ลบ
-              </Button>
-            ) : (
-              <Box></Box>
-            )}
-          </ScrollView>
-        ) : (
-          <Box></Box>
-        )}
-      </Box>
-    </NativeBaseProvider>
-  );}
+                <Heading>หมายเลขบัญชี {thisUser.member_id}</Heading>
+              </Text>
+              <VStack space={2} mt="3" padding={5}>
+                <Avatar
+                  alignSelf="center"
+                  size="110"
+                  source={{
+                    uri: thisUser.member_img,
+                  }}
+                />
+                <FormControl>
+                  <FormControl.Label _text={{ fontFamily: "Kanit_400Regular" }}>
+                    รหัสนักเรียน {user}
+                  </FormControl.Label>
+                </FormControl>
+                <FormControl>
+                  <FormControl.Label _text={{ fontFamily: "Kanit_400Regular" }}>
+                    ชื่อ
+                  </FormControl.Label>
+                  <Input
+                    style={{ fontFamily: "Kanit_400Regular" }}
+                    editable={false}
+                    value={fname}
+                    placeholder="ชื่อ"
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormControl.Label _text={{ fontFamily: "Kanit_400Regular" }}>
+                    นามสกุล
+                  </FormControl.Label>
+                  <Input
+                    style={{ fontFamily: "Kanit_400Regular" }}
+                    editable={false}
+                    value={lname}
+                    placeholder="นามสกุล"
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormControl.Label
+                    _text={{
+                      fontFamily: "Kanit_400Regular",
+                      color: "coolGray.800",
+                      fontSize: 15,
+                      fontWeight: 500,
+                    }}
+                  >
+                    ชั้นเรียน
+                  </FormControl.Label>
+                  <Input
+                    style={{ fontFamily: "Kanit_400Regular" }}
+                    editable={false}
+                    value={room}
+                    placeholder="6/1"
+                    w={{
+                      base: "35%",
+                    }}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormControl.Label
+                    _text={{
+                      fontFamily: "Kanit_400Regular",
+                      color: "coolGray.800",
+                      fontSize: 15,
+                      fontWeight: 500,
+                    }}
+                  >
+                    เลขที่
+                  </FormControl.Label>
+                  <Input
+                    style={{ fontFamily: "Kanit_400Regular" }}
+                    editable={false}
+                    value={no}
+                    placeholder="20"
+                    w={{
+                      base: "35%",
+                    }}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormControl.Label
+                    _text={{
+                      fontFamily: "Kanit_400Regular",
+                      color: "coolGray.800",
+                      fontSize: 15,
+                      fontWeight: 500,
+                    }}
+                  >
+                    วัน/เดือน/ปีเกิด
+                  </FormControl.Label>
+                  <Input
+                    style={{ fontFamily: "Kanit_400Regular" }}
+                    editable={false}
+                    value={born.substr(0, 10)}
+                    placeholder="20/07/2543"
+                    w={{
+                      base: "55%",
+                      md: "25%",
+                    }}
+                    InputRightElement={
+                      <IconButton
+                        icon={<Icon as={AntDesign} name="calendar" />}
+                        borderRadius="full"
+                        _icon={{
+                          color: "gray.400",
+                          size: "sm",
+                        }}
+                      />
+                    }
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormControl.Label _text={{ fontFamily: "Kanit_400Regular" }}>
+                    ที่อยู่
+                  </FormControl.Label>
+                  <Input
+                    style={{ fontFamily: "Kanit_400Regular" }}
+                    editable={false}
+                    value={address}
+                    marginBottom={2}
+                    placeholder="บนโลกเนี่ยแหละ"
+                  />
+                </FormControl>
+                <Text
+                  style={{ fontFamily: "Kanit_400Regular" }}
+                  fontSize={18}
+                  my={2}
+                  color="primary.500"
+                >
+                  จำนวนบันทึกความดี {thisGrace.length}
+                </Text>
+                <Text
+                  style={{ fontFamily: "Kanit_400Regular" }}
+                  fontSize={18}
+                  my={2}
+                  color="secondary.500"
+                >
+                  จำนวนโพสต์ความช่วยเหลือ {thisAid.length}
+                </Text>
+                <Text
+                  style={{ fontFamily: "Kanit_400Regular" }}
+                  fontSize={18}
+                  my={2}
+                  color="success.500"
+                >
+                  จำนวนเข้าร่วมความช่วยเหลือ {thisSub.length}
+                </Text>
+              </VStack>
+              {renderBtn()}
+              {thisUser.member_id != info.s_id ? (
+                <Button
+                  _text={{ fontFamily: "Kanit_400Regular" }}
+                  w={{ base: "90%" }}
+                  size="lg"
+                  alignSelf="center"
+                  colorScheme="error"
+                  m={3}
+                  onPress={() => {
+                    Axios.delete(
+                      `http://${SERVER_IP}:${PORT}/user/${route.params.keys}`
+                    )
+                      .then((response) => {
+                        let data = response.data;
+                        Alert.alert(data);
+                        navigation.dispatch(popAction);
+                        // navigation.navigate(""); HERE TO ADD NAVIGATE
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
+                  }}
+                >
+                  ลบ
+                </Button>
+              ) : (
+                <Box></Box>
+              )}
+            </ScrollView>
+          ) : (
+            <Box></Box>
+          )}
+        </Box>
+      </NativeBaseProvider>
+    );
+  }
 }
 
 export default Admin_option_user;

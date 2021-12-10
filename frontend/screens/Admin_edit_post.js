@@ -4,7 +4,7 @@ import { SERVER_IP, PORT } from "../database/serverIP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect, StackActions } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
-import { useValidation } from 'react-native-form-validator';
+import { useValidation } from "react-native-form-validator";
 import {
   Box,
   Heading,
@@ -25,7 +25,11 @@ import {
   Spacer,
 } from "native-base";
 import { Alert } from "react-native";
-import { useFonts, Kanit_500Medium, Kanit_400Regular } from '@expo-google-fonts/kanit';
+import {
+  useFonts,
+  Kanit_500Medium,
+  Kanit_400Regular,
+} from "@expo-google-fonts/kanit";
 
 const Card = (props) => {
   const [caption, setCaption] = useState("");
@@ -40,7 +44,13 @@ const Card = (props) => {
   function renderDate() {
     let date = new Date(props.thisSocial.social_timestamp);
     return (
-      <Text textAlign="right" padding={1} fontSize={11} color="coolGray.600" style={{ fontFamily: 'Kanit_400Regular'}}>
+      <Text
+        textAlign="right"
+        padding={1}
+        fontSize={11}
+        color="coolGray.600"
+        style={{ fontFamily: "Kanit_400Regular" }}
+      >
         โพสต์เมื่อ{" "}
         {date.getFullYear() +
           "-" +
@@ -57,7 +67,7 @@ const Card = (props) => {
   return (
     <Box p="5" py="15" w="100%" mx="auto">
       <Heading
-      style={{ fontFamily: 'Kanit_400Regular'}}
+        style={{ fontFamily: "Kanit_400Regular" }}
         mt="10"
         textAlign="center"
         size="lg"
@@ -78,7 +88,7 @@ const Card = (props) => {
       <Stack p="4" space={5}>
         {renderDate()}
         <TextArea
-        style={{ fontFamily: 'Kanit_400Regular'}}
+          style={{ fontFamily: "Kanit_400Regular" }}
           value={caption}
           onChangeText={(text) => setCaption(text)}
           h={20}
@@ -88,50 +98,50 @@ const Card = (props) => {
             md: "25%",
           }}
         />
-        {isFieldInError('caption') ? (<Text  style={{ color: 'red', fontFamily: 'Kanit_400Regular' }}>โปรดใส่รายละเอียดโพสต์</Text>) : (<Text></Text>)}
+        {isFieldInError("caption") ? (
+          <Text style={{ color: "red", fontFamily: "Kanit_400Regular" }}>
+            โปรดใส่รายละเอียดโพสต์
+          </Text>
+        ) : (
+          <Text></Text>
+        )}
       </Stack>
       <Divider my="8" w="100%" />
       <HStack mx="auto" space={3}>
         <Button
-        _text={{ fontFamily: 'Kanit_400Regular'}}
+          _text={{ fontFamily: "Kanit_400Regular" }}
           w={{ base: "30%" }}
           size="lg"
           colorScheme="indigo"
           onPress={() => {
-
-            if(validate({
-              caption: { required: true},
-              
-            })){
-              let formData = {
-              detail: caption,
-            };
-            Axios.put(
-              `http://${SERVER_IP}:${PORT}/socialadmin/${props.thisSocial.social_id}`,
-              formData
-            )
-              .then((response) => {
-                let data = response.data;
-                Alert.alert(data);
+            if (
+              validate({
+                caption: { required: true },
               })
-              .catch((error) => {
-                console.log(error);
-              });
-
-
-            }else{
-
-              return false
+            ) {
+              let formData = {
+                detail: caption,
+              };
+              Axios.put(
+                `http://${SERVER_IP}:${PORT}/socialadmin/${props.thisSocial.social_id}`,
+                formData
+              )
+                .then((response) => {
+                  let data = response.data;
+                  Alert.alert(data);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            } else {
+              return false;
             }
-
-
-            
           }}
         >
           อัพเดต
         </Button>
         <Button
-        _text={{ fontFamily: 'Kanit_400Regular'}}
+          _text={{ fontFamily: "Kanit_400Regular" }}
           w={{ base: "20%" }}
           size="lg"
           colorScheme="error"
@@ -161,7 +171,8 @@ function Admin_edit_Post({ navigation, route }) {
   const [info, setInfo] = useState({}); // LocalStorage Data
   const [thisSocial, setThisSocial] = useState({});
   let [fontsLoaded] = useFonts({
-    Kanit_500Medium, Kanit_400Regular
+    Kanit_500Medium,
+    Kanit_400Regular,
   });
 
   async function showSocial() {
@@ -211,25 +222,27 @@ function Admin_edit_Post({ navigation, route }) {
     innerFunction();
   }, [innerFunction]);
 
-  if(!fontsLoaded){
-    return(<NativeBaseProvider ><Text></Text></NativeBaseProvider>)
-    
+  if (!fontsLoaded) {
+    return (
+      <NativeBaseProvider>
+        <Text></Text>
+      </NativeBaseProvider>
+    );
+  } else {
+    return (
+      <NativeBaseProvider>
+        <ScrollView>
+          <Center>
+            {thisSocial.social_id != undefined ? (
+              <Card navigation={navigation} thisSocial={thisSocial} />
+            ) : (
+              <Box></Box>
+            )}
+          </Center>
+        </ScrollView>
+      </NativeBaseProvider>
+    );
   }
-  else{
-
-  return (
-    <NativeBaseProvider>
-      <ScrollView>
-        <Center>
-          {thisSocial.social_id != undefined ? (
-            <Card navigation={navigation} thisSocial={thisSocial} />
-          ) : (
-            <Box></Box>
-          )}
-        </Center>
-      </ScrollView>
-    </NativeBaseProvider>
-  );}
 }
 
 export default Admin_edit_Post;
