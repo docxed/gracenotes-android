@@ -10,3 +10,6 @@ expo install react-native-gesture-handler react-native-reanimated
 expo install react-native-datepicker
 expo install expo-image-picker
 expo install axios
+
+expo install expo-font 
+expo install @expo-google-fonts/kanit
