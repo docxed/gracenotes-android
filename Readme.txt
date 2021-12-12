@@ -10,7 +10,15 @@
 9. ทำการเปิดฝั่ง client เพียงแค่พิมพ์คำสั่งบน cmd ว่า "expo start"
 10. แล้วเลือก Run on Android device/emulator เท่านั้น
 
+หมายเหตุ
+- บัญชี student
+user: 62070168
+pass: 1234
+- บัญชี teacher
+user: 62070215
+pass: 1234
+
 วิดีโอสาธิตการติดตั้ง
-- 
+- https://youtu.be/qSjSMOchTjA
 วิดีโอการนำเสนอ
-- 
+- https://youtu.be/huxr2teUkvM
